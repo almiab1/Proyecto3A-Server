@@ -1,0 +1,19 @@
+{
+  "name": "conexionbd",
+  "version": "1.0.0",
+  "description": "Clase conexionBD y su test automatizado",
+  "main": "ConexionBD.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "mocha": "^6.2.2",
+    "sqlite3": "^4.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Carlos Tortosa Micó",
+  "license": "ISC"
+}
