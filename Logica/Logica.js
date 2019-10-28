@@ -23,7 +23,7 @@ module.exports = class Logica {
     }
     //////////////////////////////////////
     /*
-        Request,[Response  --> getUltimaMedida()
+        void  --> getUltimaMedida()  --> callback
     */
     getUltimaMedida(callback) {
 
@@ -38,9 +38,9 @@ module.exports = class Logica {
             if (rows.length == 0 || rows === undefined || rows === null) {
                 callback("Sin resultados", null);
                 return;
-            }
+            } //Si no ha encontrado nada tampoco continuo
 
-            callback(null, JSON.stringify(rows[0]));
+            callback(null, rows[0]);
 
         });//consultar
 
@@ -50,9 +50,10 @@ module.exports = class Logica {
 
     //////////////////////////////////////
     /*
-        [Request],[Response]  --> [guardarMedida()] 
+        JSON  --> guardarMedida() --> callback
     */
-    guardarMedida(req, res) {
+    guardarMedida(json) {
+        
     } //guardarMedida()
 
 }

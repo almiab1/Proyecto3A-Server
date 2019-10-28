@@ -6,22 +6,21 @@ var laLogica = new Logica('./test/copiaDeLaBD.db');
 
 
 
-describe('Obtención de datos de la BD', function(){
+describe('Obtención de datos de la BD', function () {
 
-    it('Extraigo la ultima medida de la BD sin error', function(hecho){
+    it('Extraigo la ultima medida de la BD sin error', function (hecho) {
 
-        laLogica.getUltimaMedida(function(err,res){
+        laLogica.getUltimaMedida(function (err, res) {
 
-           assert.equal(err,null,'Err no es null: ' + err);
+            assert.equal(err, null, 'Err no es null: ' + err);
 
-           assert.notEqual(res,null,'No he recibido nada de la BD');
+            assert.notEqual(res, null, 'No he recibido nada de la BD');
+            console.log(res);
 
-           if(res) console.log(res);
+            hecho();
 
-           hecho();
+        }) //getUltimaMedida
 
-        })//getUltimaMedida
+    }) //it
 
-    })//it
-
-})//Describe
+}) //Describe
