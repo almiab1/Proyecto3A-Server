@@ -5,15 +5,17 @@ const ConexionBD = require('./ConexionBD');
 module.exports = class Logica {
 
     /* En parte privada tenemos:
-        db --> Objeto de la biblioteca de mysql con los métodos de acceso
-        dbSettings -> Usado para crear el db con los parámetros que queremos
+        laConexionDB --> Objeto de la biblioteca de sqlite con los métodos de acceso
     */
 
     //////////////////////////////////////
     //Constructores
     //////////////////////////////////////
-    constructor(nombreBD, callback) {
-        this.laConexionBD = new ConexionBD(nombreBD, callback);
+    constructor(nombreBD) {
+        this.laConexionBD = new ConexionBD(nombreBD, function(err){
+            console.log("Me conecto a la BD desde la logica");
+            if(err) console.error(err);
+        });
     } //constructor
 
     cerrar() {
@@ -25,7 +27,7 @@ module.exports = class Logica {
     */
     getUltimaMedida(callback) {
 
-        let sql = "SELECT * FROM Medidas WHERE Tiempo=(SELECT MAX(Tiempo) FROM Medidas)";
+        let sql = "SELECT * FROM Medidas WHERE tiempo=(SELECT MAX(tiempo) FROM Medidas);";
         this.laConexionBD.consultar(sql, function (err, rows) {
 
             if (err) {
@@ -33,7 +35,7 @@ module.exports = class Logica {
                 return;
             } //Si salta error no sigo
 
-            if (row.length == 0 || row === undefined || row === null) {
+            if (rows.length == 0 || rows === undefined || rows === null) {
                 callback("Sin resultados", null);
                 return;
             }

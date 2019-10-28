@@ -12,7 +12,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "test"
+    "test": "mocha ./test/testLogica.js"
   },
   "author": "Carlos Tortosa Micó",
   "license": "ISC"
