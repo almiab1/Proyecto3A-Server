@@ -39,7 +39,8 @@ module.exports = class Logica {
                 callback("Sin resultados", null);
                 return;
             } //Si no ha encontrado nada tampoco continuo
-
+            
+            
             callback(null, rows[0]);
 
         }); //consultar
@@ -78,7 +79,7 @@ module.exports = class Logica {
 
     elJsonTieneTodosLosCamposRequeridos(json) {
 
-        let propiedades = ['idTipoMedida', 'valorMedido', 'tiempo', 'latitud', 'longitud', 'idUsuario'];
+        let propiedades = ['idTipoMedida', 'valorMedido', 'tiempo', 'latitud', 'longitud', 'idUsuario', 'humedad', 'temperatura'];
         let errCounter = 0;
 
         propiedades.forEach(function (key) {

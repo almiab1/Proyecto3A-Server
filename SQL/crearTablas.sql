@@ -1,11 +1,4 @@
-CREATE TABLE Medidas (idMedida INTEGER PRIMARY KEY AUTOINCREMENT, idTipoMedida REFERENCES TipoSensores (idTipoMedida)
-    ON DELETE SET NULL ONUPDATE CASCADE,
-         valorMedido INTEGER,
-         tiempo BIGINT,
-         latitud REAL,
-         longitud REAL,
-         idUsuario INTEGER REFERENCES Usuarios (idUsuario)
-    ON DELETE SET NULL ONUPDATE CASCADE); 
+CREATE TABLE "Usuarios" ( `idUsuario` VARCHAR (50) NOT NULL, `password` VARCHAR ( 10 ) NOT NULL, `telefono` VARCHAR ( 9 ), `idTipoUsuario` INTEGER NOT NULL, FOREIGN KEY(`idTipoUsuario`) REFERENCES `TipoUsuario`(`idTipo`) ON DELETE SET NULL, PRIMARY KEY(`idUsuario`) )
 
     /* Crear tabla Sensores */
      CREATE TABLE Sensores (idSensor INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

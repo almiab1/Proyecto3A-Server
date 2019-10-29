@@ -1,0 +1,24 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Ficheros y archivos pertenecientes al servidor del proyecto ( servidor, logica, BBDD...)",
+  "main": "ServidorRest.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mocha": "^6.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/equip-4-projecte-3a/servidor.git"
+  },
+  "author": "Carlos Tortosa Micó",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/equip-4-projecte-3a/servidor/issues"
+  },
+  "homepage": "https://gitlab.com/equip-4-projecte-3a/servidor#readme"
+}
