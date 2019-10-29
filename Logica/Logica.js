@@ -39,7 +39,8 @@ module.exports = class Logica {
                 callback("Sin resultados", null);
                 return;
             } //Si no ha encontrado nada tampoco continuo
-
+            
+            
             callback(null, rows[0]);
 
         }); //consultar

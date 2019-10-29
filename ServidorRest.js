@@ -18,7 +18,17 @@ app.get('/', function(req,res){
 })
 
 app.get('/getUltimaMedida', function(req, res){
-    LogicaDeNegocio.getUltimaMedida(req, res);
+    LogicaDeNegocio.getUltimaMedida(function(err, resultado){
+        if(err){
+            if (err == 'Sin resultados'){
+                res.sendStatus(404);
+            } else {
+                res.sendStatus(500);
+            }
+        } else {
+            res.send(JSON.stringify(resultado)).status(200);
+        }
+    });
 })
 
 app.post('/guardarMedida', function(req,res){
