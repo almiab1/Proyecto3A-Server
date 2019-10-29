@@ -8,8 +8,9 @@ const path = require('path');
     Carlos Tortosa Micó
 */
 
-LogicaDeNegocio = new Logica('baseDeDatos.db');
+LogicaDeNegocio = new Logica('./Logica/baseDeDatos.db');
 
+app.use(parser.urlencoded({extended: true}));
 app.use(parser.json()); //Auto parsea a objeto el body de los requests
 
 app.get('/', function(req,res){
@@ -21,7 +22,17 @@ app.get('/getUltimaMedida', function(req, res){
 })
 
 app.post('/guardarMedida', function(req,res){
-    LogicaDeNegocio.guardarMedida(req,res);
+    LogicaDeNegocio.guardarMedida(req.body, function(err,algo){
+        if(err) {
+            if(err == 'JSON incompleto') {
+                res.sendStatus(400);
+            } else {
+                res.sendStatus(500);
+            }
+        } else {
+            res.sendStatus(200);
+        }
+    });
 })
 
 let PUERTO;
