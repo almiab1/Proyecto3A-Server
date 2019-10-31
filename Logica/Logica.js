@@ -117,11 +117,61 @@ module.exports = class Logica {
     }
 
 
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+// Métodos implementados por Brian Calabuig
+// 30-10-19
+//------------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------------------
+// json{idCorreo: texto, password: texto < 8 char, idTipoUsuario: Z, telefono: texto }
+// -->
+// darDeAlataUsuario()
+// -->
+//
+//------------------------------------------------------------------------------------------
+    darDeAlataUsuario(json, callback){
+
+      if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(json)) {
+          callback('JSON incompleto', null); //Mal request
+          return;
+      }
+
+      let datos = {
+        $idUsuario: json.idUsuario,
+        $contrasenya: json.contrasenya,
+        $idTipoUsuario: json.idTipoUsuario,
+        $telefono: json.telefono
+      }
+
+      let textoSQL = 'INSERT INTO Usuarios (idUsuario, contrasenya, idTipoUsuario, telefono) VALUES ($idUsuario, $contrasenya, $idTipoUsuario, $telefono);'
+
+      this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
+    }//()
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+    elJsonTieneTodosLosCamposRequeridosUsuario(json) {
+
+        let propiedades = ['idUsuario', 'contrasenya', 'idTipoUsuario', 'telefono'];
+        let errCounter = 0;
+
+        propiedades.forEach(function (key) {
+
+            //Si uno de los campos no está en el JSON o su valor es null no lo considero bueno
+            if(json[key] === undefined || json[key] === null) {
+                errCounter++;
+            }
+
+        });
+
+        return errCounter === 0;
+
+
+    }//camposRequeridosUsuario
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 
 
 
-
-
-    
 
 }

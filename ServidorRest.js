@@ -45,6 +45,20 @@ app.post('/guardarMedida', function(req,res){
     });
 })
 
+app.post('/darAltaUsuario', function(req,res){
+    LogicaDeNegocio.darDeAlataUsuario(req.body, function(err,algo){
+        if(err) {
+            if(err == 'JSON incompleto') {
+                res.sendStatus(400);
+            } else {
+                res.sendStatus(500);
+            }
+        } else {
+            res.sendStatus(200);
+        }
+    });
+})
+
 let PUERTO;
 if(process.env.PORT === undefined) {
     PUERTO = 8080;
