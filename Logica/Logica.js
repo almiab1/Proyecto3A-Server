@@ -39,8 +39,8 @@ module.exports = class Logica {
                 callback("Sin resultados", null);
                 return;
             } //Si no ha encontrado nada tampoco continuo
-            
-            
+
+
             callback(null, rows[0]);
 
         }); //consultar
@@ -62,16 +62,20 @@ module.exports = class Logica {
 
 
         let datos = {
-            $idTipoMedida : json.idTipoMedida,
+
             $valorMedido : json.valorMedido,
             $tiempo : json.tiempo,
             $latitud : json.latitud,
             $longitud : json.longitud,
-            $idUsuario : json.idUsuario
+            $idUsuario : json.idUsuario,
+            $idTipoMedida : json.idTipoMedida,
+            $idSensor: json.idSensor,
+            $temperatura: json.temperatura,
+            $humedad: json.humedad
         }
 
 
-        let textoSQL = 'INSERT INTO Medidas (idTipoMedida, valorMedido, tiempo, latitud, longitud, idUsuario) VALUES ($idTipoMedida, $valorMedido, $tiempo, $latitud, $longitud, $idUsuario);';
+        let textoSQL = 'INSERT INTO Medidas (valorMedido, tiempo, latitud, longitud, idUsuario, idTipoMedida, idSensor, temperatura, humedad) VALUES ($valorMedido, $tiempo, $latitud, $longitud, $idUsuario, $idTipoMedida, $idSensor, $temperatura, $humedad);';
         this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
 
     } //guardarMedida()
@@ -79,7 +83,7 @@ module.exports = class Logica {
 
     elJsonTieneTodosLosCamposRequeridos(json) {
 
-        let propiedades = ['idTipoMedida', 'valorMedido', 'tiempo', 'latitud', 'longitud', 'idUsuario', 'humedad', 'temperatura'];
+        let propiedades = ['valorMedido', 'tiempo', 'latitud', 'longitud', 'idUsuario', 'idTipoMedida', 'idSensor', 'temperatura', 'humedad'];
         let errCounter = 0;
 
         propiedades.forEach(function (key) {
@@ -88,7 +92,7 @@ module.exports = class Logica {
             if(json[key] === undefined || json[key] === null) {
                 errCounter++;
             }
-           
+
         });
 
         return errCounter === 0;
@@ -111,5 +115,13 @@ module.exports = class Logica {
         })
 
     }
+
+
+
+
+
+
+
+    
 
 }

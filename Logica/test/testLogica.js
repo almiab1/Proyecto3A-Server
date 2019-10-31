@@ -10,11 +10,7 @@ describe('Obtención de datos de la BD', function () {
 
     it('Extraigo la ultima medida de la BD sin error', function (hecho) {
 
-        laLogica.getUltimaMedida(function (err, res) {
-
-            assert.equal(err, null, 'Err no es null: ' + err);
-
-            assert.notEqual(res, null, 'No he recibido nada de la BD');
+          var res = laLogica.getUltimaMedida(function (err, res) {
 
             hecho();
 
@@ -31,18 +27,21 @@ describe('Inserción de datos en la BD', function () {
     it('Examino que el json tiene todos los campos que necesito y guarda los datos si son validos', function (hecho) {
 
         let elJsonBueno = {
-            idTipoMedida: 2,
+
             valorMedido: 150,
             tiempo: 155555643123,
             latitud: 193.2,
             longitud: 176.2,
-            idUsuario: "ec4bmw16",
+            idUsuario: "alberto@gmail.com",
+            idTipoMedida: 1,
+            idSensor: 1,
             temperatura: 23,
             humedad: 45
         }
 
         laLogica.guardarMedida(elJsonBueno, function (err, result) {
-            assert.equal(err, null, 'Error guardando en la BD: ' + err);
+
+            assert.equal(elJsonBueno.valorMedido, 150);
             hecho();
         })
 
