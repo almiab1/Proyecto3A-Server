@@ -4,7 +4,7 @@ const assert = require('assert');
 
 var laLogica = new Logica('./test/copiaDeLaBD.db');
 
-describe('Inserción de datos en la BD', function () {
+describe('Inserción de datos en la BD Usuario', function () {
 
     it('Examino que el json tiene todos los campos que necesito y guarda los datos si son validos', function (hecho) {
 
@@ -16,7 +16,7 @@ describe('Inserción de datos en la BD', function () {
             telefono: "612783920"
         }
 
-        laLogica.darDeAlataUsuario(elJsonBueno, function (err, result) {
+        laLogica.darDeAltaUsuario(elJsonBueno, function (err, result) {
 
 
             assert.equal(elJsonBueno.idUsuario, "migui@gmail.com");
@@ -34,7 +34,7 @@ describe('Inserción de datos en la BD', function () {
             idUsuario: null
         }
 
-        laLogica.darDeAlataUsuario(jsonMalo, function (err, result) {
+        laLogica.darDeAltaUsuario(jsonMalo, function (err, result) {
             assert.notEqual(err, null, '¿Lo ha guardado igualmente?: ' + result);
             hecho();
         })
@@ -51,7 +51,7 @@ describe('Inserción de datos en la BD', function () {
           telefono: "612783920"
       }
 
-        laLogica.darDeAlataUsuario(jsonMalo, function (err, result) {
+        laLogica.darDeAltaUsuario(jsonMalo, function (err, result) {
             assert.notEqual(err, null);
             hecho();
         })

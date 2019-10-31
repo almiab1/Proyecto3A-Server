@@ -6,7 +6,7 @@ var laLogica = new Logica('./test/copiaDeLaBD.db');
 
 
 
-describe('Obtención de datos de la BD', function () {
+describe('Obtención de datos de la BD Medidas', function () {
 
     it('Extraigo la ultima medida de la BD sin error', function (hecho) {
 
@@ -22,7 +22,7 @@ describe('Obtención de datos de la BD', function () {
 
 }) //Describe
 
-describe('Inserción de datos en la BD', function () {
+describe('Inserción de datos en la BD Medidas', function () {
 
     it('Examino que el json tiene todos los campos que necesito y guarda los datos si son validos', function (hecho) {
 

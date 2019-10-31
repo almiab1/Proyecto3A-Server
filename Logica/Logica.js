@@ -126,11 +126,11 @@ module.exports = class Logica {
 //------------------------------------------------------------------------------------------
 // json{idCorreo: texto, password: texto < 8 char, idTipoUsuario: Z, telefono: texto }
 // -->
-// darDeAlataUsuario()
+// darDeAltaUsuario()
 // -->
 //
 //------------------------------------------------------------------------------------------
-    darDeAlataUsuario(json, callback){
+    darDeAltaUsuario(json, callback){
 
       if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(json)) {
           callback('JSON incompleto', null); //Mal request
@@ -170,8 +170,21 @@ module.exports = class Logica {
     }//camposRequeridosUsuario
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+// json{idTipoSensor: Z}
+// -->
+// darDeAltaSensor()
+// -->
+//
+//------------------------------------------------------------------------------------------
+    darDeAltaSensor(json, callback){
 
+      let datos = {$idTipoSensor: json.idTipoSensor}
 
+      let textoSQL = 'INSERT INTO Sensores (idTipoSensor) VALUES ($idTipoSensor);'
+
+      this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
+    }
 
 
 }
