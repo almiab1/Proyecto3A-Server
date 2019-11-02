@@ -32,9 +32,7 @@ describe('Inserción de datos en la BD Medidas', function () {
             tiempo: 155555643123,
             latitud: 193.2,
             longitud: 176.2,
-            idUsuario: "alberto@gmail.com",
             idTipoMedida: 1,
-            idSensor: 1,
             temperatura: 23,
             humedad: 45
         }

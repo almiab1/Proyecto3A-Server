@@ -108,12 +108,49 @@ app.post('/darAltaSensor', function(req,res){
     });
 })// darAltaSensor
 //------------------------------------------------------------------------------------------
-// /
+// /darBajaUsuario
 //------------------------------------------------------------------------------------------
+app.put('/darBajaUsuario', function(req,res){
+    LogicaDeNegocio.eliminarUsuarioDeTablaMedidas(req.body, function(err,algo){
+        if(err) {
+            res.sendStatus(500);
+        } else {
+            res.sendStatus(200);
+        }
+    });
+})// darBajaUsuario
 
+app.delete('/darBajaUsuario', function(req,res){
+   LogicaDeNegocio.darDeBajaUsuario(req.body, function(err,algo){
+      if(err) {
+          res.sendStatus(500);
+      } else {
+          res.sendStatus(200);
+      }
+  });
+})// darBajaUsuario
 //------------------------------------------------------------------------------------------
+// /darBajaSensor
 //------------------------------------------------------------------------------------------
+app.put('/darBajaSensor', function(req,res){
+    LogicaDeNegocio.eliminarSensorDeTablaMedidas(req.body, function(err,algo){
+        if(err) {
+            res.sendStatus(500);
+        } else {
+            res.sendStatus(200);
+        }
+    });
+})// darBajaSensor
 
+app.delete('/darBajaSensor', function(req,res){
+   LogicaDeNegocio.darDeBajaSensor(req.body, function(err,algo){
+      if(err) {
+          res.sendStatus(500);
+      } else {
+          res.sendStatus(200);
+      }
+  });
+})// darBajaSensor
 //------------------------------------------------------------------------------------------
 // puertos
 //------------------------------------------------------------------------------------------

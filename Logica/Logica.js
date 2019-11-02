@@ -213,21 +213,77 @@ module.exports = class Logica {
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
+// json{idUsuario: texto}
+// -->
+// darDeBajaUsuario()
+// -->
 //
-// -->
-// obtenerUltimoSensorRegistrado()
-// -->
-//  idSensor: Z
 //------------------------------------------------------------------------------------------
-    obtenerUltimoSensorRegistrado(callback){
+    darDeBajaUsuario(json, callback){
 
-      let textoSQL = 'SELECT idSensor FROM Sensores order by rowid desc limit 1;'
+      let datos = {
+        $idUsuario: json.idUsuario
+      }
 
-      this.laConexionBD.consultar(textoSQL, function (err, rows) {
+      let texto = 'DELETE FROM Usuarios WHERE idUsuario=$idUsuario;'
 
-      callback(rows[0].idSensor)
-
-      }); //consultar
+      this.laConexionBD.modificarConPrepared(texto, datos, callback);
     }
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+// json{idUsuario: texto}
+// -->
+// eliminarUsuarioDeTablaMedidas()
+// -->
+//
+//------------------------------------------------------------------------------------------
+    eliminarUsuarioDeTablaMedidas(json, callback){
 
+      let datos = {
+        $idUsuario: json.idUsuario
+      }
+
+      let texto = 'UPDATE Medidas SET idUsuario=null WHERE idUsuario=$idUsuario;'
+
+      this.laConexionBD.modificarConPrepared(texto, datos, callback);
+    }
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+// json{idSensor: texto}
+// -->
+// darDeBajaSensor()
+// -->
+//
+//------------------------------------------------------------------------------------------
+    darDeBajaSensor(json, callback){
+
+      let datos = {
+        $idSensor: json.idSensor
+      }
+
+      let textoSQL = 'DELETE FROM Sensores WHERE idSensor=$idSensor;'
+
+      this.laConexionBD.modificarConPrepared(textoSQL, datos, callback); //consultar
+    }
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+// json{idSensor: texto}
+// -->
+// eliminarSensorDeTablaMedidas()
+// -->
+//
+//------------------------------------------------------------------------------------------
+    eliminarSensorDeTablaMedidas(json, callback){
+
+      let datos = {
+        $idSensor: json.idSensor
+      }
+
+      let texto = 'UPDATE Medidas SET idSensor=null WHERE idSensor=$idSensor;'
+
+      this.laConexionBD.modificarConPrepared(texto, datos, callback);
+    }
 }
