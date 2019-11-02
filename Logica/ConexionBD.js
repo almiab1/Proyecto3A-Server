@@ -31,11 +31,11 @@ class ConexionBD {
 		this.laConexion = null
 
 		this.intentarConexion( callback )
-		
-	} // 
+
+	} //
 
 	// .................................................................
-	// 
+	//
 	//    f ()
 	// -->
 	// Error // via callback : function ( error )
@@ -48,7 +48,7 @@ class ConexionBD {
 		}
 
 		//
-		// 
+		//
 		//
 		var that = this
 
@@ -56,10 +56,10 @@ class ConexionBD {
 			this.nombreBaseDeDatos,
 			function( err ) {
 				if ( err ) {
-					var mensaje = " ConexionBD: error al abrir " 
-						+ that.nombreBaseDeDatos 
+					var mensaje = " ConexionBD: error al abrir "
+						+ that.nombreBaseDeDatos
 						+ " error= "
-						+ err 
+						+ err
 
 					console.error( mensaje )
 					that.laConexion = null
@@ -68,15 +68,15 @@ class ConexionBD {
 				} // if
 
 				// else : no error
-				console.log( " ConexionBD: conexion abierta con '" 
+				console.log( " ConexionBD: conexion abierta con '"
 							 + that.nombreBaseDeDatos + "' hora=" + Date.now() )
-							 
+
 				callback( null ) // no hay error
 			} // funtion( err )
 		) //  new sqlite3.Database(
 
 		//
-		// habilitar foreign keys en sqlite3 
+		// habilitar foreign keys en sqlite3
 		//
 		if ( this.laConexion ) {
 			this.laConexion.run( "PRAGMA foreign_keys = ON" )
@@ -109,7 +109,7 @@ class ConexionBD {
 				callback( null )
 			}
 		})
-		
+
 	} // ()
 
 	// .................................................................

@@ -2,6 +2,7 @@
     Carlos Tortosa Micó
 */
 const ConexionBD = require('./ConexionBD');
+
 module.exports = class Logica {
 
     /* En parte privada tenemos:
@@ -179,12 +180,54 @@ module.exports = class Logica {
 //------------------------------------------------------------------------------------------
     darDeAltaSensor(json, callback){
 
-      let datos = {$idTipoSensor: json.idTipoSensor}
+      let datos = {
+        $idSensor: json.idSensor,
+        $idTipoSensor: json.idTipoSensor
+      }
 
-      let textoSQL = 'INSERT INTO Sensores (idTipoSensor) VALUES ($idTipoSensor);'
+      let textoSQL = 'INSERT INTO Sensores (idSensor, idTipoSensor) VALUES ($idSensor, $idTipoSensor);'
+
+      this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
+
+    }
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+// json{idUsuario: texto, idSensor: Z}
+// -->
+// asociarSensorAUsuario()
+// -->
+//
+//------------------------------------------------------------------------------------------
+    asociarSensorAUsuario(json, callback){
+
+      let datos = {
+        $idUsuario: json.idUsuario,
+        $idSensor: json.idSensor
+      }
+
+      let textoSQL = 'INSERT INTO SensoresUsuarios (idUsuario, idSensor) VALUES ($idUsuario, $idSensor);'
 
       this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
     }
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+//
+// -->
+// obtenerUltimoSensorRegistrado()
+// -->
+//  idSensor: Z
+//------------------------------------------------------------------------------------------
+    obtenerUltimoSensorRegistrado(callback){
 
+      let textoSQL = 'SELECT idSensor FROM Sensores order by rowid desc limit 1;'
+
+      this.laConexionBD.consultar(textoSQL, function (err, rows) {
+
+      callback(rows[0].idSensor)
+
+      }); //consultar
+    }
 
 }
