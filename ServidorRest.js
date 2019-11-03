@@ -13,19 +13,15 @@ const routerAdministrador = require('./reglasREST/usuarios/administrador.router'
 const routerBasurero = require('./reglasREST/usuarios/basurero.router')
 
 
-
 /*
     Carlos Tortosa
 
-    Peticiones implementadas por Brian Calabuig
 */
 
 //------------------------------------------------------------------------------------------
 // constructor objeto LogicaDeNegocio
 //------------------------------------------------------------------------------------------
 LogicaDeNegocio = new Logica('./Logica/baseDeDatos.db');
-
-
 
 
 //------------------------------------------------------------------------------------------
@@ -44,11 +40,7 @@ app.get('/', function(req,res){
     //res.sendFile(path.join(__dirname,'/HTML/index.html'));
     res.send({"message": "Server Working"})
 })
-
-
-
 //------------------------------------------------------------------------------------------
-// peticiones
 //------------------------------------------------------------------------------------------
 
 
