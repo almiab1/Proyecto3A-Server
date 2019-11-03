@@ -232,25 +232,6 @@ module.exports = class Logica {
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
-// json{idUsuario: texto}
-// -->
-// eliminarUsuarioDeTablaMedidas()
-// -->
-//
-//------------------------------------------------------------------------------------------
-    eliminarUsuarioDeTablaMedidas(json, callback){
-
-      let datos = {
-        $idUsuario: json.idUsuario
-      }
-
-      let texto = 'UPDATE Medidas SET idUsuario=null WHERE idUsuario=$idUsuario;'
-
-      this.laConexionBD.modificarConPrepared(texto, datos, callback);
-    }
-//------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------
 // json{idSensor: texto}
 // -->
 // darDeBajaSensor()
@@ -266,24 +247,5 @@ module.exports = class Logica {
       let textoSQL = 'DELETE FROM Sensores WHERE idSensor=$idSensor;'
 
       this.laConexionBD.modificarConPrepared(textoSQL, datos, callback); //consultar
-    }
-//------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------
-// json{idSensor: texto}
-// -->
-// eliminarSensorDeTablaMedidas()
-// -->
-//
-//------------------------------------------------------------------------------------------
-    eliminarSensorDeTablaMedidas(json, callback){
-
-      let datos = {
-        $idSensor: json.idSensor
-      }
-
-      let texto = 'UPDATE Medidas SET idSensor=null WHERE idSensor=$idSensor;'
-
-      this.laConexionBD.modificarConPrepared(texto, datos, callback);
     }
 }
