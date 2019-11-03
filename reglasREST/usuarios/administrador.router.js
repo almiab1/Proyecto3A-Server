@@ -88,6 +88,36 @@ router.delete('/darBajaSensor', function(req, res) {
   });
 }) // darBajaSensor
 //------------------------------------------------------------------------------------------
+// /buscarUsuario
+//------------------------------------------------------------------------------------------
+router.get('/buscarUsuario/:usuario', function(req, res) {
+
+  var idUsuario = req.params.usuario
+
+  LogicaDeNegocio.buscarUsuario(idUsuario, function(err, resultado) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.send(JSON.stringify(resultado)).status(200);
+    }
+  });
+}) // buscarUsuario
+//------------------------------------------------------------------------------------------
+// /buscarSensor
+//------------------------------------------------------------------------------------------
+router.get('/buscarSensor/:sensor', function(req, res) {
+
+  var idSensor = req.params.sensor
+
+  LogicaDeNegocio.buscarUsuario(idSensor, function(err, resultado) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.send(JSON.stringify(resultado)).status(200);
+    }
+  });
+}) // buscarSensor
+//------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------------

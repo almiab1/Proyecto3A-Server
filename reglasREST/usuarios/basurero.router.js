@@ -33,17 +33,19 @@ router.post('/guardarMedida', function(req, res) {
   });
 }) // guardarMedida
 //------------------------------------------------------------------------------------------
+// /cambiarContrasenya
 //------------------------------------------------------------------------------------------
-
-/*
-app.get('/getAllMedidas', (req, res) => {
-
-    var medidas = [medida_1={"1":{valor:'20',instante:'18:00'}},
-     medida_2={"2": [valor='30',instante='19:00']}]
-
-    res.send(JSON.stringify(medidas)).status(200);
-})
-*/
+router.put('/cambiarContrasenya', function(req, res) {
+  LogicaDeNegocio.cambiarContrasenya(req.body, function(err, algo) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  });
+}) // cambiarContrasenya
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------

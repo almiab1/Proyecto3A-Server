@@ -180,7 +180,7 @@ module.exports = class Logica {
   //------------------------------------------------------------------------------------------
 
   //------------------------------------------------------------------------------------------
-  // json{idCorreo: texto, password: texto < 8 char, idTipoUsuario: Z, telefono: texto }
+  // json{idUsuario: texto, contrasenya: texto < 8 char, idTipoUsuario: Z, telefono: texto }
   // -->
   // darDeAltaUsuario()
   // -->
@@ -227,7 +227,7 @@ module.exports = class Logica {
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
-  // json{idTipoSensor: Z}
+  // json{idSensor: Z, idTipoSensor: Z}
   // -->
   // darDeAltaSensor()
   // -->
@@ -301,9 +301,68 @@ module.exports = class Logica {
 
     let textoSQL = 'DELETE FROM Sensores WHERE idSensor=$idSensor;'
 
-    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback); //consultar
+    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
   }
-  
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  // json{idUsuario: texto, contrasenya: texto}
+  // -->
+  // cambiarContrasenya()
+  // -->
+  //
+  //------------------------------------------------------------------------------------------
+  cambiarContrasenya(json, callback){
+
+    let datos = {
+      $idUsuario: json.idUsuario,
+      $contrasenya: json.contrasenya
+    }
+
+    let textoSQL = 'UPDATE Usuarios SET contrasenya=$contrasenya WHERE idUsuario=$idUsuario;'
+
+    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  // json{idUsuario: texto}
+  // -->
+  // buscarUsuario()
+  // -->
+  // json{idUsuario: texto, TipoUsuario: texto, telefono: texto }
+  //------------------------------------------------------------------------------------------
+  buscarUsuario(usuario, callback){
+
+    let datos = {
+      $idUsuario: usuario
+    }
+
+    let textoSQL = 'SELECT Usuarios.idUsuario, Usuarios.telefono, TipoUsuarios.descripcion FROM Usuarios, TipoUsuarios WHERE idUsuario=$idUsuario AND Usuarios.idTipoUsuario=TipoUsuarios.idTipoUsuario;'
+
+    this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
+
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  // json{idSensor: Z}
+  // -->
+  // buscarSensor()
+  // -->
+  // json{idSensor: Z, TipoSensor: texto}
+  //------------------------------------------------------------------------------------------
+  buscarUsuario(sensor, callback){
+
+    let datos = {
+      $idSensor: sensor
+    }
+
+    let textoSQL = 'SELECT Sensores.idSensor, TipoSensor.descripcion FROM Sensores, TipoSensor WHERE idSensor=$idSensor AND Sensores.idTipoSensor=TipoSensor.idTipoSensor;'
+
+    this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
+
+  }
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 }//() clase Logica
