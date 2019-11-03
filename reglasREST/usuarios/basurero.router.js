@@ -19,8 +19,8 @@ LogicaDeNegocio = new Logica('../../Logica/baseDeDatos.db');
 //------------------------------------------------------------------------------------------
 // /guardarMedida
 //------------------------------------------------------------------------------------------
-router.post('/guardarMedida', function(req, res) {
-  LogicaDeNegocio.guardarMedida(req.body, function(err, algo) {
+router.post('/guardarMedida', async function(req, res) {
+  await LogicaDeNegocio.guardarMedida(req.body, function(err, algo) {
     if (err) {
       if (err == 'JSON incompleto') {
         res.sendStatus(400);
@@ -35,8 +35,8 @@ router.post('/guardarMedida', function(req, res) {
 //------------------------------------------------------------------------------------------
 // /cambiarContrasenya
 //------------------------------------------------------------------------------------------
-router.put('/cambiarContrasenya', function(req, res) {
-  LogicaDeNegocio.cambiarContrasenya(req.body, function(err, algo) {
+router.put('/cambiarContrasenya', async function(req, res) {
+  await LogicaDeNegocio.cambiarContrasenya(req.body, function(err, algo) {
     if (err) {
       res.sendStatus(500);
     } else {
