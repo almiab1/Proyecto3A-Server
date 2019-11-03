@@ -26,8 +26,11 @@ app.use(parser.json()); //Auto parsea a objeto el body de los requests
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 app.get('/', function(req,res){
-    res.sendFile(path.join(__dirname,'/HTML/index.html'));
+    //res.sendFile(path.join(__dirname,'/HTML/index.html'));
+    res.send({"message": "Server Working"})
 })
+
+
 
 //------------------------------------------------------------------------------------------
 // peticiones
