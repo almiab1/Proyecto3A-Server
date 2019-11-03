@@ -48,22 +48,45 @@ router.route('/hola')
     })
 
 
-router.get('/getAllMedidas', (req, res) => {
+    //------------------------------------------------------------------------------------------
+    // /getAllMedidas
+    //------------------------------------------------------------------------------------------
+    router.get('/getAllMedidas', (req, res) => {
     
-    var medidas = [medida_1={"1":{valor:'20',instante:'18:00'}},
-     medida_2={"2": [valor='30',instante='19:00']}]
+    LogicaDeNegocio.getAllMedidas(function(err, resultado){
+        if(err){
+            if (err == 'Sin resultados'){
+                res.sendStatus(404);
+            } else {
+                res.sendStatus(500);
+            }
+        } else {
+            res.send(JSON.stringify(resultado)).status(200);
+        }
+    });
    
 
+    }) // getAllMedidas
+
+    //------------------------------------------------------------------------------------------
+    // /getAllOzono
+    //------------------------------------------------------------------------------------------
+    router.get('/getAllOzono', (req, res) => {
     
-
+        LogicaDeNegocio.getAllOzono(function(err, resultado){
+            if(err){
+                if (err == 'Sin resultados'){
+                    res.sendStatus(404);
+                } else {
+                    res.sendStatus(500);
+                }
+            } else {
+                res.send(JSON.stringify(resultado)).status(200);
+            }
+        });
+       
     
-
-    res.send(JSON.stringify(medidas)).status(200);
-
-
-    
-
-})
+        }) // getAllOzono
 
 
 module.exports = router

@@ -34,7 +34,7 @@ app.use(parser.urlencoded({extended: true}));
 app.use(parser.json()); //Auto parsea a objeto el body de los requests
 
 // enrrutadores
-app.use('/ciudadano',routerCiudadano)
+app.use('/',routerCiudadano)
 app.use('/admin',routerAdministrador)
 app.use('/basurero',routerBasurero)
 

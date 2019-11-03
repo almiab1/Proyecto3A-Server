@@ -49,6 +49,53 @@ module.exports = class Logica {
     } //getUltimaMedida()
 
 
+    // ---------------------------------------------------
+    // getAllMedidas() 
+    // ---------------------------------------------------
+    getAllMedidas(callback){
+
+        let sql = "SELECT * FROM Medidas";
+        // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
+        this.laConexionBD.consultar(sql, function (err, rows){
+
+            // Si hay error o está vacio se manda el error
+            if(err){
+                callback(err, null);
+                return;
+            }
+            if(rows.length == 0 || rows === undefined || rows === null){
+                callback("Sin resultados", null);
+                return;
+            } //
+
+            callback(null, rows);
+        })
+    } // getAllMedidas()
+
+    // ---------------------------------------------------
+    // getAllOzono() 
+    // ---------------------------------------------------
+    getAllOzono(callback){
+
+        let sql = "SELECT idMedida, valorMedido, latitud, longitud, tiempo FROM Medidas";
+        // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
+        this.laConexionBD.consultar(sql, function (err, rows){
+
+            // Si hay error o está vacio se manda el error
+            if(err){
+                callback(err, null);
+                return;
+            }
+            if(rows.length == 0 || rows === undefined || rows === null){
+                callback("Sin resultados", null);
+                return;
+            } //
+
+            callback(null, rows);
+        })
+    } // getAllOzono()
+
+
 
     //////////////////////////////////////
     /*
