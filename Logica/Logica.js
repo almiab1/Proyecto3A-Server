@@ -28,7 +28,8 @@ module.exports = class Logica {
   */
   getUltimaMedida(callback) {
 
-    let sql = "SELECT * FROM Medidas WHERE tiempo=(SELECT MAX(tiempo) FROM Medidas);";
+    let sql = "SELECT * FROM Medidas order by rowid desc limit 1;";
+    //let sql = "SELECT * FROM Medidas WHERE tiempo=(SELECT MAX(tiempo) FROM Medidas);";
     this.laConexionBD.consultar(sql, function(err, rows) {
 
       if (err) {
@@ -42,7 +43,7 @@ module.exports = class Logica {
       } //Si no ha encontrado nada tampoco continuo
 
 
-      callback(null, rows[0]);
+      callback(null, rows);
 
     }); //consultar
 
