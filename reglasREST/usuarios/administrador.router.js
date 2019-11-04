@@ -148,8 +148,52 @@ router.get('/tiempoUsuario/:usuario', async function(req, res) {
     }
   });
 }) // /tiempoUsuario
+
+//------------------------------------------------------------------------------------------
+// /getUsuarios
+//------------------------------------------------------------------------------------------
+router.get('/getUsuarios', async function(req, res) {
+
+    var idSensor = req.params.sensor
+  
+    await LogicaDeNegocio.getUsuarios(function(err, resultado) {
+        if (err) {
+          if (err == 'Sin resultados') {
+            res.sendStatus(404);
+          } else {
+            res.sendStatus(500);
+          }
+        } else {
+          res.send(JSON.stringify(resultado)).status(200);
+        }
+      });
+  }) // getUsuarios
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------------------
+// /getSensores
+//------------------------------------------------------------------------------------------
+router.get('/getSensores', async function(req, res) {
+
+    var idSensor = req.params.sensor
+  
+    await LogicaDeNegocio.getSensores(function(err, resultado) {
+        if (err) {
+          if (err == 'Sin resultados') {
+            res.sendStatus(404);
+          } else {
+            res.sendStatus(500);
+          }
+        } else {
+          res.send(JSON.stringify(resultado)).status(200);
+        }
+      });
+  }) // getSensores
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+
 
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
