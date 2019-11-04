@@ -438,7 +438,65 @@ module.exports = class Logica {
 //SELECT Medidas.latitud, Medidas.longitud FROM Medidas WHERE Medidas.tiempo >= datetime('now','-1 day')
     this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
 
-  }
+  } 
+
+  // ---------------------------------------------------
+  // Método implementado por Carlos Canut 4-11-19
+  // ->
+  // getUsuarios()
+  // ->
+  // json{ idUsuario:Text, telefono:Text , descripcion:Text }
+  // ---------------------------------------------------
+  getUsuarios(callback) {
+
+    let sql = "SELECT Usuarios.idUsuario, Usuarios.telefono, TipoUsuarios.descripcion FROM Usuarios, TipoUsuarios WHERE Usuarios.idTipoUsuario = TipoUsuarios.idTipoUsuario";
+    // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
+    this.laConexionBD.consultar(sql, function(err, rows) {
+
+      // Si hay error o está vacio se manda el error
+      if (err) {
+        callback(err, null);
+        return;
+      }
+      if (rows.length == 0 || rows === undefined || rows === null) {
+        callback("Sin resultados", null);
+        return;
+      } //
+
+      callback(null, rows);
+    })
+  } // getUsuarios()
+
+
+  
+
+  // ---------------------------------------------------
+  // Método implementado por Carlos Canut 4-11-19
+  // ->
+  // getSensores()
+  // ->
+  // json{idSensor: Int, descripcion:Text}
+  // ---------------------------------------------------
+  getSensores(callback) {
+
+    let sql = "SELECT Sensores.idSensor, TipoSensor.descripcion FROM Sensores, TipoSensor WHERE Sensores.idTipoSensor=TipoSensor.idTipoSensor";
+    // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
+    this.laConexionBD.consultar(sql, function(err, rows) {
+
+      // Si hay error o está vacio se manda el error
+      if (err) {
+        callback(err, null);
+        return;
+      }
+      if (rows.length == 0 || rows === undefined || rows === null) {
+        callback("Sin resultados", null);
+        return;
+      } //
+
+      callback(null, rows);
+    })
+  } // getSensores()
+  
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 }//() clase Logica
