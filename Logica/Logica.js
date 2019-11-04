@@ -445,7 +445,7 @@ module.exports = class Logica {
   // ->
   // getUsuarios()
   // ->
-  // json{ idUsuario:Text, telefono:Text , descripcion:Text }
+  // json{ idUsuario:Text, telefono:Text , descripcion:Text, idSensor: Int }
   // ---------------------------------------------------
   getUsuarios(callback) {
 
@@ -475,7 +475,7 @@ module.exports = class Logica {
   // ->
   // getSensores()
   // ->
-  // json{idSensor: Int, descripcion:Text}
+  // json{idSensor: Int, descripcion:Text, idUsuario:Text}
   // ---------------------------------------------------
   getSensores(callback) {
 
