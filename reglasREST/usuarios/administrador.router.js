@@ -148,14 +148,13 @@ router.get('/tiempoUsuario/:usuario', async function(req, res) {
     }
   });
 }) // /tiempoUsuario
-
 //------------------------------------------------------------------------------------------
 // /getUsuarios
 //------------------------------------------------------------------------------------------
 router.get('/getUsuarios', async function(req, res) {
 
     var idSensor = req.params.sensor
-  
+
     await LogicaDeNegocio.getUsuarios(function(err, resultado) {
         if (err) {
           if (err == 'Sin resultados') {
@@ -169,16 +168,12 @@ router.get('/getUsuarios', async function(req, res) {
       });
   }) // getUsuarios
 //------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------
-
-
-//------------------------------------------------------------------------------------------
 // /getSensores
 //------------------------------------------------------------------------------------------
 router.get('/getSensores', async function(req, res) {
 
     var idSensor = req.params.sensor
-  
+
     await LogicaDeNegocio.getSensores(function(err, resultado) {
         if (err) {
           if (err == 'Sin resultados') {

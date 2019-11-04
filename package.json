@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "nodemon ServidorRest.js",
     "start": "node ./ServidorRest.js",
-    "test": "test"
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
