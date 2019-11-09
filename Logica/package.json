@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "mocha": "^6.2.2",
-    "sqlite3": "^4.1.0"
+    "sqlite3": "^4.1.0",
+    "morgan": "^1.9.1",
+    "cors": "^2.8.5"
   },
   "devDependencies": {},
   "scripts": {
