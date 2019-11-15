@@ -8,6 +8,7 @@ const parser = require('body-parser');
 const path = require('path');
 const cors = require('cors')
 const morgan = require('morgan')
+const auth = require('./Logica/Auth')
 
 // Routers
 const routerCiudadano = require('./reglasREST/ciudadano.router')
@@ -25,6 +26,8 @@ const routerBasurero = require('./reglasREST/usuarios/basurero.router')
 //------------------------------------------------------------------------------------------
 LogicaDeNegocio = new Logica('./Logica/baseDeDatos.db');
 
+// create auth
+myAuth = new auth();
 
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
@@ -32,6 +35,10 @@ app.use(parser.urlencoded({extended: true}));
 app.use(parser.json()); //Auto parsea a objeto el body de los requests
 app.use(cors())
 app.use(morgan('dev'))
+
+// auth
+app.post('/iniciarSesion', myAuth.signin)
+app.post('/crearCuenta', myAuth.signup)
 
 // enrrutadores
 app.use('/',routerCiudadano)
