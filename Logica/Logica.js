@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken')
+
 /*
     Carlos Tortosa Micó
 */
@@ -346,6 +348,8 @@ module.exports = class Logica {
   }
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
+
+
   //------------------------------------------------------------------------------------------
   // idSensor: Z
   // -->
@@ -492,6 +496,114 @@ module.exports = class Logica {
       callback(null, rows);
     })
   } // getSensores()
+
+
+
+
+
+    // -------------------------------------------------- 
+    //  Carlos Canut
+    //  usuario: Text, contrasenya: Text ->
+    //  verificarUsuario()
+    //  -> json{idUsuario: Text, contrasenya: Text}
+    // --------------------------------------------------
+    verificarUsuario(usuario ,contrasenya , callback){
+
+      let datos = {
+        $idUsuario: usuario,
+        $contrasenya: contrasenya
+      }
+  
+      let textoSQL = 'SELECT Usuarios.idUsuario, Usuarios.contrasenya FROM Usuarios WHERE Usuarios.idUsuario=$idUsuario AND Usuarios.contrasenya=$contrasenya;'
+  
+      this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
+  
+    } // /verificarUsuario
+
+  getAllOzono(callback) {
+
+  let sql = "SELECT idMedida, valorMedido, latitud, longitud, tiempo FROM Medidas";
+  // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
+  this.laConexionBD.consultar(sql, function(err, rows) {
+
+    // Si hay error o está vacio se manda el error
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    if (rows.length == 0 || rows === undefined || rows === null) {
+      callback("Sin resultados", null);
+      return;
+    } //
+
+    callback(null, rows);
+  })
+} // getAllOzono()
+
+
+    // --------------------------------------------------
+    //  Carlos Canut
+    //  idUsuario:Text ->
+    //  existeidUsuario()
+    //  -> bool
+    // --------------------------------------------------
+    existeidUsuario(idUsuario){
+      let datos = {
+          $idUsuario: idUsuario
+      }
+      let textoSQL = 'SELECT Usuarios.idUsuario FROM Usuarios WHERE Usuarios.idUsuario=$idUsuario;'
+      LogicaDeNegocio.laConexionBD.consultar(textoSQL,(error,result) =>{
+          if(error){
+              return false
+          } else {
+              return true
+          }
+      });
+  } // /existeidUsuario  
+
+
+
+  // --------------------------------------------------
+  //  Carlos Canut
+  //  token: jwt ->
+  //  comprobarToken()
+  //  -> 
+  // --------------------------------------------------
+  comprobarToken = token => {
+      new Promise((resolve, reject) => {
+          jwt.verify(token, 'canutcodedthis', (error, payload) => {
+              if(error) {
+                  return reject(error)
+              }
+              resolve(payload)
+          })
+      })
+  } // /comprobarToken()
+
+
+  // --------------------------------------------------
+  //  Carlos Canut
+  //  idUsuario: string, contrasenya: string ->
+  //  checkcontrasenya()
+  //  -> bool
+  // --------------------------------------------------
+  checkcontrasenya(idUsuario, contrasenya){
+      let datos = {
+          $idUsuario: idUsuario
+      }
+      let textoSQL = 'SELECT Usuarios.idUsuario, Usuarios.contrasenya FROM Usuarios WHERE idUsuario=$idUsuario;'
+      LogicaDeNegocio.laConexionBD.consultarConPrepared(textoSQL,datos,(error,result) =>{
+          if(error){
+              return false
+          } else {
+              if( idUsuario == result.idUsuario && contrasenya == result.contrasenya){
+                  return true
+              } else {
+                  return false
+              }
+          }
+      });
+  } // /cheackcontrasenya
 
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
