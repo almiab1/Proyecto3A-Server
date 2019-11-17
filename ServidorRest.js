@@ -6,8 +6,6 @@ const app = express();
 const Logica = require('./Logica/Logica');
 const parser = require('body-parser');
 const path = require('path');
-const cors = require('cors')
-const morgan = require('morgan')
 
 // Routers
 const routerCiudadano = require('./reglasREST/ciudadano.router')
@@ -30,8 +28,6 @@ LogicaDeNegocio = new Logica('./Logica/baseDeDatos.db');
 //------------------------------------------------------------------------------------------
 app.use(parser.urlencoded({extended: true}));
 app.use(parser.json()); //Auto parsea a objeto el body de los requests
-app.use(cors())
-app.use(morgan('dev'))
 
 app.use('/admin', LogicaDeNegocio.autentificarUsuario)
 app.use('/basurero', LogicaDeNegocio.autentificarUsuario)
