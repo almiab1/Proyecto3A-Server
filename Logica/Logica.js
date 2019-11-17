@@ -520,6 +520,35 @@ module.exports = class Logica {
   
     } // /verificarUsuario
 
+    // -------------------------------------------------- 
+    //  Carlos Canut
+    //  req.headers.authorization ->
+    //  autentificarUsuario()
+    //  -> OK / error
+    // --------------------------------------------------
+    async autentificarUsuario(req, res, next){
+      //TO DO comprueba que el jwt se encuentra en el header
+      const tokenExistente = req.headers.authorization
+      if(!tokenExistente){
+        res.status(401).send({message: 'token no encontrado.'})
+      }
+      console.log(tokenExistente)
+      //TO DO comprobamos que se trata de un token valido
+      try{
+        var verifyOptions = {
+          issuer: 'iPolution',
+          expiresIn: 60 * 60 * 24
+          // aqui puede meterse un algoritmo de encriptación
+        }
+        var tokenVerificado = jwt.verify(tokenExistente, 'privateKey',verifyOptions)
+        console.log({tokenVerificado})
+        next()
+      } catch(error){
+        console.error(error)
+        res.status(401).send({error: 'fallo en el sistema'})
+      }
+    }
+
   getAllOzono(callback) {
 
   let sql = "SELECT idMedida, valorMedido, latitud, longitud, tiempo FROM Medidas";

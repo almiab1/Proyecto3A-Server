@@ -33,6 +33,8 @@ app.use(parser.json()); //Auto parsea a objeto el body de los requests
 app.use(cors())
 app.use(morgan('dev'))
 
+app.use('/admin', LogicaDeNegocio.autentificarUsuario)
+app.use('/basurero', LogicaDeNegocio.autentificarUsuario)
 
 // enrrutadores
 app.use('/',routerCiudadano)

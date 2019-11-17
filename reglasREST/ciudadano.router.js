@@ -64,6 +64,10 @@ router.get('/getAllOzono', (req, res) => {
   });
 }) // getAllOzono
 
+
+//------------------------------------------------------------------------------------------
+//  POST /login
+//------------------------------------------------------------------------------------------
 router.post('/login', async (req, res) => {
   
     var usuario = req.body.idUsuario
@@ -86,14 +90,20 @@ router.post('/login', async (req, res) => {
             res.status(401).end()
           }
           console.log({resultado})
+          // payload (token)
           var tokenData = {
             usuario: usuario,
             contrasenya: contrasenya
           }
+          // signing options
+          var signOptions = {
+            issuer: 'iPolution',
+            expiresIn: 60 * 60 * 24
+            // aqui puede meterse un algoritmo de encriptación
+          }
           // Se genera el token
-          const token = jwt.sign(tokenData,'privateKey',{
-            expiresIn: 60 * 60 * 24 // 24 horas
-          })
+          const token = jwt.sign(tokenData,'privateKey',signOptions)
+          console.log(token)
           res.status(200).send({token})
         } catch(error){
           console.error(error)
@@ -103,7 +113,8 @@ router.post('/login', async (req, res) => {
     })
 
    
-})
+}) // /login
+
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 
