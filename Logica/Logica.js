@@ -598,7 +598,7 @@ module.exports = class Logica {
   //  comprobarToken()
   //  -> 
   // --------------------------------------------------
-  comprobarToken = token => {
+  comprobarToken (token){
       new Promise((resolve, reject) => {
           jwt.verify(token, 'canutcodedthis', (error, payload) => {
               if(error) {
