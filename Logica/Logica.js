@@ -30,7 +30,7 @@ module.exports = class Logica {
   */
   getUltimaMedida(callback) {
 
-    let sql = "SELECT * FROM Medidas order by rowid desc limit 1;";
+    let sql = "SELECT * FROM Medidas ORDER BY tiempo DESC LIMIT 1;";
     //let sql = "SELECT * FROM Medidas WHERE tiempo=(SELECT MAX(tiempo) FROM Medidas);";
     this.laConexionBD.consultar(sql, function(err, rows) {
 
@@ -61,7 +61,7 @@ module.exports = class Logica {
   // ---------------------------------------------------
   getAllMedidas(callback) {
 
-    let sql = "SELECT * FROM Medidas";
+    let sql = "SELECT * FROM Medidas ORDER BY tiempo DESC";
     // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
     this.laConexionBD.consultar(sql, function(err, rows) {
 
