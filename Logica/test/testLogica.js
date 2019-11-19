@@ -58,40 +58,6 @@ describe('Obtención de datos de la BD Usuarios y Sensores', function(){
   })
 })
 
-describe('Obtención de los tiempos y posiciones de un usuario y su distancia recorrida', function(){
-
-  it('Busco los tiempos de un usuario', async function(){
-
-    let usuario = "a@gmail.com"
-
-    await laLogica.obtenerTiempoUsuario(usuario, function(err, res){
-      assert.equal(res.length, 1)
-      assert.equal(res[0].tiempo, 8439792)
-    })
-  })
-
-  it('Busco las posiciones de un usuario', async function(){
-
-    let usuario = "a@gmail.com"
-
-    await laLogica.obtenerPosicionesUsuario(usuario, function(err, res){
-      assert.equal(res.length, 1)
-      assert.equal(res[0].latitud, 345310)
-      assert.equal(res[0].longitud, 4350320)
-    })
-  })
-
-  it('calculo la distancia de un usuario', async function(){
-
-    let listaPosiciones = [ { latitud: 745320, longitud: 4320750 },
-  { latitud: 345310, longitud: 4350320 } ]
-
-    await laLogica.calcularDistancia(listaPosiciones, function(err, res){
-      assert.equal(res, 401.101)
-    })
-  })
-})
-
 describe('Inserción de datos en la BD sensor', function () {
 
     it('Examino que el json tiene todos los campos que necesito y guarda los datos si son validos', function (hecho) {
@@ -204,69 +170,15 @@ describe('Inserción de datos en la BD Medidas', function () {
 
 }) //describe
 
-describe('Borrar Usuario y Sensor', function () {
 
-    it('Insertamos un usuario y posteriormente lo borramos', async function () {
+describe('Calculo de distancias', function(){
+  it('Vamos a pasarle un json con latitudes y longitudes y calcular la distancia', async function(){
 
-        let elJsonBueno = {
+    let listaPosiciones = [{latitud: 10.0, longitud: 10.0},
+                          {latitud: 70.0, longitud: 40.0}]
 
-            idUsuario: "migui2@gmail.com",
-            contrasenya: "migui1234",
-            idTipoUsuario: 1,
-            telefono: "612783920"
-        }
+    let distancia = laLogica.calcularDistancia(listaPosiciones)
 
-        await laLogica.darDeAltaUsuario(elJsonBueno, function (err, result) {
-
-
-            assert.equal(elJsonBueno.idUsuario, "migui2@gmail.com");
-
-        })
-
-        let datos1 = {
-          idUsuario: "migui2@gmail.com"
-        }
-
-        await laLogica.darDeBajaUsuario(datos1, function(err, res){
-
-        })
-
-        await laLogica.buscarUsuario("migui2@gmail.com", function(err, res){
-          assert.equal(res, [])
-        })
-
-
-    })
-
-    it('Insertamos un sensor y posteriormente lo borramos', async function () {
-
-        let elJsonBueno = {
-
-            idSensor: 190,
-            idTipoSensor: 1,
-            idUsuario: "briancalabuig@gmail.com"
-        }
-
-        await laLogica.darDeAltaSensor(elJsonBueno, function (err, result) {
-
-
-            assert.equal(elJsonBueno.idSensor, 190);
-
-        })
-
-        let datos2 = {
-          idSensor: 190
-        }
-
-        await laLogica.darDeBajaSensor(datos2, function(err, res){
-
-        })
-
-        await laLogica.buscarSensor(190, function(err, res){
-          assert.equal(res, [])
-        })
-
-
-    })
-
-}) //describe
+    assert.equal(distancia, 6994)
+  })
+})
