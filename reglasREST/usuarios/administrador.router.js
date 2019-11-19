@@ -115,40 +115,24 @@ router.get('/buscarSensor/:sensor', async function(req, res) {
 //------------------------------------------------------------------------------------------
 // /distanciaRecorridaUsuario
 //------------------------------------------------------------------------------------------
-router.get('/distanciaRecorridaUsuario/:usuario', async function(req, res) {
+router.get('/distanciaActividad/:usuario', async function(req, res) {
 
   var idUsuario = req.params.usuario
 
-  await LogicaDeNegocio.obtenerPosicionesUsuario(idUsuario, function(err, resultado) {
+  await LogicaDeNegocio.obtenerPosicionesYTiempoUsuario(idUsuario, function(err, resultado) {
     if (err) {
       res.sendStatus(500);
     } else {
       let distancia = LogicaDeNegocio.calcularDistancia(resultado)
-      res.send(JSON.stringify(distancia)+" "+"km").status(200);
+      let actividad = LogicaDeNegocio.calcularActividad(resultado)
+      res.send("Distancia: "+JSON.stringify(distancia)+" "+"km"+"  "+"Actividad: "+actividad).status(200);
     }
   });
 }) // distanciaRecorridaUsuario
 //------------------------------------------------------------------------------------------
-// /tiempoUsuario
-//------------------------------------------------------------------------------------------
-router.get('/tiempoUsuario/:usuario', async function(req, res) {
-
-  var idUsuario = req.params.usuario
-
-  await LogicaDeNegocio.obtenerTiempoUsuario(idUsuario, function(err, resultado) {
-    if (err) {
-      res.sendStatus(500);
-    } else {
-      res.send(JSON.stringify(resultado)).status(200);
-    }
-  });
-}) // /tiempoUsuario
-//------------------------------------------------------------------------------------------
 // /getUsuarios
 //------------------------------------------------------------------------------------------
 router.get('/getUsuarios', async function(req, res) {
-
-    var idSensor = req.params.sensor
 
     await LogicaDeNegocio.getUsuarios(function(err, resultado) {
         if (err) {
@@ -166,8 +150,6 @@ router.get('/getUsuarios', async function(req, res) {
 // /getSensores
 //------------------------------------------------------------------------------------------
 router.get('/getSensores', async function(req, res) {
-
-    var idSensor = req.params.sensor
 
     await LogicaDeNegocio.getSensores(function(err, resultado) {
         if (err) {

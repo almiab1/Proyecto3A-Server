@@ -536,7 +536,26 @@ module.exports = class Logica {
           }
       });
   } // /cheackcontrasenya
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  // idUsuario: texto
+  // -->
+  // obtenerPosicionesYTiempoUsuario()
+  // -->
+  // json{latitud: R, longitud: R, tiempo: R}
+  //------------------------------------------------------------------------------------------
+  obtenerPosicionesYTiempoUsuario(usuario, callback){
 
+    let datos = {
+      $idUsuario: usuario
+    }
+
+    let textoSQL = 'SELECT Medidas.latitud, Medidas.longitud, Medidas.tiempo FROM Medidas WHERE idUsuario=$idUsuario;'
+  //SELECT Medidas.latitud, Medidas.longitud FROM Medidas WHERE Medidas.tiempo >= datetime('now','-1 day')
+    this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
+
+  }
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
@@ -572,83 +591,24 @@ module.exports = class Logica {
 
     return distanciaTotal
   }//calcularDistancia()
-
-  /*/------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
-  // idUsuario: texto
+  //------------------------------------------------------------------------------------------
+  // listaPosiciones: posicion{tiempo: R}
   // -->
-  // obtenerPosicionesUsuario()
+  // calcularActividad()
   // -->
-  // json{latitud: R, longitud: R}
+  // resultado: T/F
   //------------------------------------------------------------------------------------------
-  obtenerPosicionesUsuario(usuario, callback){
+  calcularActividad(listaTiempos){
 
-    let datos = {
-      $idUsuario: usuario
+    if (listaTiempos.length < 48) {
+      return false;
     }
 
-    let textoSQL = 'SELECT Medidas.latitud, Medidas.longitud FROM Medidas WHERE idUsuario=$idUsuario;'
-  //SELECT Medidas.latitud, Medidas.longitud FROM Medidas WHERE Medidas.tiempo >= datetime('now','-1 day')
-    this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
-
+    return true;
   }
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  // listaPosiciones: posicion{latitud: R, longitud: R}
-  // -->
-  // calcularDistancia()
-  // -->
-  // distancia: R
-  //------------------------------------------------------------------------------------------
-  calcularDistancia(listaPosiciones){
-
-    var distanciaTotal = 0;
-
-    for (let i = 0; i < listaPosiciones.length; i++) {
-      if (i < listaPosiciones.length - 1) {
-
-        let incrementoLatitud = listaPosiciones[i + 1].latitud - listaPosiciones[i].latitud;
-        let incrementoLongitud = listaPosiciones[i + 1].longitud - listaPosiciones[i].longitud;
-
-        let incrLatAlCuadrado = Math.pow(incrementoLatitud, 2);
-        let incrLngAlCuadrado = Math.pow(incrementoLongitud, 2);
-
-        let sumaCoordenadas = incrLatAlCuadrado + incrLngAlCuadrado;
-        let distancia = Math.sqrt(sumaCoordenadas);
-
-        distanciaTotal = distanciaTotal + distancia;
-        distanciaTotal = Math.round(distanciaTotal);
-      }//if
-    }//for
-
-    if (distanciaTotal > 1000) {
-      distanciaTotal = distanciaTotal / 1000;
-    }
-    return distanciaTotal
-
-  }
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  // idUsuario: texto
-  // -->
-  // obtenerTiempoUsuario()
-  // -->
-  // json{tiempo: Z}
-  //------------------------------------------------------------------------------------------
-  obtenerTiempoUsuario(usuario, callback){
-
-    let datos = {
-      $idUsuario: usuario
-    }
-
-    let textoSQL = 'SELECT Medidas.tiempo FROM Medidas WHERE idUsuario=$idUsuario;'
-  //SELECT Medidas.latitud, Medidas.longitud FROM Medidas WHERE Medidas.tiempo >= datetime('now','-1 day')
-    this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
-
-  }*/
+  
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 }//() clase Logica
