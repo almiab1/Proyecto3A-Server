@@ -28,6 +28,10 @@ module.exports = class Logica {
   /*
       void  --> getUltimaMedida()  --> callback
   */
+
+  //----------------------------------------------------------------------------
+  //métodos medidas
+  //----------------------------------------------------------------------------
   getUltimaMedida(callback) {
 
     let sql = "SELECT * FROM Medidas ORDER BY tiempo DESC LIMIT 1;";
@@ -175,6 +179,9 @@ module.exports = class Logica {
 
   }
 
+  //----------------------------------------------------------------------------
+  //métodos usuario
+  //----------------------------------------------------------------------------
 
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
@@ -230,47 +237,6 @@ module.exports = class Logica {
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
-  // json{idSensor: Z, idTipoSensor: Z}
-  // -->
-  // darDeAltaSensor()
-  // -->
-  //
-  //------------------------------------------------------------------------------------------
-  darDeAltaSensor(json, callback) {
-
-    let datos = {
-      $idSensor: json.idSensor,
-      $idTipoSensor: json.idTipoSensor
-    }
-
-    let textoSQL = 'INSERT INTO Sensores (idSensor, idTipoSensor) VALUES ($idSensor, $idTipoSensor);'
-
-    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
-
-  }
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  // json{idUsuario: texto, idSensor: Z}
-  // -->
-  // asociarSensorAUsuario()
-  // -->
-  //
-  //------------------------------------------------------------------------------------------
-  asociarSensorAUsuario(json, callback) {
-
-    let datos = {
-      $idUsuario: json.idUsuario,
-      $idSensor: json.idSensor
-    }
-
-    let textoSQL = 'INSERT INTO SensoresUsuarios (idUsuario, idSensor) VALUES ($idUsuario, $idSensor);'
-
-    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
-  }
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
   // json{idUsuario: texto}
   // -->
   // darDeBajaUsuario()
@@ -286,25 +252,6 @@ module.exports = class Logica {
     let texto = 'DELETE FROM Usuarios WHERE idUsuario=$idUsuario;'
 
     this.laConexionBD.modificarConPrepared(texto, datos, callback);
-  }
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  // json{idSensor: texto}
-  // -->
-  // darDeBajaSensor()
-  // -->
-  //
-  //------------------------------------------------------------------------------------------
-  darDeBajaSensor(json, callback) {
-
-    let datos = {
-      $idSensor: json.idSensor
-    }
-
-    let textoSQL = 'DELETE FROM Sensores WHERE idSensor=$idSensor;'
-
-    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
   }
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
@@ -346,28 +293,6 @@ module.exports = class Logica {
     this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
 
   }
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-
-
-  //------------------------------------------------------------------------------------------
-  // idSensor: Z
-  // -->
-  // buscarSensor()
-  // -->
-  // json{idSensor: Z, TipoSensor: texto}
-  //------------------------------------------------------------------------------------------
-  buscarSensor(sensor, callback){
-
-    let datos = {
-      $idSensor: sensor
-    }
-
-    let textoSQL = 'SELECT Sensores.idSensor, TipoSensor.descripcion FROM Sensores, TipoSensor WHERE idSensor=$idSensor AND Sensores.idTipoSensor=TipoSensor.idTipoSensor;'
-
-    this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
-
-  }
   // ---------------------------------------------------
   // Método implementado por Carlos Canut 4-11-19
   // ->
@@ -394,6 +319,168 @@ module.exports = class Logica {
       callback(null, rows);
     })
   } // getUsuarios()
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  // idUsuario: texto
+  // -->
+  // obtenerPosicionesYTiempoUsuario()
+  // -->
+  // json{latitud: R, longitud: R, tiempo: R}
+  //------------------------------------------------------------------------------------------
+  obtenerPosicionesYTiempoUsuario(usuario, callback){
+
+    let datos = {
+      $idUsuario: usuario
+    }
+
+    let textoSQL = 'SELECT Medidas.latitud, Medidas.longitud, Medidas.tiempo FROM Medidas WHERE idUsuario=$idUsuario;'
+  //SELECT Medidas.latitud, Medidas.longitud FROM Medidas WHERE Medidas.tiempo >= datetime('now','-1 day')
+    this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
+
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  // listaPosiciones: posicion{latitud: R, longitud: R}
+  // -->
+  // calcularDistancia()
+  // -->
+  // distancia: R
+  //------------------------------------------------------------------------------------------
+  calcularDistancia(listaPosiciones){
+
+    var distanciaTotal = 0;
+
+    for (let i = 0; i < listaPosiciones.length; i++) {
+      if (i < listaPosiciones.length - 1) {
+
+        let senoLatitudOrigen = Math.sin((listaPosiciones[i].latitud * 2 * Math.PI) / 360)
+        let senoLatitudDestino = Math.sin((listaPosiciones[i+1].latitud * 2 * Math.PI) / 360)
+        let cosenoLatitudOrigen = Math.cos((listaPosiciones[i].latitud * 2 * Math.PI) / 360)
+        let cosenoLatitudDestino = Math.cos((listaPosiciones[i+1].latitud * 2 * Math.PI) / 360)
+        let incrementoLongitud = listaPosiciones[i+1].longitud - listaPosiciones[i].longitud
+        let cosenoLongitud = Math.cos((incrementoLongitud * 2 * Math.PI) / 360)
+
+        let multiplicacionSenos = senoLatitudOrigen * senoLatitudDestino
+        let multiplicacionCosenos = cosenoLatitudOrigen * cosenoLatitudDestino * cosenoLongitud
+        let distanciaAngular = Math.acos(multiplicacionSenos + multiplicacionCosenos) * 360 / (2*Math.PI)
+
+        let distanciaEnKm = distanciaAngular * 111.11;
+
+        distanciaTotal = Math.round(distanciaTotal + distanciaEnKm)
+      }//if
+    }//for
+
+    return distanciaTotal
+  }//calcularDistancia()
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  // listaPosiciones: posicion{tiempo: R}
+  // -->
+  // calcularActividad()
+  // -->
+  // resultado: T/F
+  //------------------------------------------------------------------------------------------
+  calcularActividad(listaTiempos){
+
+    if (listaTiempos.length < 48) {
+      return false;
+    }
+
+    return true;
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  // json{idUsuario: texto, idSensor: Z}
+  // -->
+  // asociarSensorAUsuario()
+  // -->
+  //
+  //------------------------------------------------------------------------------------------
+  asociarSensorAUsuario(json, callback) {
+
+    let datos = {
+      $idUsuario: json.idUsuario,
+      $idSensor: json.idSensor
+    }
+
+    let textoSQL = 'INSERT INTO SensoresUsuarios (idUsuario, idSensor) VALUES ($idUsuario, $idSensor);'
+
+    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
+  }
+
+  //----------------------------------------------------------------------------
+  //métodos sensores
+  //----------------------------------------------------------------------------
+
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  // json{idSensor: Z, idTipoSensor: Z}
+  // -->
+  // darDeAltaSensor()
+  // -->
+  //
+  //------------------------------------------------------------------------------------------
+  darDeAltaSensor(json, callback) {
+
+    let datos = {
+      $idSensor: json.idSensor,
+      $idTipoSensor: json.idTipoSensor
+    }
+
+    let textoSQL = 'INSERT INTO Sensores (idSensor, idTipoSensor) VALUES ($idSensor, $idTipoSensor);'
+
+    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
+
+  }
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  // json{idSensor: texto}
+  // -->
+  // darDeBajaSensor()
+  // -->
+  //
+  //------------------------------------------------------------------------------------------
+  darDeBajaSensor(json, callback) {
+
+    let datos = {
+      $idSensor: json.idSensor
+    }
+
+    let textoSQL = 'DELETE FROM Sensores WHERE idSensor=$idSensor;'
+
+    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
+  }
+
+
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+
+
+  //------------------------------------------------------------------------------------------
+  // idSensor: Z
+  // -->
+  // buscarSensor()
+  // -->
+  // json{idSensor: Z, TipoSensor: texto}
+  //------------------------------------------------------------------------------------------
+  buscarSensor(sensor, callback){
+
+    let datos = {
+      $idSensor: sensor
+    }
+
+    let textoSQL = 'SELECT Sensores.idSensor, TipoSensor.descripcion FROM Sensores, TipoSensor WHERE idSensor=$idSensor AND Sensores.idTipoSensor=TipoSensor.idTipoSensor;'
+
+    this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
+
+  }
+
   // ---------------------------------------------------
   // Método implementado por Carlos Canut 4-11-19
   // ->
@@ -423,7 +510,9 @@ module.exports = class Logica {
 
 
 
-
+  //----------------------------------------------------------------------------
+  //métodos log in
+  //----------------------------------------------------------------------------
 
     // --------------------------------------------------
     //  Carlos Canut
@@ -536,79 +625,8 @@ module.exports = class Logica {
           }
       });
   } // /cheackcontrasenya
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  // idUsuario: texto
-  // -->
-  // obtenerPosicionesYTiempoUsuario()
-  // -->
-  // json{latitud: R, longitud: R, tiempo: R}
-  //------------------------------------------------------------------------------------------
-  obtenerPosicionesYTiempoUsuario(usuario, callback){
 
-    let datos = {
-      $idUsuario: usuario
-    }
 
-    let textoSQL = 'SELECT Medidas.latitud, Medidas.longitud, Medidas.tiempo FROM Medidas WHERE idUsuario=$idUsuario;'
-  //SELECT Medidas.latitud, Medidas.longitud FROM Medidas WHERE Medidas.tiempo >= datetime('now','-1 day')
-    this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
-
-  }
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  // listaPosiciones: posicion{latitud: R, longitud: R}
-  // -->
-  // calcularDistancia()
-  // -->
-  // distancia: R
-  //------------------------------------------------------------------------------------------
-  calcularDistancia(listaPosiciones){
-
-    var distanciaTotal = 0;
-
-    for (let i = 0; i < listaPosiciones.length; i++) {
-      if (i < listaPosiciones.length - 1) {
-
-        let senoLatitudOrigen = Math.sin((listaPosiciones[i].latitud * 2 * Math.PI) / 360)
-        let senoLatitudDestino = Math.sin((listaPosiciones[i+1].latitud * 2 * Math.PI) / 360)
-        let cosenoLatitudOrigen = Math.cos((listaPosiciones[i].latitud * 2 * Math.PI) / 360)
-        let cosenoLatitudDestino = Math.cos((listaPosiciones[i+1].latitud * 2 * Math.PI) / 360)
-        let incrementoLongitud = listaPosiciones[i+1].longitud - listaPosiciones[i].longitud
-        let cosenoLongitud = Math.cos((incrementoLongitud * 2 * Math.PI) / 360)
-
-        let multiplicacionSenos = senoLatitudOrigen * senoLatitudDestino
-        let multiplicacionCosenos = cosenoLatitudOrigen * cosenoLatitudDestino * cosenoLongitud
-        let distanciaAngular = Math.acos(multiplicacionSenos + multiplicacionCosenos) * 360 / (2*Math.PI)
-
-        let distanciaEnKm = distanciaAngular * 111.11;
-
-        distanciaTotal = Math.round(distanciaTotal + distanciaEnKm)
-      }//if
-    }//for
-
-    return distanciaTotal
-  }//calcularDistancia()
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  //------------------------------------------------------------------------------------------
-  // listaPosiciones: posicion{tiempo: R}
-  // -->
-  // calcularActividad()
-  // -->
-  // resultado: T/F
-  //------------------------------------------------------------------------------------------
-  calcularActividad(listaTiempos){
-
-    if (listaTiempos.length < 48) {
-      return false;
-    }
-
-    return true;
-  }
-  
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 }//() clase Logica
