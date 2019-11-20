@@ -124,8 +124,20 @@ router.get('/distanciaActividad/:usuario', async function(req, res) {
       res.sendStatus(500);
     } else {
       let distancia = LogicaDeNegocio.calcularDistancia(resultado)
-      let actividad = LogicaDeNegocio.calcularActividad(resultado)
-      res.send("Distancia: "+JSON.stringify(distancia)+" "+"km"+"  "+"Actividad: "+actividad).status(200);
+      let bool = LogicaDeNegocio.calcularActividad(resultado)
+
+      let actividad = ""
+      if (bool == true){
+        actividad = "activo"
+      }
+      else {
+        actividad = "inactivo"
+      }
+      json = {
+        distancia: distancia,
+        actividad: actividad
+      }
+      res.send(JSON.stringify(json)).status(200);
     }
   });
 }) // distanciaRecorridaUsuario

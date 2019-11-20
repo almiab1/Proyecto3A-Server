@@ -24,14 +24,14 @@ async function scriptParaRellenarBaseDatos(){
   var latitud = 38.900
   var longitud = -0.200
 
-  for (var i = 0; i < 100; i++) {
+  for (var i = 0; i < 10; i++) {
 
     tiempo = new Date().getTime()
 
     medida = Math.floor(Math.random() * 100) + 15;
 
-    latitud = latitud + 0.01
-    longitud = longitud + 0.001
+    latitud = latitud + 0.001
+    longitud = longitud + 0.0001
 
     var json ={
       valorMedido: medida,
@@ -48,7 +48,7 @@ async function scriptParaRellenarBaseDatos(){
     await LogicaDeNegocio.guardarMedida(json, function(err, res){
 
     })
-    
+
   }//for
 
 }
