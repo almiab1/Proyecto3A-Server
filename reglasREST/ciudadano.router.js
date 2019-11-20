@@ -4,6 +4,9 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
 
+const jsdom = require('jsdom')
+const {JSDOM} = jsdom
+
 //------------------------------------------------------------------------------------------
 // Creación del enrutador
 //------------------------------------------------------------------------------------------
@@ -114,6 +117,18 @@ router.post('/login', async (req, res) => {
 
    
 }) // /login
+
+
+//------------------------------------------------------------------------------------------
+//  GET /getMedidasOficiales
+//------------------------------------------------------------------------------------------
+router.get('/getMedidasOficiales', (req, res) => {
+
+  // funcion que muestra las medidas oficiales
+  LogicaDeNegocio.getMedidasOficialeslol(req, res);
+
+})  // /getMedidasOficiales
+
 
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
