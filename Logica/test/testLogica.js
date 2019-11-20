@@ -84,7 +84,8 @@ describe('Inserción de datos en la BD Usuario', function () {
             idUsuario: "migui@gmail.com",
             contrasenya: "migui1234",
             idTipoUsuario: 1,
-            telefono: "612783920"
+            telefono: "612783920",
+            nombre: "Migui Alvarez Nistal"
         }
 
         laLogica.darDeAltaUsuario(elJsonBueno, function (err, result) {
@@ -119,7 +120,8 @@ describe('Inserción de datos en la BD Usuario', function () {
           idUsuario: "migui@gmail.com",
           contrasenya: "migui1234",
           idTipoUsuario: 1,
-          telefono: "612783920"
+          telefono: "612783920",
+          nombre: "Migui Alvarez Nistal"
       }
 
         laLogica.darDeAltaUsuario(jsonMalo, function (err, result) {

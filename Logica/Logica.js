@@ -207,10 +207,11 @@ module.exports = class Logica {
       $idUsuario: json.idUsuario,
       $contrasenya: json.contrasenya,
       $idTipoUsuario: json.idTipoUsuario,
-      $telefono: json.telefono
+      $telefono: json.telefono,
+      $nombre: json.nombre
     }
 
-    let textoSQL = 'INSERT INTO Usuarios (idUsuario, contrasenya, idTipoUsuario, telefono) VALUES ($idUsuario, $contrasenya, $idTipoUsuario, $telefono);'
+    let textoSQL = 'INSERT INTO Usuarios (idUsuario, contrasenya, idTipoUsuario, telefono, nombre) VALUES ($idUsuario, $contrasenya, $idTipoUsuario, $telefono, $nombre);'
 
     this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
   } //()
@@ -218,7 +219,7 @@ module.exports = class Logica {
   //------------------------------------------------------------------------------------------
   elJsonTieneTodosLosCamposRequeridosUsuario(json) {
 
-    let propiedades = ['idUsuario', 'contrasenya', 'idTipoUsuario', 'telefono'];
+    let propiedades = ['idUsuario', 'contrasenya', 'idTipoUsuario', 'telefono', 'nombre'];
     let errCounter = 0;
 
     propiedades.forEach(function(key) {
@@ -288,7 +289,7 @@ module.exports = class Logica {
       $idUsuario: usuario
     }
 
-    let textoSQL = 'SELECT Usuarios.idUsuario, Usuarios.telefono, TipoUsuarios.descripcion FROM Usuarios, TipoUsuarios WHERE idUsuario=$idUsuario AND Usuarios.idTipoUsuario=TipoUsuarios.idTipoUsuario;'
+    let textoSQL = 'SELECT Usuarios.idUsuario, Usuarios.telefono, Usuarios.nombre, TipoUsuarios.descripcion, SensoresUsuarios.idSensor FROM Usuarios, TipoUsuarios, SensoresUsuarios WHERE Usuarios.idUsuario=$idUsuario AND Usuarios.idTipoUsuario=TipoUsuarios.idTipoUsuario AND SensoresUsuarios.idUsuario=$idUsuario;'
 
     this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
 
@@ -302,7 +303,7 @@ module.exports = class Logica {
   // ---------------------------------------------------
   getUsuarios(callback) {
 
-    let sql = "SELECT Usuarios.idUsuario, Usuarios.telefono, TipoUsuarios.descripcion, SensoresUsuarios.idSensor FROM Usuarios, TipoUsuarios, SensoresUsuarios WHERE Usuarios.idTipoUsuario = TipoUsuarios.idTipoUsuario AND Usuarios.idUsuario = SensoresUsuarios.idUsuario;"
+    let sql = "SELECT Usuarios.idUsuario, Usuarios.telefono, Usuarios.nombre, TipoUsuarios.descripcion, SensoresUsuarios.idSensor FROM Usuarios, TipoUsuarios, SensoresUsuarios WHERE Usuarios.idTipoUsuario = TipoUsuarios.idTipoUsuario AND Usuarios.idUsuario = SensoresUsuarios.idUsuario;"
     // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
     this.laConexionBD.consultar(sql, function(err, rows) {
 
@@ -475,7 +476,7 @@ module.exports = class Logica {
       $idSensor: sensor
     }
 
-    let textoSQL = 'SELECT Sensores.idSensor, TipoSensor.descripcion FROM Sensores, TipoSensor WHERE idSensor=$idSensor AND Sensores.idTipoSensor=TipoSensor.idTipoSensor;'
+    let textoSQL = 'SELECT Sensores.idSensor, TipoSensor.descripcion, SensoresUsuarios.idUsuario FROM Sensores, TipoSensor, SensoresUsuarios WHERE Sensores.idSensor=$idSensor AND Sensores.idTipoSensor=TipoSensor.idTipoSensor AND SensoresUsuarios.idSensor=$idSensor;'
 
     this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
 
