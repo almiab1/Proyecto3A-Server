@@ -43,8 +43,8 @@ LogicaDeNegocio = new Logica('./Logica/baseDeDatos.db');
 app.use(parser.urlencoded({extended: true}));
 app.use(parser.json()); //Auto parsea a objeto el body de los requests
 
-app.use('/admin', LogicaDeNegocio.autentificarUsuario)
-app.use('/basurero', LogicaDeNegocio.autentificarUsuario)
+//app.use('/admin', LogicaDeNegocio.autentificarUsuario)
+//app.use('/basurero', LogicaDeNegocio.autentificarUsuario)
 
 // enrrutadores
 app.use('/',routerCiudadano)
