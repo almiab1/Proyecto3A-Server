@@ -76,22 +76,20 @@ router.post('/login', async (req, res) => {
         console.log({usuario, contrasenya})
         res.status(400).send({message: 'idUsuario and contrasenya required'})
     }
-    console.log({usuario, contrasenya})
-
-
     await LogicaDeNegocio.verificarUsuario(usuario,contrasenya,(err,resultado) => {
       if(err){
-        res.status(401).end()
+        res.status(401).end();
+        return;
       } else {
         try{
           if(resultado==''){
-            res.status(401).end()
+            res.status(404).end();
+            return;
           }
-          console.log({resultado})
           // payload (token)
           var tokenData = {
             usuario: usuario,
-            contrasenya: contrasenya
+            idTipoUsuario: resultado[0].idTipoUsuario
           }
           // signing options
           var signOptions = {
@@ -108,10 +106,8 @@ router.post('/login', async (req, res) => {
           res.status(401).end()
         }
       }
-    })
-
-   
-}) // /login
+    });   
+}); // /login
 
 
 //------------------------------------------------------------------------------------------

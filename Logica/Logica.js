@@ -536,7 +536,7 @@ module.exports = class Logica {
         $contrasenya: contrasenya
       }
 
-      let textoSQL = 'SELECT Usuarios.idUsuario, Usuarios.contrasenya FROM Usuarios WHERE Usuarios.idUsuario=$idUsuario AND Usuarios.contrasenya=$contrasenya;'
+      let textoSQL = 'SELECT * FROM Usuarios WHERE Usuarios.idUsuario=$idUsuario AND Usuarios.contrasenya=$contrasenya;'
 
       this.laConexionBD.consultarConPrepared(textoSQL, datos, callback);
 
