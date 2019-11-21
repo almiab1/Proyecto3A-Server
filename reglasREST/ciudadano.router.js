@@ -13,15 +13,6 @@ const {JSDOM} = jsdom
 //------------------------------------------------------------------------------------------
 const router = express.Router()
 
-/* *********** CORS *********************************
- * Óscar Blánquez
- * description: middleware que habilita el
- * uso de CORS del servidor para poder realizar
- * peticiones HTTP desde el script de un cliente.
- * @params: req: Object, res: Object, next
- * @return: void
- ***************************************************/
-
 //------------------------------------------------------------------------------------------
 // /getUltimaMedida
 //------------------------------------------------------------------------------------------

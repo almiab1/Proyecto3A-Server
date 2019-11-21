@@ -12,6 +12,15 @@ const routerCiudadano = require('./reglasREST/ciudadano.router')
 const routerAdministrador = require('./reglasREST/usuarios/administrador.router')
 const routerBasurero = require('./reglasREST/usuarios/basurero.router')
 
+/* *********** CORS *********************************
+ * Óscar Blánquez
+ * description: middleware que habilita el
+ * uso de CORS del servidor para poder realizar
+ * peticiones HTTP desde el script de un cliente.
+ * @params: req: Object, res: Object, next
+ * @return: void
+ ***************************************************/
+
 /*
     Carlos Tortosa
 
