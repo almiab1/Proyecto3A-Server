@@ -566,7 +566,7 @@ module.exports = class Logica {
         console.log({tokenVerificado})
         next()
       } catch(error){
-        console.error(error)
+        console.error(error)  
         res.status(401).send({error: 'fallo en el sistema'})
       }
     }

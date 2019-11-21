@@ -180,7 +180,6 @@ router.get('/getSensores', async function(req, res) {
 
 // Prueba admin
 router.get('/prueba', (req, res, next) => {
-  if(err) res.send(err);
   res.status(200).send('Administrador');
 });
 
