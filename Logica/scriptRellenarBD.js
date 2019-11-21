@@ -24,13 +24,11 @@ async function scriptParaRellenarBaseDatos(){
   var latitud = 38.900
   var longitud = -0.200
 
-  for (var i = 0; i < 100; i++) {
+  for (var i = 0; i < 10; i++) {
 
     tiempo = new Date().getTime()
 
-    //medida = Math.floor(Math.random() * 100) + 15; //ozono
-    //medida = Math.floor(Math.random() * 150) + 290; //co2
-    medida = Math.floor(Math.random() * 4) + 1; //so2
+    medida = Math.floor(Math.random() * 100) + 15;
 
     latitud = latitud + 0.001
     longitud = longitud + 0.0001
@@ -41,8 +39,8 @@ async function scriptParaRellenarBaseDatos(){
       latitud: latitud,
       longitud: longitud,
       idUsuario: "briancalabuig@gmail.com",
-      idTipoMedida: 3,
-      idSensor: 3,
+      idTipoMedida: 1,
+      idSensor: 1,
       temperatura: 20,
       humedad: 66
     }
