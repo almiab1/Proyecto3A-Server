@@ -2,6 +2,7 @@
 // requires
 //------------------------------------------------------------------------------------------
 const express = require('express')
+const app = express();
 const jwt = require('jsonwebtoken')
 
 const jsdom = require('jsdom')
@@ -12,11 +13,22 @@ const {JSDOM} = jsdom
 //------------------------------------------------------------------------------------------
 const router = express.Router()
 
+/* *********** CORS *********************************
+ * Óscar Blánquez
+ * description: middleware que habilita el
+ * uso de CORS del servidor para poder realizar
+ * peticiones HTTP desde el script de un cliente.
+ * @params: req: Object, res: Object, next
+ * @return: void
+ ***************************************************/
 
-
-//------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------
-
+app.use( (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+  res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+  next();
+})
 
 //------------------------------------------------------------------------------------------
 // /getUltimaMedida
