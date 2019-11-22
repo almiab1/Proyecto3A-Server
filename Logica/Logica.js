@@ -206,17 +206,19 @@ module.exports = class Logica {
   //------------------------------------------------------------------------------------------
   darDeAltaUsuario(json, callback) {
 
-    if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(json)) {
-      callback('JSON incompleto', null); //Mal request
-      return;
-    }
+    let idTipo = (int)json.idTipoUsuario
 
     let datos = {
       $idUsuario: json.idUsuario,
       $contrasenya: json.contrasenya,
-      $idTipoUsuario: json.idTipoUsuario,
+      $idTipoUsuario: idTipo,
       $telefono: json.telefono,
       $nombre: json.nombre
+    }
+
+    if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(datos)) {
+      callback('JSON incompleto', null); //Mal request
+      return;
     }
 
     let textoSQL = 'INSERT INTO Usuarios (idUsuario, contrasenya, idTipoUsuario, telefono, nombre) VALUES ($idUsuario, $contrasenya, $idTipoUsuario, $telefono, $nombre);'
@@ -566,7 +568,7 @@ module.exports = class Logica {
         console.log({tokenVerificado})
         next()
       } catch(error){
-        console.error(error)  
+        console.error(error)
         res.status(401).send({error: 'fallo en el sistema'})
       }
     }
@@ -644,32 +646,32 @@ module.exports = class Logica {
   async getMedidasOficialeslol(req, res){
 // Opciones para JSDOM
 const options = {
-  cookieJar: new jsdom.CookieJar() // Habilitar cookies   
+  cookieJar: new jsdom.CookieJar() // Habilitar cookies
  };
- 
+
  // URLs de los datos
  const urlDatosGandia = "http://www.cma.gva.es/cidam/emedio/atmosfera/jsp/pde.jsp?PDE.CONT=912&estacion=5&titulo=46131002-Gandia&provincia=null&municipio=null&red=0&PDE.SOLAPAS.Mostrar=1111";
  const urlDatos = "http://www.cma.gva.es/cidam/emedio/atmosfera/jsp/datos_on_line.jsp";
 
  (async function () {
- 
+
   // Array donde guardaremos las medidas
   let data = [];
- 
+
   // Primera petición para obtener las cookies
   await JSDOM.fromURL(urlDatosGandia, options);
 
   // Petición para obtener datos contaminación
   await JSDOM.fromURL(urlDatos, options).then(dom => {
- 
+
   // Tabla de contaminación
   let table = dom.window.document.getElementsByTagName("table")[7];
- 
+
   // Filas de la tabla
   let rows = table.getElementsByTagName("tr");
- 
-  for (var i = 1; i < rows.length; i++) {   
- 
+
+  for (var i = 1; i < rows.length; i++) {
+
   let measure = {
   hora: rows[i].children[0].innerHTML,
   s02: rows[i].children[1].innerHTML,
@@ -677,17 +679,17 @@ const options = {
   no: rows[i].children[5].innerHTML,
   no2: rows[i].children[6].innerHTML,
   nox: rows[i].children[8].innerHTML,
-  o3: rows[i].children[9].innerHTML  
+  o3: rows[i].children[9].innerHTML
 
   }
-  // Guardamos objeto en el array de medidas 
-  data.push(measure);  
+  // Guardamos objeto en el array de medidas
+  data.push(measure);
   }
- 
+
   })
 
-  res.json(data) 
-  
+  res.json(data)
+
  }())
   } // /getMedidasOficiales
 
