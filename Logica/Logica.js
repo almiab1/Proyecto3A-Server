@@ -206,7 +206,7 @@ module.exports = class Logica {
   //------------------------------------------------------------------------------------------
   darDeAltaUsuario(json, callback) {
 
-    let idTipo = (int)json.idTipoUsuario
+    let idTipo = parseInt(json.idTipoUsuario, 10)
 
     let datos = {
       $idUsuario: json.idUsuario,
