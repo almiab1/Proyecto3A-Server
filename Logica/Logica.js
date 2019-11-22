@@ -413,9 +413,11 @@ module.exports = class Logica {
   //------------------------------------------------------------------------------------------
   asociarSensorAUsuario(json, callback) {
 
+    let idSensor = parseInt(json.idSensor, 10)
+
     let datos = {
       $idUsuario: json.idUsuario,
-      $idSensor: json.idSensor
+      $idSensor: idSensor
     }
 
     let textoSQL = 'INSERT INTO SensoresUsuarios (idUsuario, idSensor) VALUES ($idUsuario, $idSensor);'
@@ -438,9 +440,12 @@ module.exports = class Logica {
   //------------------------------------------------------------------------------------------
   darDeAltaSensor(json, callback) {
 
+    let idTipo = parseInt(json.idTipoSesnor, 10)
+    let idSensor = parseInt(json.idSensor, 10)
+
     let datos = {
-      $idSensor: json.idSensor,
-      $idTipoSensor: json.idTipoSensor
+      $idSensor: idSensor,
+      $idTipoSensor: idTipo
     }
 
     let textoSQL = 'INSERT INTO Sensores (idSensor, idTipoSensor) VALUES ($idSensor, $idTipoSensor);'
