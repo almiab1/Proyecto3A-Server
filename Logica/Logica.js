@@ -216,10 +216,10 @@ module.exports = class Logica {
       $nombre: json.nombre
     }
 
-    if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(datos)) {
-      callback('JSON incompleto', null); //Mal request
-      return;
-    }
+    //if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(datos)) {
+      //callback('JSON incompleto', null); //Mal request
+      //return;
+    //}
 
     let textoSQL = 'INSERT INTO Usuarios (idUsuario, contrasenya, idTipoUsuario, telefono, nombre) VALUES ($idUsuario, $contrasenya, $idTipoUsuario, $telefono, $nombre);'
 
