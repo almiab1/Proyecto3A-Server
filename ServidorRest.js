@@ -29,7 +29,6 @@ app.use( (req, res, next) => {
   })
 /*
     Carlos Tortosa
-
 */
 
 //------------------------------------------------------------------------------------------
@@ -40,7 +39,7 @@ LogicaDeNegocio = new Logica('./Logica/baseDeDatos.db');
 
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
-app.use(parser.urlencoded({extended: true}));
+app.use(parser.urlencoded({extended: false}));
 app.use(parser.json()); //Auto parsea a objeto el body de los requests
 
 //app.use('/admin', LogicaDeNegocio.autentificarUsuario)
@@ -55,26 +54,16 @@ app.use('/basurero',routerBasurero)
 //------------------------------------------------------------------------------------------
 app.get('/', function(req,res){
     //res.sendFile(path.join(__dirname,'/HTML/index.html'));
-    res.send({"message": "Server Working"})
+    res.send({mensaje: "Server Working"})
 })
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
-
-app.get('/prueba', (req, res) => {
-    res.status(200).send(req.headers);
-    console.log("HEADERS! :  "+ req.headers.authorization);
-})
 
 //------------------------------------------------------------------------------------------
 // puertos
 //------------------------------------------------------------------------------------------
-let PUERTO;
-if(process.env.PORT === undefined) {
-    PUERTO = 8080;
-} else {
-    PUERTO = process.env.PORT;
-}
+const PUERTO = process.env.PORT || 8080;
 
-app.listen(PUERTO, function(){
+app.listen(PUERTO, function() {
     console.log('Server conectado en puerto ' + PUERTO);
 });

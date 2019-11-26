@@ -118,8 +118,6 @@ module.exports = class Logica {
     })
   } // getAllOzono()
 
-
-
   //////////////////////////////////////
   /*
       JSON  --> guardarMedida() --> callback
@@ -178,13 +176,41 @@ module.exports = class Logica {
   */
 
   borrarUltimaMedida(callback) {
+    const maxIdMedida = 'SELECT idMedida FROM Medidas WHERE idMedida=(SELECT MAX(idMedida) FROM Medidas);'
+    let idUltimaMedida = '';
+    let sql = '';
+    this.laConexionBD.consultar(maxIdMedida, (err, row) => {
+      if(err) {
+        callback(false, err);
+      }
+      if(row.length == 0) {
+        callback(false, "Ya se han borrado todas las medidas");
+      }
+      if(row.length != 0) {
+        idUltimaMedida = row[0].idMedida;
+        sql= `DELETE FROM Medidas WHERE idMedida=${idUltimaMedida}`
+      }
+      this.laConexionBD.modificar(sql, (err) => {
+        if(err) {
+          callback(false, err);
+        } else{
+          callback(true, idUltimaMedida);
+          console.log("Se ha borrado con el id: " + idUltimaMedida);
+        }
+      });
+    });
+  }
 
-    let sql = 'DELETE FROM Medidas WHERE idMedida=(SELECT MAX(idMedida) FROM Medidas);'
-
-    this.laConexionBD.modificar(sql, function(err, res) {
-      callback(err, res);
+  borrarTodasLasMedidas(callback) {
+    const sql = 'DELETE FROM Medidas;';
+    this.laConexionBD.modificar(sql, (err) => {
+      if(err){
+        callback(false, err);
+      }
+      else{
+        callback(true);
+      }
     })
-
   }
 
   //----------------------------------------------------------------------------

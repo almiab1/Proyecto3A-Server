@@ -7,7 +7,6 @@ const app = express();
 // Creación del enrutador
 //------------------------------------------------------------------------------------------
 const router = express.Router()
-
 /* *********** CORS *********************************
  * Óscar Blánquez
  * description: middleware que habilita el
@@ -188,12 +187,33 @@ router.get('/getSensores', async function(req, res) {
         }
       });
   }) // getSensores
-//------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------
 
-// Prueba admin
-router.get('/prueba', (req, res, next) => {
-  res.status(200).send('Administrador');
+//------------------------------------------------------------------------------------------
+// GET /borrarUltimaMedida
+//------------------------------------------------------------------------------------------
+router.get('/borrarUltimaMedida', async (req, res) => {
+  await LogicaDeNegocio.borrarUltimaMedida( (confirmacion, respuesta) => {
+    if(confirmacion == true) {
+      res.status(200).send('Se ha borrado la medida con ID: ' + respuesta);
+    }
+    if(confirmacion == false) {
+      res.end();
+      //res.status(500).send({Error: "Error"});
+    }
+  });
+});
+//------------------------------------------------------------------------------------------
+// GET /borrarTodasLasMedidas
+//------------------------------------------------------------------------------------------
+router.get('/borrarTodasLasMedidas', async (req, res) => {
+  await LogicaDeNegocio.borrarTodasLasMedidas( (confirmacion, err) => {
+    if(confirmacion == true) {
+      res.status(200).send('Se han borrado todas las medidas');
+    }
+    if(confirmacion == false) {
+      res.status(500).send({Error: 'Error al borrar en la base de datos: ' +err});
+    }
+  });
 });
 
 //------------------------------------------------------------------------------------------
