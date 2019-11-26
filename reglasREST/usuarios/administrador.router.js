@@ -198,7 +198,6 @@ router.get('/borrarUltimaMedida', async (req, res) => {
     }
     if(confirmacion == false) {
       res.end();
-      //res.status(500).send({Error: "Error"});
     }
   });
 });

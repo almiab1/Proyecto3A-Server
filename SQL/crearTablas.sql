@@ -1,24 +1,37 @@
-CREATE TABLE "Usuarios" ( `idUsuario` VARCHAR (50) NOT NULL, `password` VARCHAR ( 10 ) NOT NULL, `telefono` VARCHAR ( 9 ), `idTipoUsuario` INTEGER NOT NULL, FOREIGN KEY(`idTipoUsuario`) REFERENCES `TipoUsuario`(`idTipo`) ON DELETE SET NULL, PRIMARY KEY(`idUsuario`) )
-
-    /* Crear tabla Sensores */
-     CREATE TABLE Sensores (idSensor INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-         idTipo INTEGER REFERENCES TipoSensores (idTipoMedida)
-    ON DELETE SET NULL
-    ONUPDATE CASCADE, descripcion TEXT);
-
-     /* Crear tipo Sensores */ 
-     CREATE TABLE TipoSensores (idTipoMedida INTEGER PRIMARY KEY AUTOINCREMENT, descripcion TEXT);
-
-     /* Crear Tipo Usuarios */ 
-     CREATE TABLE TipoUsuario (idTipo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Descripcion TEXT);
-     
-      /* Crear UsuarioSensor */ 
-      CREATE TABLE UsuarioSensor (idUsuario INTEGER REFERENCES Usuarios (idUsuario)
-    ON DELETE SET NULL,
-         idSensor INTEGER REFERENCES Sensores (idSensor)
-    ON DELETE SET NULL,
-         idUsuarioSensor INTEGER PRIMARY KEY
-    ON CONFLICT ROLLBACK AUTOINCREMENT NOT NULL);
-
-    /* Crear Usuarios */
-    CREATE TABLE Usuarios (idUsuario INTEGER PRIMARY KEY NOT NULL, email VARCHAR (50), password VARCHAR (10) NOT NULL, telefono VARCHAR (9), idTipoUsuario INTEGER REFERENCES TipoUsuario (idTipo) ON DELETE SET NULL NOT NULL);
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS `SensoresUsuarios` (
+	`idUsuario`	TEXT NOT NULL,
+	`idSensor`	INTEGER NOT NULL,
+	FOREIGN KEY(`idUsuario`) REFERENCES `Usuarios`(`idUsuario`) ON DELETE CASCADE,
+	PRIMARY KEY(`idUsuario`,`idSensor`),
+	FOREIGN KEY(`idSensor`) REFERENCES `Sensores`(`idSensor`) on delete cascade
+);
+INSERT INTO `SensoresUsuarios` VALUES ('briancalabuig@gmail.com',1);
+INSERT INTO `SensoresUsuarios` VALUES ('canut@gmail.com',3);
+INSERT INTO `SensoresUsuarios` VALUES ('a@gmail.com',2);
+CREATE TABLE IF NOT EXISTS `Sensores` (
+	`idSensor`	INTEGER,
+	`idTipoSensor`	INTEGER,
+	`descripcion`	TEXT,
+	FOREIGN KEY(`idTipoSensor`) REFERENCES `TipoSensor`(`idTipoSensor`),
+	PRIMARY KEY(`idSensor`)
+);
+INSERT INTO `Sensores` VALUES (1,1,NULL);
+INSERT INTO `Sensores` VALUES (2,2,NULL);
+INSERT INTO `Sensores` VALUES (3,3,NULL);
+CREATE TABLE IF NOT EXISTS `Medidas` (
+	`idMedida`	INTEGER PRIMARY KEY AUTOINCREMENT,
+	`valorMedido`	INTEGER,
+	`latitud`	REAL,
+	`longitud`	REAL,
+	`humedad`	INTEGER,
+	`temperatura`	INTEGER,
+	`tiempo`	BIGINT,
+	`idTipoMedida`	INTEGER,
+	`idUsuario`	TEXT,
+	`idSensor`	INTEGER,
+	FOREIGN KEY(`idTipoMedida`) REFERENCES `TipoSensor`(`idTipoSensor`),
+	FOREIGN KEY(`idSensor`) REFERENCES `Sensores`(`idSensor`) on delete set null,
+	FOREIGN KEY(`idUsuario`) REFERENCES `Usuarios`(`idUsuario`) on delete set null
+);
+COMMIT;
