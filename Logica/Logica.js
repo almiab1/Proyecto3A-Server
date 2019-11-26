@@ -181,10 +181,10 @@ module.exports = class Logica {
     let sql = '';
     this.laConexionBD.consultar(maxIdMedida, (err, row) => {
       if(err) {
-        callback(false);
+        callback(false, err);
       }
       if(row.length == 0) {
-        callback(false);
+        callback(false, "Ya se han borrado todas las medidas");
       }
       if(row.length != 0) {
         idUltimaMedida = row[0].idMedida;
@@ -195,6 +195,7 @@ module.exports = class Logica {
           callback(false, err);
         } else{
           callback(true, idUltimaMedida);
+          console.log("Se ha borrado con el id: " + idUltimaMedida);
         }
       });
     });
