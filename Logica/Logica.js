@@ -339,8 +339,7 @@ module.exports = class Logica {
   // ---------------------------------------------------
   getUsuarios(callback) {
 
-    let sql = "SELECT * FROM Usuarios;"
-    //let sql = "SELECT Usuarios.idUsuario, Usuarios.telefono, Usuarios.nombre, TipoUsuarios.descripcion, SensoresUsuarios.idSensor FROM Usuarios, TipoUsuarios, SensoresUsuarios WHERE Usuarios.idTipoUsuario = TipoUsuarios.idTipoUsuario AND Usuarios.idUsuario = SensoresUsuarios.idUsuario;"
+    let sql = "SELECT Usuarios.idUsuario, Usuarios.telefono, Usuarios.nombre, TipoUsuarios.descripcion, SensoresUsuarios.idSensor FROM Usuarios, TipoUsuarios, SensoresUsuarios WHERE Usuarios.idTipoUsuario = TipoUsuarios.idTipoUsuario AND Usuarios.idUsuario = SensoresUsuarios.idUsuario;"
     // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
     this.laConexionBD.consultar(sql, function(err, rows) {
 
