@@ -84,7 +84,7 @@ module.exports = class Logica {
                     if (rows.length == 0 || rows === undefined || rows === null) {
                         callback("Sin resultados", null);
                         return;
-                    } //  
+                    } //
                     callback(null, rows);
                 })
             } // getAllMedidas()
@@ -523,7 +523,7 @@ module.exports = class Logica {
         // ---------------------------------------------------
         getSensores(callback) {
 
-                let sql = "SELECT Sensores.idSensor, TipoSensor.descripcion, SensoresUsuarios.idUsuario FROM Sensores, TipoSensor, SensoresUsuarios WHERE Sensores.idTipoSensor=TipoSensor.idTipoSensor AND SensoresUsuarios.idSensor = Sensores.idSensor;"
+                let sql = "SELECT Sensores.idSensor, TipoSensor.descripcion FROM Sensores, TipoSensor WHERE Sensores.idTipoSensor=TipoSensor.idTipoSensor;"
                     // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
                 this.laConexionBD.consultar(sql, function(err, rows) {
 
