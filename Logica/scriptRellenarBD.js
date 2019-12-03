@@ -43,7 +43,7 @@ async function scriptParaRellenarBaseDatos() {
           latitud: latitud,
           longitud: longitud,
           idUsuario: "canut@gmail.com",
-          idTipoMedida: 2,
+          idTipoMedida: 1,
           idSensor: 2,
           temperatura: 20,
           humedad: 66

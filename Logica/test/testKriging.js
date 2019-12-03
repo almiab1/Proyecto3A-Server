@@ -24,7 +24,13 @@ let medida3 = {
 
 let medidas = [medida1, medida2, medida3];
 
-laLogica.calidadDelAireMediaRespirada(medidas, function(err, res){
+let json = {
+    ubicaciones: medidas,
+    horaInicio: 1575389711221,
+    horaFinal: 1575389711221 + (1 * 3600 * 1000)
+}
+
+laLogica.calidadDelAireMediaRespirada(json, function(err, res){
     if(err) {
         console.error(err);
     } else {

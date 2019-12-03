@@ -728,13 +728,25 @@ module.exports = class Logica {
     // --------------------------------------------------
     //  Carlos Tortosa Micó
     // --------------------------------------------------
-    //  -> ubicaciones[]:Ubicacion 
+    //  -> {ubicaciones[]:Ubicacion, horaInicio:Int, horaFinal:Int}  (Dentro de un json)
     //  calidadDelAireMediaRespirada
     //  -> resultado : string / error (via callback)
     // --------------------------------------------------
-    calidadDelAireMediaRespirada(puntosRuta, callback) {
+    calidadDelAireMediaRespirada(json, callback) {
+        let that = this;
         let puntosValidos = [];
-        let variograma = this.interpolarPorKriging(function (err, res) {
+
+        let puntosRuta = json.ubicaciones;
+        let horaInicio =  json.horaInicio;
+        let horaFinal = json.horaFinal;
+
+        if(!puntosRuta || !horaInicio || !horaFinal) {
+            callback('puntosRuta no tiene ubicaciones o horas', null);
+            return;
+        }
+
+
+        this.interpolarPorKriging(function (err, variograma) {
             if (err) {
                 callback(err, null);
                 return;
@@ -749,7 +761,12 @@ module.exports = class Logica {
 
             }//for
 
-            callback(null, 'wow');
+            let media = that.calcularMediaCalidadAire(puntosValidos, variograma);
+            let medidaEnMg3 = that.ozonoDePpbaMg3(media);
+
+            let intervalo = (horaFinal - horaInicio)/(3600*1000);
+            
+            callback(null, medidaEnMg3/intervalo/8); //Duracion jornada
 
         }); //interpolarPorKrigging
 
@@ -765,14 +782,14 @@ module.exports = class Logica {
     // --------------------------------------------------
     //  -> Ubicacion {longitud:R, latitud:R}
     //  interpolarPorKriging()
-    //  -> resultado : variograma / error (via callback)
+    //  -> resultado : variograma , horas:R/ error (via callback)
     // --------------------------------------------------
     interpolarPorKriging(callback) {
 
-        let sql = 'SELECT longitud,latitud,valorMedido,idTipoMedida FROM Medidas;';
+        let sql = 'SELECT longitud,latitud,valorMedido,idTipoMedida, tiempo FROM Medidas ORDER BY tiempo DESC LIMIT 50;';
         this.laConexionBD.consultar(sql, function (err, res) {
             if (err) {
-                callback(err, null);
+                callback(err, null,null)
                 return;
             }
 
@@ -781,7 +798,7 @@ module.exports = class Logica {
             let valores = [];
         
             for (const medida of res) {
-                if (medida.idTipoMedida === 2 && medida.latitud && medida.longitud && medida.valorMedido) {
+                if (medida.idTipoMedida === 1 && medida.latitud && medida.longitud && medida.valorMedido) {
 
                    x.push(medida.longitud);
                    y.push(medida.latitud);
@@ -789,6 +806,8 @@ module.exports = class Logica {
 
                 } 
             }
+
+            
 
             let variograma = kriging.train(valores,x,y, 'spherical', 0, 100);
             
@@ -799,6 +818,35 @@ module.exports = class Logica {
 
     } //kriging
 
+
+    // --------------------------------------------------
+    //  Carlos Tortosa Micó
+    // --------------------------------------------------
+    //  -> Ubicaciones[] {longitud:R, latitud:R} , variograma: Variogram (Libreria kriging)
+    //  calcularMediaCalidadAire()
+    //  -> resultado : R
+    // --------------------------------------------------
+    calcularMediaCalidadAire(ubicaciones, variograma){
+        let acumulador = 0;
+        for(const ubi of ubicaciones) {
+            acumulador += kriging.predict(ubi.longitud, ubi.latitud, variograma);
+        }
+
+        return Math.floor(acumulador/ubicaciones.length);
+
+    }//calcularMediaCalidadAire
+
+    // --------------------------------------------------
+    //  Carlos Tortosa Micó
+    // --------------------------------------------------
+    //  -> ppb: Int , variograma: Variogram (Libreria kriging)
+    //  ozonoDePpbAMg3()
+    //  -> resultado : R
+    // --------------------------------------------------
+    ozonoDePpbaMg3(ppb){
+        return ppb*2;
+    }
     //------------------------------------------------------------------------------------------
     //------------------------------------------------------------------------------------------
 } //() clase Logica
+
