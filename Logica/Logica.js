@@ -724,32 +724,80 @@ module.exports = class Logica {
         }())
     } // /getMedidasOficiales
 
+
     // --------------------------------------------------
     //  Carlos Tortosa Micó
     // --------------------------------------------------
-    //  ->Medidas[]
-    //  kriging()
-    //  -> resultado:string
+    //  -> ubicaciones[]:Ubicacion 
+    //  calidadDelAireMediaRespirada
+    //  -> resultado : string / error (via callback)
     // --------------------------------------------------
-    kriging(medidas, valorGuess){
+    calidadDelAireMediaRespirada(puntosRuta, callback) {
+        let puntosValidos = [];
+        let variograma = this.interpolarPorKriging(function (err, res) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
 
-        let x = [];
-        let y = [];
-        let valores = [];
+            
+            for (const punto of puntosRuta) {
 
-        for (const medida of medidas) {
-           x.push(medida.longitud);
-           y.push(medida.latitud);
-           valores.push(medida.valorMedido);
-        }
+                if (punto.latitud && punto.longitud) {
+                    puntosValidos.push(punto);
+                }//if
 
-        let variogrrama = kriging.train(valores,x,y,'spherical',0,100);
+            }//for
 
-        return(kriging.predict(valorGuess.longitud,valorGuess.latitud,variogrrama));
+            callback(null, 'wow');
 
-    }//kriging
+        }); //interpolarPorKrigging
 
 
+
+
+
+    } //calidadDelAireMediaRespirada
+
+
+    // --------------------------------------------------
+    //  Carlos Tortosa Micó
+    // --------------------------------------------------
+    //  -> Ubicacion {longitud:R, latitud:R}
+    //  interpolarPorKriging()
+    //  -> resultado : variograma / error (via callback)
+    // --------------------------------------------------
+    interpolarPorKriging(callback) {
+
+        let sql = 'SELECT longitud,latitud,valorMedido,idTipoMedida FROM Medidas;';
+        this.laConexionBD.consultar(sql, function (err, res) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+
+            let x = [];
+            let y = [];
+            let valores = [];
+        
+            for (const medida of res) {
+                if (medida.idTipoMedida === 2 && medida.latitud && medida.longitud && medida.valorMedido) {
+
+                   x.push(medida.longitud);
+                   y.push(medida.latitud);
+                   valores.push(medida.valorMedido);
+
+                } 
+            }
+
+            let variograma = kriging.train(valores,x,y, 'spherical', 0, 100);
+            
+            callback(null, variograma);
+        }); //consultar
+
+
+
+    } //kriging
 
     //------------------------------------------------------------------------------------------
     //------------------------------------------------------------------------------------------
