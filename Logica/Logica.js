@@ -332,7 +332,7 @@ module.exports = class Logica {
             // ---------------------------------------------------
         getUsuarios(callback) {
 
-                let sql = "SELECT Usuarios.idUsuario, Usuarios.telefono, Usuarios.nombre, TipoUsuario.descripcion FROM Usuarios, TipoUsuario WHERE Usuarios.idUsuario = TipoUsuario.idUsuario;"
+                let sql = "SELECT Usuarios.idUsuario, Usuarios.telefono, Usuarios.nombre, TipoUsuarios.descripcion FROM Usuarios, TipoUsuarios WHERE Usuarios.idUsuario = TipoUsuarios.idUsuario;"
                     // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
                 this.laConexionBD.consultar(sql, function(err, rows) {
 
@@ -540,6 +540,32 @@ module.exports = class Logica {
                     callback(null, rows);
                 })
             } // getSensores()
+
+            // ---------------------------------------------------
+            // Método implementado por Brian Calabuig 3-12-19
+            // ->
+            // dameListaSensoresConSuUltimaMedida()
+            // ->
+            // lista [json{idSensor: Int, tiempo:R}]
+            // ---------------------------------------------------
+            dameListaSensoresConSuUltimaMedida(tiempoLimite ,callback) {
+
+                    let sql = "SELECT idSensor, max(tiempo) AS tiempo FROM Medidas GROUP BY idSensor ORDER BY idSensor ASC;"
+
+                    var tiempoActual = new Date();
+
+                    var sensoresInactivos = [];
+
+                    this.laConexionBD.consultar(sql, function(err, res){
+
+                        for (var i = 0; i < res.length; i++) {
+                          if (res[i].tiempo + tiempoLimite ) {
+
+                          }
+                        }
+                    })
+
+                } // dameListaSensoresConSuUltimaMedida()
 
 
 
