@@ -5,19 +5,19 @@ const assert = require('assert');
 const laLogica = new Logica('copiaDeLaBD.db');
 
 let medida1 = {
-    latitud: 1,
-    longitud: 2,
+    latitud: 31,
+    longitud: 32,
     valorMedido: 3
 }
 let medida2 = {
-    latitud: 2,
-    longitud: -1,
+    latitud: 320,
+    longitud: 31,
     valorMedido: 6
 }
 
 let medida3 = {
-    latitud: 1.5,
-    longitud: 2.3,
+    latitud: 31.5,
+    longitud: 33,
     valorMedido: 2
 }
 

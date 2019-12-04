@@ -746,13 +746,15 @@ module.exports = class Logica {
         }
 
 
+        //Obtengo un modelo matemático ('variograma') para predecir que cantidad de O3 habrá en un sitio
+        // según las medidas de la BD
         this.interpolarPorKriging(function (err, variograma) {
             if (err) {
                 callback(err, null);
                 return;
             }
 
-            
+            // Relleno el array de puntosRuta con los puntos que son validos
             for (const punto of puntosRuta) {
 
                 if (punto.latitud && punto.longitud) {
@@ -761,12 +763,13 @@ module.exports = class Logica {
 
             }//for
 
-            let media = that.calcularMediaCalidadAire(puntosValidos, variograma);
-            let medidaEnMg3 = that.ozonoDePpbaMg3(media);
+            let media = that.calcularMediaCalidadAire(puntosValidos, variograma)/1000//Para compararlo más facil con los estándares de la OMS en ppm (0.06 por cada 8h) 
 
-            let intervalo = (horaFinal - horaInicio)/(3600*1000);
+            let intervalo = (horaFinal - horaInicio)/(3600*1000); //Tiempo que estuvo en ruta en hora
+
+            let mediaJornada = (media/intervalo)*8;
             
-            callback(null, medidaEnMg3/intervalo/8); //Duracion jornada
+            callback(null, mediaJornada); //Duracion jornada
 
         }); //interpolarPorKrigging
 
@@ -798,6 +801,8 @@ module.exports = class Logica {
             let valores = [];
         
             for (const medida of res) {
+
+                //Compruebo  que la medida es de Ozono y tiene los campos necesarios
                 if (medida.idTipoMedida === 1 && medida.latitud && medida.longitud && medida.valorMedido) {
 
                    x.push(medida.longitud);
@@ -808,8 +813,8 @@ module.exports = class Logica {
             }
 
             
-
-            let variograma = kriging.train(valores,x,y, 'spherical', 0, 100);
+            // "Entreno" la libreria con los parámetros de Ozono que he obtenido de la BD
+            let variograma = kriging.train(valores,x,y, 'spherical', 0, 100); 
             
             callback(null, variograma);
         }); //consultar
@@ -832,20 +837,9 @@ module.exports = class Logica {
             acumulador += kriging.predict(ubi.longitud, ubi.latitud, variograma);
         }
 
-        return Math.floor(acumulador/ubicaciones.length);
+        return (acumulador/ubicaciones.length);
 
     }//calcularMediaCalidadAire
-
-    // --------------------------------------------------
-    //  Carlos Tortosa Micó
-    // --------------------------------------------------
-    //  -> ppb: Int , variograma: Variogram (Libreria kriging)
-    //  ozonoDePpbAMg3()
-    //  -> resultado : R
-    // --------------------------------------------------
-    ozonoDePpbaMg3(ppb){
-        return ppb*2;
-    }
     //------------------------------------------------------------------------------------------
     //------------------------------------------------------------------------------------------
 } //() clase Logica
