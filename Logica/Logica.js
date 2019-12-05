@@ -612,28 +612,25 @@ module.exports = class Logica {
     //TO DO comprueba que el jwt se encuentra en el header
     const tokenExistente = req.headers.authorization
     if (!tokenExistente) {
-      res.status(401).send({
-        message: 'token no encontrado.'
-      })
+      console.log('Logica.autentificarUsuario: no existe el token.')
+      res.status(401).send({'Logica.autentificarUsuario': ' no existe el token.'})
+      return
     }
-    console.log(tokenExistente)
     //TO DO comprobamos que se trata de un token valido
     try {
+      console.log('Logica.autentificarUsuario: procedemos a verificar el token.')
       var verifyOptions = {
         issuer: 'iPolution',
         expiresIn: 60 * 60 * 24
         // aqui puede meterse un algoritmo de encriptación
       }
       var tokenVerificado = jwt.verify(tokenExistente, 'privateKey', verifyOptions)
-      console.log({
-        tokenVerificado
-      })
+      console.log('Logica.autentificarUsuario: token verificado, procedemos a ejecutar la ruta.')
       next()
     } catch (error) {
-      console.error(error)
-      res.status(401).send({
-        error: 'fallo en el sistema'
-      })
+      console.log('Logica.autentificarUsuario: el token no se pudo verificar correctamente.')
+      res.status(401).send({'Logica.autentificarUsuario': ' el token no pudo verificarse.'})
+      return
     }
   }
 
