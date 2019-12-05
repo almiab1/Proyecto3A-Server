@@ -737,10 +737,10 @@ module.exports = class Logica {
         let puntosValidos = [];
 
         let puntosRuta = json.ubicaciones;
-        let horaInicio =  json.horaInicio;
+        let horaInicio = json.horaInicio;
         let horaFinal = json.horaFinal;
 
-        if(!puntosRuta || !horaInicio || !horaFinal) {
+        if (!puntosRuta || !horaInicio || !horaFinal) {
             callback('puntosRuta no tiene ubicaciones o horas', null);
             return;
         }
@@ -759,16 +759,16 @@ module.exports = class Logica {
 
                 if (punto.latitud && punto.longitud) {
                     puntosValidos.push(punto);
-                }//if
+                } //if
 
-            }//for
+            } //for
 
-            let media = that.calcularMediaCalidadAire(puntosValidos, variograma)/1000//Para compararlo más facil con los estándares de la OMS en ppm (0.06 por cada 8h) 
+            let media = that.calcularMediaCalidadAire(puntosValidos, variograma) *2 //Para compararlo más facil con los estándares de la OMS en ppm (0.06 por cada 8h) 
 
-            let intervalo = (horaFinal - horaInicio)/(3600*1000); //Tiempo que estuvo en ruta en hora
+            let intervalo = (horaFinal - horaInicio) / (3600 * 1000); //Tiempo que estuvo en ruta en hora
 
-            let mediaJornada = (media/intervalo)*8;
-            
+            let mediaJornada = (media / intervalo);
+
             callback(null, mediaJornada); //Duracion jornada
 
         }); //interpolarPorKrigging
@@ -792,30 +792,45 @@ module.exports = class Logica {
         let sql = 'SELECT longitud,latitud,valorMedido,idTipoMedida, tiempo FROM Medidas ORDER BY tiempo DESC LIMIT 50;';
         this.laConexionBD.consultar(sql, function (err, res) {
             if (err) {
-                callback(err, null,null)
+                callback(err, null)
                 return;
             }
 
             let x = [];
             let y = [];
             let valores = [];
-        
+
+            let lat = 39.024053;
+            let lon = -0.241725;
+
+            while (lon <= -0.153030 && lat >= 38.913943) {
+                lon += 0.02;
+                lat -= 0.02;
+
+                x.push(lon);
+                y.push(lat);
+                valores.push(0.0);
+            }
+
+            let error = 0;
+
             for (const medida of res) {
+            let random = Math.floor(Math.random()*10);
 
                 //Compruebo  que la medida es de Ozono y tiene los campos necesarios
                 if (medida.idTipoMedida === 1 && medida.latitud && medida.longitud && medida.valorMedido) {
 
-                   x.push(medida.longitud);
-                   y.push(medida.latitud);
-                   valores.push(medida.valorMedido);
+                    x.push(medida.longitud);
+                    y.push(medida.latitud);
+                    valores.push(medida.valorMedido);
 
-                } 
+                }
             }
 
-            
+
             // "Entreno" la libreria con los parámetros de Ozono que he obtenido de la BD
-            let variograma = kriging.train(valores,x,y, 'spherical', 0, 100); 
-            
+            let variograma = kriging.train(valores, x, y, 'spherical', 0, 100);
+
             callback(null, variograma);
         }); //consultar
 
@@ -831,16 +846,15 @@ module.exports = class Logica {
     //  calcularMediaCalidadAire()
     //  -> resultado : R
     // --------------------------------------------------
-    calcularMediaCalidadAire(ubicaciones, variograma){
+    calcularMediaCalidadAire(ubicaciones, variograma) {
         let acumulador = 0;
-        for(const ubi of ubicaciones) {
+        for (const ubi of ubicaciones) {
             acumulador += kriging.predict(ubi.longitud, ubi.latitud, variograma);
         }
 
-        return (acumulador/ubicaciones.length);
+        return (acumulador / ubicaciones.length);
 
-    }//calcularMediaCalidadAire
+    } //calcularMediaCalidadAire
     //------------------------------------------------------------------------------------------
     //------------------------------------------------------------------------------------------
 } //() clase Logica
-

@@ -10,13 +10,13 @@ let medida1 = {
     valorMedido: 3
 }
 let medida2 = {
-    latitud: 320,
+    latitud: 37,
     longitud: 31,
     valorMedido: 6
 }
 
 let medida3 = {
-    latitud: 31.5,
+    latitud: 38.5,
     longitud: 33,
     valorMedido: 2
 }
@@ -27,7 +27,7 @@ let medidas = [medida1, medida2, medida3];
 let json = {
     ubicaciones: medidas,
     horaInicio: 1575389711221,
-    horaFinal: 1575389711221 + (1 * 3600 * 1000)
+    horaFinal: 1575389711221 + (2 * 3600 * 1000)
 }
 
 laLogica.calidadDelAireMediaRespirada(json, function(err, res){
