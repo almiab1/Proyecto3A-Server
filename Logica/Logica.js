@@ -337,7 +337,7 @@ module.exports = class Logica {
     let sql = 'SELECT idUsuario, telefono, nombre FROM Usuarios;'
 
     this.laConexionBD.consultar(sql, callback)
-    
+
   }// getUsuarios()
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
@@ -511,25 +511,14 @@ module.exports = class Logica {
   // ->
   // json{idSensor: Int, descripcion:Text, idUsuario:Text}
   // ---------------------------------------------------
-  getSensores(callback) {
+  getSensores(callback){
 
-    let sql = "SELECT Sensores.idSensor, TipoSensor.descripcion, SensoresUsuarios.idUsuario FROM Sensores, TipoSensor, SensoresUsuarios WHERE Sensores.idTipoSensor=TipoSensor.idTipoSensor AND SensoresUsuarios.idSensor = Sensores.idSensor;"
-    // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
-    this.laConexionBD.consultar(sql, function(err, rows) {
+    let sql = 'SELECT * FROM Sensores;'
 
-      // Si hay error o está vacio se manda el error
-      if (err) {
-        callback(err, null);
-        return;
-      }
-      if (rows.length == 0 || rows === undefined || rows === null) {
-        callback("Sin resultados", null);
-        return;
-      } //
+    this.laConexionBD.consultar(sql, callback)
 
-      callback(null, rows);
-    })
   } // getSensores()
+
 
   // ---------------------------------------------------
   // Método implementado por Brian Calabuig 3-12-19
