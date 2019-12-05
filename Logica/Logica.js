@@ -332,25 +332,13 @@ module.exports = class Logica {
   // ->
   // json{ idUsuario:Text, telefono:Text , descripcion:Text, idSensor: Int }
   // ---------------------------------------------------
-  getUsuarios(callback) {
+  getUsuarios(callback){
 
-    let sql = "SELECT Usuarios.idUsuario, Usuarios.telefono, Usuarios.nombre FROM Usuarios;"
-    // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
-    this.laConexionBD.consultar(sql, function(err, rows) {
+    let sql = 'SELECT idUsuario, telefono, nombre FROM Usuarios;'
 
-      // Si hay error o está vacio se manda el error
-      if (err) {
-        callback(err, null);
-        return;
-      }
-      if (rows.length == 0 || rows === undefined || rows === null) {
-        callback("Sin resultados", null);
-        return;
-      } //
-
-      callback(null, rows);
-    })
-  } // getUsuarios()
+    this.laConexionBD.consultar(sql, callback)
+    
+  }// getUsuarios()
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
