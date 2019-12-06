@@ -537,7 +537,7 @@ module.exports = class Logica {
         })
     })
 
-  }
+  }//dameTodosSensoresConSuUltimaMedida
   // ---------------------------------------------------
   // Método implementado por Brian Calabuig 3-12-19
   // lista [json{idSensor: Int, tiempo:R}]
@@ -563,7 +563,7 @@ module.exports = class Logica {
       //si cumple la condición añadimos el sensor a la lista resultado
       if (lista[i].tiempo + tiempoLimite < tiempoActual) {
 
-        sensoresInactivos[indiceSensoresInactivos] = lista[i];
+        sensoresInactivos[indiceSensoresInactivos] = lista[i].idSensor;
 
         indiceSensoresInactivos++;
 
@@ -574,7 +574,7 @@ module.exports = class Logica {
     //devolvemos la lista resultado
     return sensoresInactivos;
 
-  } // dameListaSensoresConSuUltimaMedida()
+  } // dameListaSensoresInactivos()
 
 
 

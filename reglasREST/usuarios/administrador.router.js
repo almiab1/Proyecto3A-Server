@@ -158,16 +158,12 @@ router.get('/distanciaActividad/:usuario', async function(req, res) {
 //------------------------------------------------------------------------------------------
 router.get('/estadoSensores', async function(req, res) {
 
-  await LogicaDeNegocio.obtenerPosicionesYTiempoUsuario(idUsuario, function(err, resultado) {
-    if (err) {
-      res.sendStatus(500);
-    } else {
-      let tiempoLimite = 3600000 * 24;
-      let listaSensores = await LogicaDeNegocio.dameTodosSensoresConSuUltimaMedida();
-      let sensoresInactivos = await LogicaDeNegocio.dameListaSensoresInactivos(tiempoLimite, sensoresInactivos)
-      res.send(JSON.stringify(sensoresInactivos)).status(200);
-    }
-  });
+  let tiempoLimite = 3600000 * 24;
+  let listaSensores = await LogicaDeNegocio.dameTodosSensoresConSuUltimaMedida();
+  let sensoresInactivos = await LogicaDeNegocio.dameListaSensoresInactivos(tiempoLimite, listaSensores)
+  console.log(sensoresInactivos);
+  res.send(JSON.stringify(sensoresInactivos)).status(200);
+
 }) // estadoSensores
 //------------------------------------------------------------------------------------------
 // /getUsuarios
