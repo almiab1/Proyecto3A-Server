@@ -449,7 +449,7 @@ module.exports = class Logica {
   //------------------------------------------------------------------------------------------
   darDeAltaSensor(json, callback) {
 
-    let idTipo = parseInt(json.idTipoSesnor, 10)
+    let idTipo = parseInt(json.idTipoSensor, 10)
     let idSensor = parseInt(json.idSensor, 10)
 
     let datos = {
@@ -518,7 +518,6 @@ module.exports = class Logica {
     this.laConexionBD.consultar(sql, callback)
 
   } // getSensores()
-
 
   // ---------------------------------------------------
   // Método implementado por Brian Calabuig 3-12-19
