@@ -161,8 +161,19 @@ router.get('/estadoSensores', async function(req, res) {
   let tiempoLimite = 3600000 * 24;
   let listaSensores = await LogicaDeNegocio.dameTodosSensoresConSuUltimaMedida();
   let sensoresInactivos = await LogicaDeNegocio.dameListaSensoresInactivos(tiempoLimite, listaSensores)
-  console.log(sensoresInactivos);
   res.send(JSON.stringify(sensoresInactivos)).status(200);
+
+}) // estadoSensores
+//------------------------------------------------------------------------------------------
+// /estadoUnSensor
+//------------------------------------------------------------------------------------------
+router.get('/estadoUnSensor/:idSensor', async function(req, res) {
+
+  var idSensor = req.params.idSensor;
+  let tiempoLimite = 3600000 * 24;
+  let tiempo = await LogicaDeNegocio.dameUltimaMedidaDeUnSensor(idSensor);
+  let bool = await LogicaDeNegocio.estaInactivoUnSensor(tiempoLimite, tiempo[0].tiempo)
+  res.send(JSON.stringify(bool)).status(200);
 
 }) // estadoSensores
 //------------------------------------------------------------------------------------------

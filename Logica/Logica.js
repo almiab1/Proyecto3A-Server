@@ -576,7 +576,48 @@ module.exports = class Logica {
 
   } // dameListaSensoresInactivos()
 
+  // ---------------------------------------------------
+  // Método implementado por Brian Calabuig 6-12-19
+  // idSensor: N
+  // ->
+  // dameUltimaMedidaDeUnSensor()
+  // ->
+  // lista[json{tiempo:R}]
+  // ---------------------------------------------------
+  async dameUltimaMedidaDeUnSensor(idSensor) {
 
+    let datos = {
+      $idSensor: idSensor
+    }
+
+    let sql = "SELECT max(tiempo) AS tiempo FROM Medidas WHERE idSensor=$idSensor;"
+
+    return new Promise((resolver, rechazar) => {
+      this.laConexionBD.consultarConPrepared(sql, datos,
+        (err, res) => {
+          (err ? rechazar(err) : resolver(res))
+        })
+    })
+
+  }//dameUltimaMedidaDeUnSensor
+  // ---------------------------------------------------
+  // Método implementado por Brian Calabuig 6-12-19
+  // tiempoLimite:R, tiempo:R
+  // ->
+  // estaInactivoUnSensor()
+  // ->
+  // T/F
+  // ---------------------------------------------------
+  async estaInactivoUnSensor(tiempoLimite, tiempo){
+
+    var tiempoActual = new Date().getTime();
+
+    if (tiempo + tiempoLimite < tiempoActual) {
+      return true;
+    }
+    return false;
+
+  }//estaInactivoUnSensor()
 
   //----------------------------------------------------------------------------
   //métodos log in
