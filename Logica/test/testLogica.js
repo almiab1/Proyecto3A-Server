@@ -12,8 +12,8 @@ describe('Obtención de datos de la BD Medidas', function () {
 
           await laLogica.getUltimaMedida(function (err, res) {
               assert.equal(res.length, 1)
-              assert.equal(res[0].idMedida, 10)
-              assert.equal(res[0].idUsuario, "a@gmail.com")
+              assert.equal(res[0].idMedida, 566)
+              assert.equal(res[0].idUsuario, "canut@gmail.com")
         }) //getUltimaMedida
 
     }) //it
@@ -21,7 +21,7 @@ describe('Obtención de datos de la BD Medidas', function () {
     it('Extraigo todas las medidas de la BD Mediciones sin error', async function () {
 
           await laLogica.getAllMedidas(function (err, res) {
-            assert.equal(res.length, 6)
+            assert.equal(res.length, 100)
         }) //getUltimaMedida
 
     }) //it
@@ -29,7 +29,7 @@ describe('Obtención de datos de la BD Medidas', function () {
     it('Extraigo todas las medidas de ozono de la BD Mediciones sin error', async function () {
 
           await laLogica.getAllOzono(function (err, res) {
-            assert.equal(res.length, 6)
+            assert.equal(res.length, 100)
         }) //getUltimaMedida
 
     }) //it

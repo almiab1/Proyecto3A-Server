@@ -241,10 +241,10 @@ module.exports = class Logica {
             $nombre: json.nombre
         }
 
-        //if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(datos)) {
-        //callback('JSON incompleto', null); //Mal request
-        //return;
-        //}
+        if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(datos)) {
+        callback('JSON incompleto', null); //Mal request
+        return;
+        }
 
         let textoSQL = 'INSERT INTO Usuarios (idUsuario, contrasenya, idTipoUsuario, telefono, nombre) VALUES ($idUsuario, $contrasenya, $idTipoUsuario, $telefono, $nombre);'
 
@@ -763,9 +763,9 @@ module.exports = class Logica {
 
             } //for
 
-            let media = that.calcularMediaCalidadAire(puntosValidos, variograma) *2 //Para compararlo más facil con los estándares de la OMS en ppm (0.06 por cada 8h) 
+            let media = that.calcularMediaCalidadAire(puntosValidos, variograma) *2 //Para compararlo más facil con los estándares de la OMS en ug/m3
 
-            let intervalo = (horaFinal - horaInicio) / (3600 * 1000); //Tiempo que estuvo en ruta en hora
+            let intervalo = (horaFinal - horaInicio) / (3600 * 1000); //Tiempo que estuvo en ruta en horas (millis -> horas)
 
             let mediaJornada = (media / intervalo);
 
@@ -803,6 +803,7 @@ module.exports = class Logica {
             let lat = 39.024053;
             let lon = -0.241725;
 
+            //Con este bucle creo un 'grid' de valores 0 en un cuadrante que engloba gandia
             while (lon <= -0.153030 && lat >= 38.913943) {
                 lon += 0.02;
                 lat -= 0.02;
@@ -812,10 +813,7 @@ module.exports = class Logica {
                 valores.push(0.0);
             }
 
-            let error = 0;
-
             for (const medida of res) {
-            let random = Math.floor(Math.random()*10);
 
                 //Compruebo  que la medida es de Ozono y tiene los campos necesarios
                 if (medida.idTipoMedida === 1 && medida.latitud && medida.longitud && medida.valorMedido) {
