@@ -59,16 +59,16 @@ router.put('/cambiarContrasenya', async function(req, res) {
 // /calidadDelAireMediaRespirada
 //------------------------------------------------------------------------------------------
 router.get('/calidadDelAireMediaRespirada', async function(req, res) {
-  if(req.body.datos) {
-    await LogicaDeNegocio.calidadDelAireMediaRespirada(req.body.datos, function(err, media){
+  if(req.body) {
+    await LogicaDeNegocio.calidadDelAireMediaRespirada(req.body, function(err, media){
       if(err){
-        res.send(err).status(500);
+        res.json({error: err}).status(500);
       } else {
-        res.send(media).status(200);
+        res.json({CalidadDelAire: media}).status(200);
       }
     })
   } else {
-    res.sendStatus(401);
+    res.sendStatus(403);
   }
 }) // cambiarContrasenya
 //------------------------------------------------------------------------------------------

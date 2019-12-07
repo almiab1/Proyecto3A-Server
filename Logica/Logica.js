@@ -242,8 +242,8 @@ module.exports = class Logica {
         }
 
         if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(datos)) {
-        callback('JSON incompleto', null); //Mal request
-        return;
+            callback('JSON incompleto', null); //Mal request
+            return;
         }
 
         let textoSQL = 'INSERT INTO Usuarios (idUsuario, contrasenya, idTipoUsuario, telefono, nombre) VALUES ($idUsuario, $contrasenya, $idTipoUsuario, $telefono, $nombre);'
@@ -740,8 +740,12 @@ module.exports = class Logica {
         let horaInicio = json.horaInicio;
         let horaFinal = json.horaFinal;
 
-        if (!puntosRuta || !horaInicio || !horaFinal) {
-            callback('puntosRuta no tiene ubicaciones o horas', null);
+        if (!puntosRuta) {
+            callback('No se ha proporcionado waypoints', null);
+            return;
+        }
+        if (!horaInicio || !horaFinal) {
+            callback('Asegurate que proporcionas la hora de inicio y final', null);
             return;
         }
 
@@ -763,18 +767,39 @@ module.exports = class Logica {
 
             } //for
 
-            let media = that.calcularMediaCalidadAire(puntosValidos, variograma) *2 //Para compararlo más facil con los estándares de la OMS en ug/m3
+            let media = that.calcularMediaCalidadAire(puntosValidos, variograma) * 2 //Para compararlo más facil con los estándares de la OMS en ug/m3
 
             let intervalo = (horaFinal - horaInicio) / (3600 * 1000); //Tiempo que estuvo en ruta en horas (millis -> horas)
 
-            let mediaJornada = (media / intervalo);
+            let mediaJornada = (media / intervalo); // unidades --> ug/m3/h (microgramos / metro cúbico / hora)
 
-            callback(null, mediaJornada); //Duracion jornada
+            /* 
+            
+                Vamos a emplear la siguiente tabla para definir que resultado damos, segun indicaciones de la OMS:
 
-        }); //interpolarPorKrigging
+                media <= 90 ug/m3/h --> Exposicion reducida
+                90 < media <= 110  --> Exposicion media
+                110 < media  --> Exposicion alta
 
+            */
 
+            switch (true) {
+                case (mediaJornada <= 90):
+                    callback(null, 'Baja exposicion: ' + mediaJornada + " ug/m3 por hora");
+                    break;
 
+                case (mediaJornada > 90 && mediaJornada <= 110):
+                    callback(null, 'Exposicion media: ' + mediaJornada + ' ug/m3 por hora');
+                    break;
+                case (mediaJornada > 110):
+                    callback(null, 'Alta exposición: ' + mediaJornada + ' ug/m3 por hora');
+
+                default:
+                    callback(null, 'Media indefinida: ' + mediaJornada);
+                    break;
+            } //switch
+
+        }); //interpolarPorKriging
 
 
     } //calidadDelAireMediaRespirada
@@ -805,8 +830,8 @@ module.exports = class Logica {
 
             //Con este bucle creo un 'grid' de valores 0 en un cuadrante que engloba gandia
             while (lon <= -0.153030 && lat >= 38.913943) {
-                lon += 0.02;
-                lat -= 0.02;
+                lon += 0.00025;
+                lat -= 0.00025;
 
                 x.push(lon);
                 y.push(lat);
@@ -814,7 +839,6 @@ module.exports = class Logica {
             }
 
             for (const medida of res) {
-
                 //Compruebo  que la medida es de Ozono y tiene los campos necesarios
                 if (medida.idTipoMedida === 1 && medida.latitud && medida.longitud && medida.valorMedido) {
 

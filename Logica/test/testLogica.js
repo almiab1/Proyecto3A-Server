@@ -227,7 +227,7 @@ describe('Estimación calidad del aire media respirada', function () {
     it('Pruebo el método para estimar la calidad del aire segun ruta recorrida y tiempo tomado', function(hecho){
         laLogica.calidadDelAireMediaRespirada(json, function(err,res){
             assert.equal(err,null, 'Ha habido un error estimando la calidad del aire: ' + err);
-            assert.equal(res, 162.60927321885924, 'No coincide el resultado con el esperado: ' + res);
+            assert.equal(res,  'Baja exposicion: 42.29912473314289 ug/m3 por hora', 'No coincide el resultado con el esperado: ' + res);
             hecho();
         })
     })//
