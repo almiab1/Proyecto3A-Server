@@ -6,6 +6,7 @@ const app = express();
 const Logica = require('./Logica/Logica');
 const parser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 
 // Routers
 const routerCiudadano = require('./reglasREST/ciudadano.router')
@@ -20,13 +21,7 @@ const routerBasurero = require('./reglasREST/usuarios/basurero.router')
  * @params: req: Object, res: Object, next
  * @return: void
  ***************************************************/
-app.use( (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-    next();
-  })
+
 /*
     Carlos Tortosa
 */
@@ -41,9 +36,10 @@ LogicaDeNegocio = new Logica('./SQL/baseDeDatos.db');
 //------------------------------------------------------------------------------------------
 app.use(parser.urlencoded({extended: false}));
 app.use(parser.json()); //Auto parsea a objeto el body de los requests
+app.use(cors());
 
-//app.use('/admin', LogicaDeNegocio.autentificarUsuario)
-//app.use('/basurero', LogicaDeNegocio.autentificarUsuario)
+app.use('/admin', LogicaDeNegocio.autentificarUsuario)
+app.use('/basurero', LogicaDeNegocio.autentificarUsuario)
 
 // enrrutadores
 app.use('/',routerCiudadano)
