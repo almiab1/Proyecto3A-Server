@@ -169,7 +169,7 @@ describe('Inserción de datos en la BD Medidas', function () {
         }
 
         laLogica.guardarMedida(jsonMalo, function (err, result) {
-            assert.notEqual(err, null, '¿Lo ha guardado igualmente?: ' + result);
+            assert.notEqual(err, null, '¿Lo ha guardado? ' + result);
             hecho();
         })
 
