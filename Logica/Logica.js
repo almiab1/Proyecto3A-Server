@@ -242,8 +242,8 @@ module.exports = class Logica {
     }
 
     if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(datos)) {
-    callback('JSON incompleto', null); //Mal request
-    return;
+      callback('JSON incompleto', null); //Mal request
+      return;
     }
 
     let textoSQL = 'INSERT INTO Usuarios (idUsuario, contrasenya, idTipoUsuario, telefono, nombre) VALUES ($idUsuario, $contrasenya, $idTipoUsuario, $telefono, $nombre);'
@@ -333,13 +333,13 @@ module.exports = class Logica {
   // ->
   // json{ idUsuario:Text, telefono:Text , descripcion:Text, idSensor: Int }
   // ---------------------------------------------------
-  getUsuarios(callback){
+  getUsuarios(callback) {
 
     let sql = 'SELECT idUsuario, telefono, nombre FROM Usuarios;'
 
     this.laConexionBD.consultar(sql, callback)
 
-  }// getUsuarios()
+  } // getUsuarios()
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
@@ -512,7 +512,7 @@ module.exports = class Logica {
   // ->
   // json{idSensor: Int, descripcion:Text, idUsuario:Text}
   // ---------------------------------------------------
-  getSensores(callback){
+  getSensores(callback) {
 
     let sql = 'SELECT * FROM Sensores;'
 
@@ -538,10 +538,11 @@ module.exports = class Logica {
         })
     })
 
-  }//dameTodosSensoresConSuUltimaMedida
+  } //dameTodosSensoresConSuUltimaMedida
   // ---------------------------------------------------
   // Método implementado por Brian Calabuig 3-12-19
   // lista [json{idSensor: Int, tiempo:R}]
+  // tiempoLimite:R
   // ->
   // dameListaSensoresInactivos()
   // ->
@@ -600,7 +601,7 @@ module.exports = class Logica {
         })
     })
 
-  }//dameUltimaMedidaDeUnSensor
+  } //dameUltimaMedidaDeUnSensor
   // ---------------------------------------------------
   // Método implementado por Brian Calabuig 6-12-19
   // tiempoLimite:R, tiempo:R
@@ -609,7 +610,7 @@ module.exports = class Logica {
   // ->
   // T/F
   // ---------------------------------------------------
-  async estaInactivoUnSensor(tiempoLimite, tiempo){
+  async estaInactivoUnSensor(tiempoLimite, tiempo) {
 
     var tiempoActual = new Date().getTime();
 
@@ -618,7 +619,7 @@ module.exports = class Logica {
     }
     return false;
 
-  }//estaInactivoUnSensor()
+  } //estaInactivoUnSensor()
 
   //----------------------------------------------------------------------------
   //métodos log in
@@ -654,7 +655,9 @@ module.exports = class Logica {
     const tokenExistente = req.headers.authorization
     if (!tokenExistente) {
       console.log('Logica.autentificarUsuario: no existe el token.')
-      res.status(401).send({'Logica.autentificarUsuario': ' no existe el token.'})
+      res.status(401).send({
+        'Logica.autentificarUsuario': ' no existe el token.'
+      })
       return
     }
     //TO DO comprobamos que se trata de un token valido
@@ -670,7 +673,9 @@ module.exports = class Logica {
       next()
     } catch (error) {
       console.log('Logica.autentificarUsuario: el token no se pudo verificar correctamente.')
-      res.status(401).send({'Logica.autentificarUsuario': ' el token no pudo verificarse.'})
+      res.status(401).send({
+        'Logica.autentificarUsuario': ' el token no pudo verificarse.'
+      })
       return
     }
   }
@@ -796,159 +801,159 @@ module.exports = class Logica {
   } // /getMedidasOficiales
 
   // --------------------------------------------------
-    //  Carlos Tortosa Micó
-    // --------------------------------------------------
-    //  -> {ubicaciones[]:Ubicacion, horaInicio:Int, horaFinal:Int}  (Dentro de un json)
-    //  calidadDelAireMediaRespirada()
-    //  -> resultado : string / error (via callback)
-    // --------------------------------------------------
-    calidadDelAireMediaRespirada(json, callback) {
-        let that = this;
-        let puntosValidos = [];
+  //  Carlos Tortosa Micó
+  // --------------------------------------------------
+  //  -> {ubicaciones[]:Ubicacion, horaInicio:Int, horaFinal:Int}  (Dentro de un json)
+  //  calidadDelAireMediaRespirada()
+  //  -> resultado : string / error (via callback)
+  // --------------------------------------------------
+  calidadDelAireMediaRespirada(json, callback) {
+    let that = this;
+    let puntosValidos = [];
 
-        let puntosRuta = json.puntosRuta;
-        let horaInicio = json.horaInicio;
-        let horaFinal = json.horaFinal;
+    let puntosRuta = json.puntosRuta;
+    let horaInicio = json.horaInicio;
+    let horaFinal = json.horaFinal;
 
-        if (!puntosRuta) {
-            callback('No se ha proporcionado waypoints', null);
-            return;
+    if (!puntosRuta) {
+      callback('No se ha proporcionado waypoints', null);
+      return;
+    }
+    if (!horaInicio || !horaFinal) {
+      callback('Asegurate que proporcionas la hora de inicio y final', null);
+      return;
+    }
+
+
+    //Obtengo un modelo matemático ('variograma') para predecir que cantidad de O3 habrá en un sitio
+    // según las medidas de la BD
+    this.interpolarPorKriging(function(err, variograma) {
+      if (err) {
+        callback(err, null);
+        return;
+      }
+
+      // Relleno el array de puntosRuta con los puntos que son validos
+      for (const punto of puntosRuta) {
+
+        if (punto.latitud && punto.longitud) {
+          puntosValidos.push(punto);
+        } //if
+
+      } //for
+
+      let media = that.calcularMediaCalidadAire(puntosValidos, variograma) * 2 //Para compararlo más facil con los estándares de la OMS en ug/m3
+
+      let intervalo = (horaFinal - horaInicio) / (3600 * 1000); //Tiempo que estuvo en ruta en horas (millis -> horas)
+
+      let mediaJornada = (media / intervalo); // unidades --> ug/m3/h (microgramos / metro cúbico / hora)
+
+      /*
+
+          Vamos a emplear la siguiente tabla para definir que resultado damos, segun indicaciones de la OMS:
+
+          media <= 90 ug/m3/h --> Exposicion reducida
+          90 < media <= 110  --> Exposicion media
+          110 < media  --> Exposicion alta
+
+      */
+
+      switch (true) {
+        case (mediaJornada <= 90):
+          callback(null, 'Baja exposicion: ' + mediaJornada + " ug/m3 por hora");
+          break;
+
+        case (mediaJornada > 90 && mediaJornada <= 110):
+          callback(null, 'Exposicion media: ' + mediaJornada + ' ug/m3 por hora');
+          break;
+        case (mediaJornada > 110):
+          callback(null, 'Alta exposición: ' + mediaJornada + ' ug/m3 por hora');
+
+        default:
+          callback(null, 'Media indefinida: ' + mediaJornada);
+          break;
+      } //switch
+
+    }); //interpolarPorKriging
+
+
+  } //calidadDelAireMediaRespirada
+
+
+  // --------------------------------------------------
+  //  Carlos Tortosa Micó
+  // --------------------------------------------------
+  //  -> Ubicacion {longitud:R, latitud:R}
+  //  interpolarPorKriging()
+  //  -> resultado : variograma , horas:R/ error (via callback)
+  // --------------------------------------------------
+  interpolarPorKriging(callback) {
+
+    let sql = 'SELECT longitud,latitud,valorMedido,idTipoMedida, tiempo FROM Medidas ORDER BY tiempo DESC LIMIT 50;';
+    this.laConexionBD.consultar(sql, function(err, res) {
+      if (err) {
+        callback(err, null)
+        return;
+      }
+
+      let x = [];
+      let y = [];
+      let valores = [];
+
+      let lat = 39.024053;
+      let lon = -0.241725;
+
+      //Con este bucle creo un 'grid' de valores 0 en un cuadrante que engloba gandia
+      while (lon <= -0.153030 && lat >= 38.913943) {
+        lon += 0.00025;
+        lat -= 0.00025;
+
+        x.push(lon);
+        y.push(lat);
+        valores.push(0.0);
+      }
+
+      for (const medida of res) {
+        //Compruebo  que la medida es de Ozono y tiene los campos necesarios
+        if (medida.idTipoMedida === 1 && medida.latitud && medida.longitud && medida.valorMedido) {
+
+          x.push(medida.longitud);
+          y.push(medida.latitud);
+          valores.push(medida.valorMedido);
+
         }
-        if (!horaInicio || !horaFinal) {
-            callback('Asegurate que proporcionas la hora de inicio y final', null);
-            return;
-        }
+      }
 
 
-        //Obtengo un modelo matemático ('variograma') para predecir que cantidad de O3 habrá en un sitio
-        // según las medidas de la BD
-        this.interpolarPorKriging(function (err, variograma) {
-            if (err) {
-                callback(err, null);
-                return;
-            }
+      // "Entreno" la libreria con los parámetros de Ozono que he obtenido de la BD
+      let variograma = kriging.train(valores, x, y, 'spherical', 0, 100);
 
-            // Relleno el array de puntosRuta con los puntos que son validos
-            for (const punto of puntosRuta) {
-
-                if (punto.latitud && punto.longitud) {
-                    puntosValidos.push(punto);
-                } //if
-
-            } //for
-
-            let media = that.calcularMediaCalidadAire(puntosValidos, variograma) * 2 //Para compararlo más facil con los estándares de la OMS en ug/m3
-
-            let intervalo = (horaFinal - horaInicio) / (3600 * 1000); //Tiempo que estuvo en ruta en horas (millis -> horas)
-
-            let mediaJornada = (media / intervalo); // unidades --> ug/m3/h (microgramos / metro cúbico / hora)
-
-            /* 
-            
-                Vamos a emplear la siguiente tabla para definir que resultado damos, segun indicaciones de la OMS:
-
-                media <= 90 ug/m3/h --> Exposicion reducida
-                90 < media <= 110  --> Exposicion media
-                110 < media  --> Exposicion alta
-
-            */
-
-            switch (true) {
-                case (mediaJornada <= 90):
-                    callback(null, 'Baja exposicion: ' + mediaJornada + " ug/m3 por hora");
-                    break;
-
-                case (mediaJornada > 90 && mediaJornada <= 110):
-                    callback(null, 'Exposicion media: ' + mediaJornada + ' ug/m3 por hora');
-                    break;
-                case (mediaJornada > 110):
-                    callback(null, 'Alta exposición: ' + mediaJornada + ' ug/m3 por hora');
-
-                default:
-                    callback(null, 'Media indefinida: ' + mediaJornada);
-                    break;
-            } //switch
-
-        }); //interpolarPorKriging
-
-
-    } //calidadDelAireMediaRespirada
-
-
-    // --------------------------------------------------
-    //  Carlos Tortosa Micó
-    // --------------------------------------------------
-    //  -> Ubicacion {longitud:R, latitud:R}
-    //  interpolarPorKriging()
-    //  -> resultado : variograma , horas:R/ error (via callback)
-    // --------------------------------------------------
-    interpolarPorKriging(callback) {
-
-        let sql = 'SELECT longitud,latitud,valorMedido,idTipoMedida, tiempo FROM Medidas ORDER BY tiempo DESC LIMIT 50;';
-        this.laConexionBD.consultar(sql, function (err, res) {
-            if (err) {
-                callback(err, null)
-                return;
-            }
-
-            let x = [];
-            let y = [];
-            let valores = [];
-
-            let lat = 39.024053;
-            let lon = -0.241725;
-
-            //Con este bucle creo un 'grid' de valores 0 en un cuadrante que engloba gandia
-            while (lon <= -0.153030 && lat >= 38.913943) {
-                lon += 0.00025;
-                lat -= 0.00025;
-
-                x.push(lon);
-                y.push(lat);
-                valores.push(0.0);
-            }
-
-            for (const medida of res) {
-                //Compruebo  que la medida es de Ozono y tiene los campos necesarios
-                if (medida.idTipoMedida === 1 && medida.latitud && medida.longitud && medida.valorMedido) {
-
-                    x.push(medida.longitud);
-                    y.push(medida.latitud);
-                    valores.push(medida.valorMedido);
-
-                }
-            }
-
-
-            // "Entreno" la libreria con los parámetros de Ozono que he obtenido de la BD
-            let variograma = kriging.train(valores, x, y, 'spherical', 0, 100);
-
-            callback(null, variograma);
-        }); //consultar
+      callback(null, variograma);
+    }); //consultar
 
 
 
-    } //kriging
+  } //kriging
 
 
-    // --------------------------------------------------
-    //  Carlos Tortosa Micó
-    // --------------------------------------------------
-    //  -> Ubicaciones[] {longitud:R, latitud:R} , variograma: Variogram (Libreria kriging)
-    //  calcularMediaCalidadAire()
-    //  -> resultado : R
-    // --------------------------------------------------
-    calcularMediaCalidadAire(ubicaciones, variograma) {
-        let acumulador = 0;
-        for (const ubi of ubicaciones) {
-            acumulador += kriging.predict(ubi.longitud, ubi.latitud, variograma);
-        }
+  // --------------------------------------------------
+  //  Carlos Tortosa Micó
+  // --------------------------------------------------
+  //  -> Ubicaciones[] {longitud:R, latitud:R} , variograma: Variogram (Libreria kriging)
+  //  calcularMediaCalidadAire()
+  //  -> resultado : R
+  // --------------------------------------------------
+  calcularMediaCalidadAire(ubicaciones, variograma) {
+    let acumulador = 0;
+    for (const ubi of ubicaciones) {
+      acumulador += kriging.predict(ubi.longitud, ubi.latitud, variograma);
+    }
 
-        return (acumulador / ubicaciones.length);
+    return (acumulador / ubicaciones.length);
 
-    } //calcularMediaCalidadAire
-    //------------------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------------------
+  } //calcularMediaCalidadAire
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
 
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
