@@ -736,7 +736,7 @@ module.exports = class Logica {
         let that = this;
         let puntosValidos = [];
 
-        let puntosRuta = json.ubicaciones;
+        let puntosRuta = json.puntosRuta;
         let horaInicio = json.horaInicio;
         let horaFinal = json.horaFinal;
 
