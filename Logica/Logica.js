@@ -242,8 +242,8 @@ module.exports = class Logica {
         }
 
         if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(datos)) {
-            callback('JSON incompleto', null); //Mal request
-            return;
+        callback('JSON incompleto', null); //Mal request
+        return;
         }
 
         let textoSQL = 'INSERT INTO Usuarios (idUsuario, contrasenya, idTipoUsuario, telefono, nombre) VALUES ($idUsuario, $contrasenya, $idTipoUsuario, $telefono, $nombre);'
@@ -335,22 +335,10 @@ module.exports = class Logica {
     // ---------------------------------------------------
     getUsuarios(callback) {
 
-        let sql = "SELECT Usuarios.idUsuario, Usuarios.telefono, Usuarios.nombre, TipoUsuario.descripcion FROM Usuarios, TipoUsuario WHERE Usuarios.idUsuario = TipoUsuario.idUsuario;"
-        // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
-        this.laConexionBD.consultar(sql, function (err, rows) {
+        let sql = 'SELECT idUsuario, telefono, nombre FROM Usuarios;'
 
-            // Si hay error o está vacio se manda el error
-            if (err) {
-                callback(err, null);
-                return;
-            }
-            if (rows.length == 0 || rows === undefined || rows === null) {
-                callback("Sin resultados", null);
-                return;
-            } //
+        this.laConexionBD.consultar(sql, callback)
 
-            callback(null, rows);
-        })
     } // getUsuarios()
     //------------------------------------------------------------------------------------------
     //------------------------------------------------------------------------------------------
@@ -462,7 +450,7 @@ module.exports = class Logica {
     //------------------------------------------------------------------------------------------
     darDeAltaSensor(json, callback) {
 
-        let idTipo = parseInt(json.idTipoSesnor, 10)
+        let idTipo = parseInt(json.idTipoSensor, 10)
         let idSensor = parseInt(json.idSensor, 10)
 
         let datos = {
@@ -526,25 +514,111 @@ module.exports = class Logica {
     // ---------------------------------------------------
     getSensores(callback) {
 
-        let sql = "SELECT Sensores.idSensor, TipoSensor.descripcion FROM Sensores, TipoSensor WHERE Sensores.idTipoSensor=TipoSensor.idTipoSensor;"
-        // Realizar una consulta a la base de datos, meter todas las medidas en un objeto y pasarlo por el segundo campo del callback
-        this.laConexionBD.consultar(sql, function (err, rows) {
+        let sql = 'SELECT * FROM Sensores;'
 
-            // Si hay error o está vacio se manda el error
-            if (err) {
-                callback(err, null);
-                return;
-            }
-            if (rows.length == 0 || rows === undefined || rows === null) {
-                callback("Sin resultados", null);
-                return;
-            } //
+        this.laConexionBD.consultar(sql, callback)
 
-            callback(null, rows);
-        })
     } // getSensores()
 
+    // ---------------------------------------------------
+    // Método implementado por Brian Calabuig 3-12-19
+    // ->
+    // dameTodosSensoresConSuUltimaMedida()
+    // ->
+    // lista [json{idSensor: Int, tiempo:R}]
+    // ---------------------------------------------------
+    async dameTodosSensoresConSuUltimaMedida() {
 
+        let sql = "SELECT idSensor, max(tiempo) AS tiempo FROM Medidas GROUP BY idSensor ORDER BY idSensor ASC;"
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexionBD.consultar(sql,
+                (err, res) => {
+                    (err ? rechazar(err) : resolver(res))
+                })
+        })
+
+    } //dameTodosSensoresConSuUltimaMedida
+    // ---------------------------------------------------
+    // Método implementado por Brian Calabuig 3-12-19
+    // lista [json{idSensor: Int, tiempo:R}]
+    // ->
+    // dameListaSensoresInactivos()
+    // ->
+    // lista [json{idSensor: Int}]
+    // ---------------------------------------------------
+    async dameListaSensoresInactivos(tiempoLimite, lista) {
+
+        //obtenemos el tiempo actual
+        var tiempoActual = 1575486900000 //new Date();
+
+        //creamos la lista donde albergaremos el resultado
+        var sensoresInactivos = [];
+
+        //creamos el indice de la lista anterior
+        var indiceSensoresInactivos = 0;
+
+        //recorremos la lista de la cabecera del método
+        for (var i = 0; i < lista.length; i++) {
+
+            //si cumple la condición añadimos el sensor a la lista resultado
+            if (lista[i].tiempo + tiempoLimite < tiempoActual) {
+
+                sensoresInactivos[indiceSensoresInactivos] = lista[i].idSensor;
+
+                indiceSensoresInactivos++;
+
+            } //if
+
+        } //for
+
+        //devolvemos la lista resultado
+        return sensoresInactivos;
+
+    } // dameListaSensoresInactivos()
+
+    // ---------------------------------------------------
+    // Método implementado por Brian Calabuig 6-12-19
+    // idSensor: N
+    // ->
+    // dameUltimaMedidaDeUnSensor()
+    // ->
+    // lista[json{tiempo:R}]
+    // ---------------------------------------------------
+    async dameUltimaMedidaDeUnSensor(idSensor) {
+
+        let datos = {
+            $idSensor: idSensor
+        }
+
+        let sql = "SELECT max(tiempo) AS tiempo FROM Medidas WHERE idSensor=$idSensor;"
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexionBD.consultarConPrepared(sql, datos,
+                (err, res) => {
+                    (err ? rechazar(err) : resolver(res))
+                })
+        })
+
+    } //dameUltimaMedidaDeUnSensor
+    // ---------------------------------------------------
+    // Método implementado por Brian Calabuig 6-12-19
+    // tiempoLimite:R, tiempo:R
+    // ->
+    // estaInactivoUnSensor()
+    // ->
+    // T/F
+    // ---------------------------------------------------
+    async estaInactivoUnSensor(tiempoLimite, tiempo) {
+
+        var tiempoActual = new Date().getTime();
+
+        if (tiempo + tiempoLimite < tiempoActual) {
+            return true;
+        }
+        return false;
+
+    } //estaInactivoUnSensor()
 
     //----------------------------------------------------------------------------
     //métodos log in
@@ -579,28 +653,29 @@ module.exports = class Logica {
         //TO DO comprueba que el jwt se encuentra en el header
         const tokenExistente = req.headers.authorization
         if (!tokenExistente) {
+            console.log('Logica.autentificarUsuario: no existe el token.')
             res.status(401).send({
-                message: 'token no encontrado.'
+                'Logica.autentificarUsuario': ' no existe el token.'
             })
+            return
         }
-        console.log(tokenExistente)
         //TO DO comprobamos que se trata de un token valido
         try {
+            console.log('Logica.autentificarUsuario: procedemos a verificar el token.')
             var verifyOptions = {
                 issuer: 'iPolution',
                 expiresIn: 60 * 60 * 24
                 // aqui puede meterse un algoritmo de encriptación
             }
             var tokenVerificado = jwt.verify(tokenExistente, 'privateKey', verifyOptions)
-            console.log({
-                tokenVerificado
-            })
+            console.log('Logica.autentificarUsuario: token verificado, procedemos a ejecutar la ruta.')
             next()
         } catch (error) {
-            console.error(error)
+            console.log('Logica.autentificarUsuario: el token no se pudo verificar correctamente.')
             res.status(401).send({
-                error: 'fallo en el sistema'
+                'Logica.autentificarUsuario': ' el token no pudo verificarse.'
             })
+            return
         }
     }
 
@@ -877,6 +952,9 @@ module.exports = class Logica {
         return (acumulador / ubicaciones.length);
 
     } //calcularMediaCalidadAire
+    //------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------
+
     //------------------------------------------------------------------------------------------
     //------------------------------------------------------------------------------------------
 } //() clase Logica
