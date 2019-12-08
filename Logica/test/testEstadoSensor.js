@@ -18,8 +18,8 @@ describe('Prueba método dameListaSensoresConSuUltimaMedida()', function(){
 
     console.log(sensoresInactivos);
 
-    assert.equal(sensoresInactivos.length, 1)
-    assert.equal(sensoresInactivos[0].idSensor, 2)
+    assert.equal(sensoresInactivos.length, 1);
+    assert.equal(sensoresInactivos[0], 2)
 
   })//it
 
@@ -36,8 +36,8 @@ describe('Prueba método dameListaSensoresConSuUltimaMedida()', function(){
     console.log(sensoresInactivos);
 
     assert.equal(sensoresInactivos.length, 2)
-    assert.equal(sensoresInactivos[0].idSensor, 1)
-    assert.equal(sensoresInactivos[1].idSensor, 2)
+    assert.equal(sensoresInactivos[0], 1)
+    assert.equal(sensoresInactivos[1], 2)
 
   })//it
 
