@@ -174,6 +174,46 @@ router.get('/estadoUnSensor/:idSensor', async function(req, res) {
 
 }) // estadoSensores
 //------------------------------------------------------------------------------------------
+// /precisionUnSensor
+//------------------------------------------------------------------------------------------
+router.get('/precisionUnSensor/:idSensor', async function(req, res) {
+
+  var idSensor = req.params.idSensor;
+  let lista1 = await LogicaDeNegocio.dameTodasMedidasDeUnSensor(idSensor);
+  let lista2 = await LogicaDeNegocio.dameTodasMedidasDeTodosSensores();
+  let bool = await LogicaDeNegocio.estaDandoMedidasErroneasUnSensor(lista1, lista2)
+  res.send(JSON.stringify(bool)).status(200);
+
+}) // precisionUnSensor
+//------------------------------------------------------------------------------------------
+// /precisionTodosSensores
+//------------------------------------------------------------------------------------------
+router.get('/precisionTodosSensores', async function(req, res) {
+
+  var listaJson = []
+  var indiceListaJson = 0;
+  var listaIdSensores = await LogicaDeNegocio.getIdSensores();
+  for (var i = 0; i < listaIdSensores.length; i++) {
+    let lista1 = await LogicaDeNegocio.dameTodasMedidasDeUnSensor(listaIdSensores[i]);
+    let lista2 = await LogicaDeNegocio.dameTodasMedidasDeTodosSensores();
+    let bool = await LogicaDeNegocio.estaDandoMedidasErroneasUnSensor(lista1, lista2)
+
+    if (bool == true) {
+
+      var jsonSensoresAveriados = {
+        idSensor: listaIdSensores[i],
+        bool: true
+      }
+
+      listaJson[indiceListaJson] = jsonSensoresAveriados;
+      indiceListaJson ++;
+    }//if
+  }//for
+
+  res.send(JSON.stringify(listaJson)).status(200);
+
+}) // precisionTodosSensores
+//------------------------------------------------------------------------------------------
 // /getUsuarios
 //------------------------------------------------------------------------------------------
 router.get('/getUsuarios', async function(req, res) {

@@ -521,6 +521,26 @@ module.exports = class Logica {
   } // getSensores()
 
   // ---------------------------------------------------
+  // Método implementado por Brian Calabuig
+  // ->
+  // getIdSensores()
+  // ->
+  // lista [json{idSensor: Int}]
+  // ---------------------------------------------------
+  async getIdSensores() {
+
+    let sql = 'SELECT idSensor FROM Sensores;'
+
+    return new Promise((resolver, rechazar) => {
+      this.laConexionBD.consultar(sql,
+        (err, res) => {
+          (err ? rechazar(err) : resolver(res))
+        })
+    })
+
+  } // getSensores()
+
+  // ---------------------------------------------------
   // Método implementado por Brian Calabuig 3-12-19
   // ->
   // dameTodosSensoresConSuUltimaMedida()
@@ -551,7 +571,7 @@ module.exports = class Logica {
   async dameListaSensoresInactivos(tiempoLimite, lista) {
 
     //obtenemos el tiempo actual
-    var tiempoActual = 1575486900000 //new Date();
+    var tiempoActual = 1575486900000 //new Date()getTime();
 
     //creamos la lista donde albergaremos el resultado
     var sensoresInactivos = [];
@@ -620,6 +640,120 @@ module.exports = class Logica {
     return false;
 
   } //estaInactivoUnSensor()
+  // ---------------------------------------------------
+  // Método implementado por Brian Calabuig 8-12-19
+  // idSensor: N
+  // ->
+  // dameTodasMedidasDeUnSensor()
+  // ->
+  // lista[{idSensor: N, valorMedido: Z, latitud: R, longitud: R, tiempo: R}]
+  // ---------------------------------------------------
+  async dameTodasMedidasDeUnSensor(idSensor){
+
+    let datos = {
+      $idSensor: idSensor
+    }
+
+    let sql= "SELECT idSensor, valorMedido, latitud, longitud, tiempo FROM Medidas WHERE idSensor=$idSensor;"
+
+    return new Promise((resolver, rechazar) => {
+      this.laConexionBD.consultarConPrepared(sql, datos,
+        (err, res) => {
+          (err ? rechazar(err) : resolver(res))
+        })
+    })
+
+  }//dameTodasMedidasDeUnSensor
+  // ---------------------------------------------------
+  // Método implementado por Brian Calabuig 8-12-19
+  // ->
+  // dameTodasMedidasDeTodosSensores()
+  // ->
+  // lista[{idSensor: N, valorMedido: Z, latitud: R, longitud: R, tiempo: R}]
+  // ---------------------------------------------------
+  async dameTodasMedidasDeTodosSensores(){
+
+    let sql= "SELECT idSensor, valorMedido, latitud, longitud, tiempo FROM Medidas;"
+
+    return new Promise((resolver, rechazar) => {
+      this.laConexionBD.consultar(sql,
+        (err, res) => {
+          (err ? rechazar(err) : resolver(res))
+        })
+    })
+
+  }//dameTodasMedidasDeTodosSensores
+  // ---------------------------------------------------
+  // Método implementado por Brian Calabuig 8-12-19
+  //  lista1[{idSensor: N, valorMedido: Z, latitud: R, longitud: R, tiempo: R}]
+  //  lista2[{idSensor: N, valorMedido: Z, latitud: R, longitud: R, tiempo: R}]
+  // ->
+  // estaDandoMedidasErroneasUnSensor()
+  // ->
+  // T/F
+  // ---------------------------------------------------
+  async estaDandoMedidasErroneasUnSensor(lista1, lista2) {
+
+    var bool = false;
+
+    for (var i = 0; i < lista1.length; i++) {
+
+      var contador = 0;
+
+      for (var j = 0; j < lista2.length; j++) {
+
+        var distancia = this.calcularDistanciaEntre2Puntos(lista1.latitud, lista1.longitud, lista2.latitud, lista2.longitud)
+
+        if ((lista1.idSensor != lista2.idSensor) && (lista1.tiempo <= lista2.tiempo + 1800000 || lista1.tiempo >= lista2.tiempo - 1800000)
+        && (distancia < 50) && (lista1.valorMedido > lista2.valorMedido + 10 || lista1.valorMedido < lista2.valorMedido - 10)) {
+
+          contador ++;
+
+        }//if
+
+        if (contador > 3){
+
+          bool = true;
+
+        }//if
+
+      }//for2
+
+    }//for1
+
+    return bool;
+
+  }//estaDandoMedidasErroneasUnSensor()
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+  // Método implementado por Brian Calabuig 8-12-19
+  // latitud1: R, longitud1: R, latitud2: R, longitud2: R
+  // -->
+  // calcularDistanciaEntre2Puntos()
+  // -->
+  // distancia: R
+  //------------------------------------------------------------------------------------------
+  calcularDistanciaEntre2Puntos(latitud1, longitud1, latitud2, longitud2) {
+
+    let senoLatitudOrigen = Math.sin((latitud1 * 2 * Math.PI) / 360)
+    let senoLatitudDestino = Math.sin((latitud2 * 2 * Math.PI) / 360)
+    let cosenoLatitudOrigen = Math.cos((latitud1 * 2 * Math.PI) / 360)
+    let cosenoLatitudDestino = Math.cos((latitud2 * 2 * Math.PI) / 360)
+    let incrementoLongitud = longitud2 - longitud1
+    let cosenoLongitud = Math.cos((incrementoLongitud * 2 * Math.PI) / 360)
+
+    let multiplicacionSenos = senoLatitudOrigen * senoLatitudDestino
+    let multiplicacionCosenos = cosenoLatitudOrigen * cosenoLatitudDestino * cosenoLongitud
+    let distanciaAngular = Math.acos(multiplicacionSenos + multiplicacionCosenos) * 360 / (2 * Math.PI)
+
+    let distanciaEnKm = distanciaAngular * 111.11 * 1000;
+
+    let distanciaTotal = Math.round(distanciaEnKm)
+
+    return distanciaTotal
+
+  } //calcularDistanciaEntre2Puntos()
 
   //----------------------------------------------------------------------------
   //métodos log in
