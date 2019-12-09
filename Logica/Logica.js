@@ -241,7 +241,7 @@ module.exports = class Logica {
       $nombre: json.nombre
     }
 
-    if (!this.elJsonTieneTodosLosCamposRequeridosUsuario(datos)) {
+    if (this.elJsonTieneTodosLosCamposRequeridosUsuario(datos)) {
       callback('JSON incompleto', null); //Mal request
       return;
     }

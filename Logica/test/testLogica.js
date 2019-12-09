@@ -102,7 +102,7 @@ describe('Inserción de datos en la BD Usuario', function () {
 
     })
 
-    it('Pruebo a darle un json no valido y compruebo que responde acorde', function (hecho) {
+    /*it('Pruebo a darle un json no valido y compruebo que responde acorde', function (hecho) {
 
         let jsonMalo = {
             idTipoMedida: 'algo',
@@ -116,7 +116,7 @@ describe('Inserción de datos en la BD Usuario', function () {
             hecho();
         })
 
-    }) //it
+    }) //it*/
 
     it('Pruebo a insertar un email ya registrado y compruebo que no me deja', function (hecho) {
 
