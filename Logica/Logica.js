@@ -976,7 +976,7 @@ module.exports = class Logica {
 
                     } //for
 
-                    let media = that.calcularMediaCalidadAire(puntosValidos, variograma) * 2 //Para compararlo más facil con los estándares de la OMS en ug/m3
+                    let media = Math.floor(that.calcularMediaCalidadAire(puntosValidos, variograma) * 2) //Para compararlo más facil con los estándares de la OMS en ug/m3
 
                     /*
 
@@ -1142,7 +1142,7 @@ module.exports = class Logica {
                         return;
                     }
 
-                    let media = that.calcularMediaCalidadAire(valoresBD) * 2; //Lo paso a ug/m3
+                    let media = Math.floor(that.calcularMediaCalidadAire(valoresBD) * 2); //Lo paso a ug/m3
 
                     /*
                       Vuelvo a tener en cuenta las recomendaciones de la OMS para disernir la gravedad de la medicion
