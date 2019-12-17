@@ -225,7 +225,7 @@ describe('Estimación calidad del aire media respirada', function() {
         }
 
         it('Pruebo el método para estimar la calidad del aire segun ruta recorrida y tiempo tomado', function(hecho) {
-                laLogica.calidadDelAireMediaRespirada(json, function(err, res) {
+                laLogica.getValoracionCalidadAire(json, function(err, res) {
                     assert.equal(err, null, 'Ha habido un error estimando la calidad del aire: ' + err);
                     assert.notEqual(res, null, 'No me ha entregado nada');
                     hecho();
@@ -234,7 +234,7 @@ describe('Estimación calidad del aire media respirada', function() {
 
 
         it('Pruebo que maneja bien entrega incorrecta de datos', function(hecho) {
-            laLogica.calidadDelAireMediaRespirada({
+            laLogica.getValoracionCalidadAire({
                 algo: 'Incorrecto'
             }, function(err, res) {
                 assert.notEqual(err, null, 'No ha habido error, ¿lo ha ejecutado?: ' + res);

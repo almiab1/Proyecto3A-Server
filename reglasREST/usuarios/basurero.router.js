@@ -50,11 +50,11 @@ router.put('/cambiarContrasenya', async function(req, res) {
 
 //------------------------------------------------------------------------------------------
 // Carlos Tortosa Micó
-// /calidadDelAireMediaRespirada
+// /getValoracionCalidadAire
 //------------------------------------------------------------------------------------------
-router.get('/calidadDelAireMediaRespirada', async function(req, res) {
+router.get('/getValoracionCalidadAire', async function(req, res) {
         if (req.body) {
-            await LogicaDeNegocio.calidadDelAireMediaRespirada(req.body, function(err, media) {
+            await LogicaDeNegocio.getValoracionCalidadAire(req.body, function(err, media) {
                 if (err) {
                     res.json({
                         error: err

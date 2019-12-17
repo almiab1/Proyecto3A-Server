@@ -941,7 +941,7 @@ module.exports = class Logica {
         //  calidadDelAireMediaRespirada()
         //  -> resultado : string / error (via callback)
         // --------------------------------------------------
-        calidadDelAireMediaRespirada(json, callback) {
+        getValoracionCalidadAire(json, callback) {
                 let that = this;
                 let puntosValidos = [];
 
@@ -990,17 +990,17 @@ module.exports = class Logica {
 
                     switch (true) {
                         case (media <= 90):
-                            callback(null, 'Baja exposicion: ' + media + " ug/m3 por hora");
+                            callback(null, 1);
                             break;
 
                         case (media > 90 && media <= 110):
-                            callback(null, 'Exposicion media: ' + media + ' ug/m3 por hora');
+                            callback(null, 2);
                             break;
                         case (media > 110):
-                            callback(null, 'Alta exposición: ' + media + ' ug/m3 por hora');
+                            callback(null, 3);
                             break;
                         default:
-                            callback(null, 'Media indefinida: ' + media);
+                            callback(null, 0);
                             break;
                     } //switch
 
@@ -1155,18 +1155,18 @@ module.exports = class Logica {
 
                     switch (true) {
                         case (media <= 90):
-                            callback(null, 'Baja exposicion: ' + media + " ug/m3 por hora");
+                            callback(null, 1);
                             break;
 
                         case (media > 90 && media <= 110):
-                            callback(null, 'Exposicion media: ' + media + ' ug/m3 por hora');
+                            callback(null, 2);
                             break;
                         case (media > 110):
-                            callback(null, 'Alta exposición: ' + media + ' ug/m3 por hora');
+                            callback(null, 3);
                             break;
 
                         default:
-                            callback(null, 'Media indefinida: ' + media);
+                            callback(null, 0);
                             break;
                     } //switch
 
