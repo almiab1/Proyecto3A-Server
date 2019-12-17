@@ -227,7 +227,7 @@ describe('Estimación calidad del aire media respirada', function() {
         it('Pruebo el método para estimar la calidad del aire segun ruta recorrida y tiempo tomado', function(hecho) {
                 laLogica.getValoracionCalidadAire(json, function(err, res) {
                     assert.equal(err, null, 'Ha habido un error estimando la calidad del aire: ' + err);
-                    assert.notEqual(res, null, 'No me ha entregado nada');
+                    assert.equal(Math.round(res), 85, 'Ha dado algo diferente?: ' + res);
                     hecho();
                 })
             }) //
@@ -250,7 +250,7 @@ describe('Estimación calidad del aire media respirada', function() {
                 horaFinal: 1575388147735
             }, function(err, res) {
                 assert.equal(err, null, 'Ha habido un error en la calidad del aire por camiones: ' + err);
-                assert.notEqual(res, null, '¿No ha devuelto respuesta?');
+                assert.equal(res, 3, '¿Ha dado algo imprevisto?: ' + res);
                 hecho();
             })
 
@@ -266,4 +266,4 @@ describe('Estimación calidad del aire media respirada', function() {
             })
         })
 
-    }) //Describe
+    }) //Describes
