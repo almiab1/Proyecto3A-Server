@@ -938,7 +938,7 @@ module.exports = class Logica {
         //  Carlos Tortosa Micó
         // --------------------------------------------------
         //  -> {ubicaciones[]:Ubicacion, horaInicio:Int, horaFinal:Int}  (Dentro de un json)
-        //  calidadDelAireMediaRespirada()
+        //  getValoracionCalidadAire()
         //  -> resultado : string / error (via callback)
         // --------------------------------------------------
         getValoracionCalidadAire(json, callback) {
@@ -1106,10 +1106,10 @@ module.exports = class Logica {
         //  Carlos Tortosa Micó
         // --------------------------------------------------
         //  -> {horaInicio:int, horaFinal:int, idUsuario:string}
-        //  calidadDelAireCamiones()
+        //  getValoracionCalidadAireRespiradoJornada()
         //  -> resultado : R
         // --------------------------------------------------
-        calidadDelAireCamiones(json, callback) {
+        getValoracionCalidadAireJornada(json, callback) {
             let that = this; //Establezco contexto para acceder a métodos propios después
 
             //Comprobaciones genéricas de que tengo lo que me hace falta

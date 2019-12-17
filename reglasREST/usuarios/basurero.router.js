@@ -74,11 +74,11 @@ router.get('/getValoracionCalidadAire', async function(req, res) {
 
 //------------------------------------------------------------------------------------------
 // Carlos Tortosa Micó
-// /calidadDelAireCamiones
+// /getValoracionCalidadAireJornada
 //------------------------------------------------------------------------------------------
-router.get('/calidadDelAireCamiones', async function(req, res) {
+router.get('/getValoracionCalidadAireJornada', async function(req, res) {
         if (req.body) {
-            await LogicaDeNegocio.calidadDelAireCamiones(req.body, function(err, media) {
+            await LogicaDeNegocio.getValoracionCalidadAireJornada(req.body, function(err, media) {
                 if (err) {
                     res.json({
                         error: err

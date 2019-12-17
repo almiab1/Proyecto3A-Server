@@ -244,7 +244,7 @@ describe('Estimación calidad del aire media respirada', function() {
 
 
         it('Prueno el método de estimar la calidad del aire recorrido por camiones', function(hecho) {
-            laLogica.calidadDelAireCamiones({
+            laLogica.getValoracionCalidadAireJornada({
                 idUsuario: 'canut@gmail.com',
                 horaInicio: 1575388147734,
                 horaFinal: 1575388147735
@@ -258,7 +258,7 @@ describe('Estimación calidad del aire media respirada', function() {
 
 
         it('Pruebo que el método de calidad del aire de camiones maneja malos requests bien', function(hecho) {
-            laLogica.calidadDelAireCamiones({
+            laLogica.getValoracionCalidadAireJornada({
                 Algo: 'incorrecto'
             }, function(err, res) {
                 assert.notEqual(err, null, '¿Lo ha procesado pese a estar mal?: ' + res);
