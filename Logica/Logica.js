@@ -1169,8 +1169,8 @@ module.exports = class Logica {
             }
 
             let intervalo = {
-                extremoAnterior: json.fecha - ((json.ventanaDeHoras / 2) * 3600 * 1000), // - 12 horas
-                extremoPosterior: json.fecha + ((json.ventanaDeHoras / 2) * 3600 * 1000) // + 12 horas
+                extremoAnterior: json.fecha - ((json.ventanaDeHoras / 2) * 3600 * 1000),
+                extremoPosterior: json.fecha + ((json.ventanaDeHoras / 2) * 3600 * 1000)
             }
 
             let sql = "SELECT valorMedido, latitud, longitud from Medidas WHERE tiempo BETWEEN " + intervalo.extremoAnterior +

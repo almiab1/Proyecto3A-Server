@@ -47,11 +47,20 @@ describe('Obtención de datos de la BD Medidas', function() {
                 }
 
                 laLogica.getMedidasDeIntervaloConcreto(json, function(err, res) {
-                    console.log('Bien');
+                    assert.equal(err, null, 'Ha habido un error buscando medidas dentro de intervalo: ' + err);
+                    assert.notStrictEqual(res, null, 'No he recibido las medidas dentro de intervalo del servidor');
+                    assert.strictEqual(res.length, 100, 'No hay 100 medidas dentro del intervalo: ' + res.length);
                     hecho();
                 })
 
             }) //it
+
+        it('Compruebo que el método de getMediasDeIntervaloConcreto maneja los errores', function(hecho) {
+            laLogica.getMedidasDeIntervaloConcreto({ algo: 'incorrecto' }, function(err, res) {
+                assert.notStrictEqual(err, null, '¿Ha habido algun error?: ' + err);
+                hecho();
+            })
+        })
 
     }) //Describe
 
