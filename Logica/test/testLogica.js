@@ -35,6 +35,24 @@ describe('Obtención de datos de la BD Medidas', function() {
 
             }) //it
 
+        it('Obtener las medidas que se publicaron dentro de un intervalo de tiempo', function(hecho) {
+
+                let fecha = 1575388147733; // Tue Dec 03 2019 16:49:07
+
+                let intervalo = 24; // 24 horas
+
+                let json = {
+                    fecha: fecha,
+                    ventanaDeHoras: intervalo
+                }
+
+                laLogica.getMedidasDeIntervaloConcreto(json, function(err, res) {
+                    console.log('Bien');
+                    hecho();
+                })
+
+            }) //it
+
     }) //Describe
 
 

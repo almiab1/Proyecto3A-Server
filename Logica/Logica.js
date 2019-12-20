@@ -1147,4 +1147,50 @@ module.exports = class Logica {
 
         //------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------
+
+        // --------------------------------------------------
+        //  Carlos Tortosa Micó
+        // --------------------------------------------------
+        //      fecha: N-- >
+        //    getMedidasDeDiaConcreto() 
+        //    <--[medidas]
+        //---------------------------------------------------
+
+        getMedidasDeIntervaloConcreto(json, callback) {
+            let that = this;
+
+            if (!json.fecha || !json.ventanaDeHoras) {
+                callback('Recuerda adjuntar la fecha y ventana de horas', null);
+                return;
+            }
+
+            if (json.fecha < 0 || json.ventanaDeHoras < 0) {
+                callback('Ambas propiedades deben ser mayor que 0', null);
+            }
+
+            let intervalo = {
+                extremoAnterior: json.fecha - ((json.ventanaDeHoras / 2) * 3600 * 1000), // - 12 horas
+                extremoPosterior: json.fecha + ((json.ventanaDeHoras / 2) * 3600 * 1000) // + 12 horas
+            }
+
+            let sql = "SELECT valorMedido, latitud, longitud from Medidas WHERE tiempo BETWEEN " + intervalo.extremoAnterior +
+                " AND " + intervalo.extremoPosterior + ";";
+
+
+            this.laConexionBD.consultar(sql, function(err, res) {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    callback(null, res);
+                }
+            });
+
+
+        }
+
+
+        //------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------
+
+
     } //() clase Logica
