@@ -1,4 +1,10 @@
 //------------------------------------------------------------------------------------------
+// administrador.router.js
+// Equipo 4
+// Brian, Carlos Tortosa, Carlos Canut, Oscar, Alejandro
+// copyright
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 // requires
 //------------------------------------------------------------------------------------------
 const express = require('express')
@@ -7,14 +13,14 @@ const app = express();
 // Creación del enrutador
 //------------------------------------------------------------------------------------------
 const router = express.Router()
-/* *********** CORS *********************************
- * Óscar Blánquez
- * description: middleware que habilita el
- * uso de CORS del servidor para poder realizar
- * peticiones HTTP desde el script de un cliente.
- * @params: req: Object, res: Object, next
- * @return: void
- ***************************************************/
+//------------------------------------------------------------------------------------------
+// Óscar Blánquez
+// description: middleware que habilita el
+// uso de CORS del servidor para poder realizar
+// peticiones HTTP desde el script de un cliente.
+// @params: req: Object, res: Object, next
+// @return: void
+//------------------------------------------------------------------------------------------
 
 
 //------------------------------------------------------------------------------------------
@@ -206,9 +212,9 @@ router.get('/precisionTodosSensores', async function(req, res) {
       }
 
       listaJson[indiceListaJson] = jsonSensoresAveriados;
-      indiceListaJson ++;
-    }//if
-  }//for
+      indiceListaJson++;
+    } //if
+  } //for
 
   res.send(JSON.stringify(listaJson)).status(200);
 
@@ -281,9 +287,11 @@ router.get('/borrarTodasLasMedidas', async (req, res) => {
 //------------------------------------------------------------------------------------------
 router.get('/getMedidasDeIntervaloConcreto', (req, res) => {
 
-  LogicaDeNegocio.getMedidasDeIntervaloConcreto(req.body, function(err,medidas){
-    if(err) {
-      res.send({Error: err}).status(500);
+  LogicaDeNegocio.getMedidasDeIntervaloConcreto(req.body, function(err, medidas) {
+    if (err) {
+      res.send({
+        Error: err
+      }).status(500);
     } else {
       res.send(medidas).status(200);
     }

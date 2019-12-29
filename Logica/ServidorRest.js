@@ -1,4 +1,10 @@
 //------------------------------------------------------------------------------------------
+// ServidorRest.js
+// Equipo 4
+// Brian, Carlos Tortosa, Carlos Canut, Oscar, Alejandro
+// copyright
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 // requires
 //------------------------------------------------------------------------------------------
 const express = require('express');
@@ -13,14 +19,14 @@ const routerAdministrador = require('./reglasREST/usuarios/administrador.router'
 const routerBasurero = require('./reglasREST/usuarios/basurero.router')
 
 
-/* *********** CORS *********************************
- * Óscar Blánquez
- * description: middleware que habilita el
- * uso de CORS del servidor para poder realizar
- * peticiones HTTP desde el script de un cliente.
- * @params: req: Object, res: Object, next
- * @return: void
- ***************************************************/
+//------------------------------------------------------------------------------------------
+// Óscar Blánquez
+// description: middleware que habilita el
+// uso de CORS del servidor para poder realizar
+// peticiones HTTP desde el script de un cliente.
+// @params: req: Object, res: Object, next
+// @return: void
+//------------------------------------------------------------------------------------------
 app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
@@ -28,10 +34,10 @@ app.use((req, res, next) => {
         res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
         next();
     })
-    /*
-        Carlos Tortosa
 
-    */
+//------------------------------------------------------------------------------------------
+// Carlos Tortosa
+//------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------------
 // constructor objeto LogicaDeNegocio
@@ -79,3 +85,4 @@ if (process.env.PORT === undefined) {
 app.listen(PUERTO, function() {
     console.log('Server conectado en puerto ' + PUERTO);
 });
+//------------------------------------------------------------------------------------------
