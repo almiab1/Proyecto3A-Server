@@ -173,6 +173,9 @@ router.get('/estadoUnSensor/:idSensor', async function(req, res) {
   console.log(idSensor);
   let tiempoLimite = 3600000 * 24;
   let tiempo = await LogicaDeNegocio.dameUltimaMedidaDeUnSensor(idSensor);
+  if( tiempo[0].tiempo == null){
+    tiempo[0].tiempo = 0
+  }
   console.log(tiempo);
   let bool = await LogicaDeNegocio.estaInactivoUnSensor(tiempoLimite, tiempo[0].tiempo)
   console.log(bool);

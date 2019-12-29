@@ -581,7 +581,7 @@ module.exports = class Logica {
   async dameListaSensoresInactivos(tiempoLimite, lista) {
 
     //obtenemos el tiempo actual
-    var tiempoActual = 1575486900000 //new Date()getTime();
+    var tiempoActual = new Date()getTime();
 
     //creamos la lista donde albergaremos el resultado
     var sensoresInactivos = [];
@@ -644,7 +644,7 @@ module.exports = class Logica {
 
     var tiempoActual = new Date().getTime();
 
-    if (tiempo + tiempoLimite < tiempoActual) {
+    if (tiempo + tiempoLimite > tiempoActual) {
       return true;
     }
     return false;
