@@ -290,7 +290,7 @@ router.get('/borrarTodasLasMedidas', async (req, res) => {
 //------------------------------------------------------------------------------------------
 router.get('/getMedidasDeIntervaloConcreto', (req, res) => {
 
-  LogicaDeNegocio.getMedidasDeIntervaloConcreto(req.body, function(err, medidas) {
+  LogicaDeNegocio.getMedidasDeIntervaloConcreto(req.query, function(err, medidas) {
     if (err) {
       res.send({
         Error: err

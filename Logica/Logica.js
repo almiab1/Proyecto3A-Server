@@ -42,7 +42,7 @@ module.exports = class Logica {
   }
   //------------------------------------------------------------------------------------------
 
-  void-- > getUltimaMedida() -- > callback
+  
   //------------------------------------------------------------------------------------------
 
 
@@ -581,7 +581,7 @@ module.exports = class Logica {
   async dameListaSensoresInactivos(tiempoLimite, lista) {
 
     //obtenemos el tiempo actual
-    var tiempoActual = new Date()getTime();
+    var tiempoActual = new Date().getTime();
 
     //creamos la lista donde albergaremos el resultado
     var sensoresInactivos = [];
@@ -982,7 +982,22 @@ module.exports = class Logica {
 
       let media = that.calcularMediaCalidadAire(puntosValidos, variograma) * 2; //Para compararlo más facil con los estándares de la OMS en ug/m3
 
-      callback(null, media);
+      switch (true) {
+        case (media <= 90):
+          callback(null, 1);
+          break;
+
+        case (media > 90 && media <= 110):
+          callback(null, 2);
+          break;
+        case (media > 110):
+          callback(null, 3);
+          break;
+
+        default:
+          callback(null, 0);
+          break;
+      } //switch
 
     }); //interpolarPorKriging
 
@@ -1086,7 +1101,7 @@ module.exports = class Logica {
   //  Carlos Tortosa Micó
   // --------------------------------------------------
   //  -> {horaInicio:int, horaFinal:int, idUsuario:string}
-  //  getValoracionCalidadAireRespiradoJornada()
+  //  getValoracionCalidadAireJornada()
   //  -> resultado : R
   // --------------------------------------------------
   getValoracionCalidadAireJornada(json, callback) {
@@ -1162,7 +1177,7 @@ module.exports = class Logica {
   //  Carlos Tortosa Micó
   // --------------------------------------------------
   //      fecha: N-- >
-  //    getMedidasDeDiaConcreto()
+  //    getMedidasDeIntervaloConcreto()
   //    <--[medidas]
   //---------------------------------------------------
 

@@ -57,8 +57,9 @@ router.put('/cambiarContrasenya', async function(req, res) {
 //------------------------------------------------------------------------------------------
 // Carlos Tortosa Micó
 // /getValoracionCalidadAire
+// A pesar de ser un get, uso post porque la libreria de Ionic no permite adjuntar body con los get
 //------------------------------------------------------------------------------------------
-router.get('/getValoracionCalidadAire', async function(req, res) {
+router.post('/getValoracionCalidadAire', async function(req, res) {
   if (req.body) {
     await LogicaDeNegocio.getValoracionCalidadAire(req.body, function(err, media) {
       if (err) {
@@ -83,8 +84,8 @@ router.get('/getValoracionCalidadAire', async function(req, res) {
 // /getValoracionCalidadAireJornada
 //------------------------------------------------------------------------------------------
 router.get('/getValoracionCalidadAireJornada', async function(req, res) {
-  if (req.body) {
-    await LogicaDeNegocio.getValoracionCalidadAireJornada(req.body, function(err, media) {
+  if (req.query) {
+    await LogicaDeNegocio.getValoracionCalidadAireJornada(req.query, function(err, media) {
       if (err) {
         res.json({
           error: err
@@ -96,7 +97,7 @@ router.get('/getValoracionCalidadAireJornada', async function(req, res) {
       }
     })
   } else {
-    res.send('No se ha detectado body en la peticion').status(403);
+    res.send('No se han detectado los datos en la peticion (Comprueba el query)').status(403);
   }
 }) // cambiarContrasenya
 //------------------------------------------------------------------------------------------
