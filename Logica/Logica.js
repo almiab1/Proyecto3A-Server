@@ -765,6 +765,33 @@ module.exports = class Logica {
 
   } //calcularDistanciaEntre2Puntos()
 
+  //------------------------------------------------------------------------------------------
+  // métodos rutas
+  //------------------------------------------------------------------------------------------
+
+  //------------------------------------------------------------------------------------------
+  // json{ idUsuario: texto, nombreRuta: texto, tipoRuta: Z, ruta: {lista[lat: R, lng: R]} }
+  // ->
+  // postRuta()
+  // ->
+  //
+  //------------------------------------------------------------------------------------------
+  postRuta(json, callback){
+
+    let tipoRuta = parseInt(json.tipoRuta, 10);
+
+    let datos = {
+      $idUsuario: json.idUsuario,
+      $nombreRuta: json.nombreRuta,
+      $tipoRuta: tipoRuta,
+      $ruta: json.ruta
+    }
+
+    let textoSQL = "INSERT INTO Rutas (idUsuario, nombreRuta, tipoRuta, ruta) VALUES ($idUsuario, $nombreRuta, $tipoRuta, $ruta);";
+
+    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
+  }
+
   //----------------------------------------------------------------------------
   //métodos log in
   //----------------------------------------------------------------------------
@@ -1212,32 +1239,7 @@ module.exports = class Logica {
 
 
   }
-  //------------------------------------------------------------------------------------------
-  // métodos rutas
-  //------------------------------------------------------------------------------------------
 
-  //------------------------------------------------------------------------------------------
-  // json{ idUsuario: texto, nombreRuta: texto, tipoRuta: Z, ruta: {lista[lat: R, lng: R]} }
-  // ->
-  // postRuta()
-  // ->
-  //
-  //------------------------------------------------------------------------------------------
-  postRuta(json, callback){
-
-    let tipoRuta = parseInt(json.tipoRuta, 10);
-
-    let datos = {
-      $idUsuario: json.idUsuario,
-      $nombreRuta: json.nombreRuta,
-      $tipoRuta: tipoRuta,
-      $ruta: json.ruta
-    }
-
-    let textoSQL = "INSERT INTO Rutas (idUsuario, nombreRuta, tipoRuta, ruta) VALUES ($idUsuario, $nombreRuta, $tipoRuta, $ruta);"
-
-    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
-  }
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
 

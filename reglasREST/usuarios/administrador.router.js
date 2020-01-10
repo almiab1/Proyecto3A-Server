@@ -250,6 +250,21 @@ router.get('/getSensores', async function(req, res) {
 }) // getSensores
 
 //------------------------------------------------------------------------------------------
+//  POST /postRuta
+//------------------------------------------------------------------------------------------
+router.post('/postRuta', async function(req, res) {
+
+  await LogicaDeNegocio.postRuta(req.body, function(err, algo) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  });
+
+}) // /postRuta
+
+//------------------------------------------------------------------------------------------
 // GET /borrarUltimaMedida
 //------------------------------------------------------------------------------------------
 router.get('/borrarUltimaMedida', async (req, res) => {
@@ -301,21 +316,6 @@ router.get('/getMedidasDeIntervaloConcreto', (req, res) => {
   })
 
 }) // /getMedidasOficiales
-
-//------------------------------------------------------------------------------------------
-//  POST /postRuta
-//------------------------------------------------------------------------------------------
-router.post('/postRuta', async function(req, res) {
-
-  await LogicaDeNegocio.postRuta(req.body, function(err, algo) {
-    if (err) {
-      res.sendStatus(500);
-    } else {
-      res.sendStatus(200);
-    }
-  })
-
-}) // /postRuta
 
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
