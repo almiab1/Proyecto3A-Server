@@ -309,9 +309,7 @@ router.post('/postRuta', async function(req, res) {
 
   await LogicaDeNegocio.postRuta(req.body, function(err, algo) {
     if (err) {
-      res.send({
-        Error: err
-      }).status(500);
+      res.sendStatus(500);
     } else {
       res.sendStatus(200);
     }

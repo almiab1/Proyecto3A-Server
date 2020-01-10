@@ -42,7 +42,7 @@ module.exports = class Logica {
   }
   //------------------------------------------------------------------------------------------
 
-  
+
   //------------------------------------------------------------------------------------------
 
 
@@ -1223,7 +1223,7 @@ module.exports = class Logica {
   // ->
   //
   //------------------------------------------------------------------------------------------
-  postRuta(json){
+  postRuta(json, callback){
 
     let tipoRuta = parseInt(json.tipoRuta, 10);
 
@@ -1236,11 +1236,7 @@ module.exports = class Logica {
 
     let textoSQL = "INSERT INTO Rutas (idUsuario, nombreRuta, tipoRuta, ruta) VALUES ($idUsuario, $nombreRuta, $tipoRuta, $ruta);"
 
-    return new Promise((resolver, rechazar) => {
-      this.laConexion.run(textoSQL, datos, function(err) {
-        (err ? rechazar(err) : resolver())
-      })
-    })
+    this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
   }
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
