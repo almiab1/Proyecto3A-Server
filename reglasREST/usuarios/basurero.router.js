@@ -100,6 +100,21 @@ router.get('/getValoracionCalidadAireJornada', async function(req, res) {
     res.send('No se han detectado los datos en la peticion (Comprueba el query)').status(403);
   }
 }) // cambiarContrasenya
+
+//------------------------------------------------------------------------------------------
+//  POST /postRuta
+//------------------------------------------------------------------------------------------
+router.post('/postRuta', async function(req, res) {
+
+  await LogicaDeNegocio.postRuta(req.body, function(err, algo) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  });
+
+}) // /postRuta
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 
