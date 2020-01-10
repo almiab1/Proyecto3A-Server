@@ -1,6 +1,12 @@
-// --------------------------------------------------
+//------------------------------------------------------------------------------------------
+// Logica.js
+// Equipo 4
+// Brian, Carlos Tortosa, Carlos Canut, Oscar, Alejandro
+// copyright
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 //  dependencies
-// --------------------------------------------------
+//------------------------------------------------------------------------------------------
 const jwt = require('jsonwebtoken')
 const jsdom = require('jsdom')
 const kriging = require('@sakitam-gis/kriging');
@@ -8,22 +14,22 @@ const {
   JSDOM
 } = jsdom
 //  /dependencies
-// --------------------------------------------------
-
-/*
-    Carlos Tortosa Micó
-*/
+//------------------------------------------------------------------------------------------
 const ConexionBD = require('./ConexionBD');
 
 module.exports = class Logica {
+  //------------------------------------------------------------------------------------------
 
-  /* En parte privada tenemos:
-      laConexionDB --> Objeto de la biblioteca de sqlite con los métodos de acceso
-  */
+  // En parte privada tenemos:
+  //  laConexionDB --> Objeto de la biblioteca de sqlite con los métodos de acceso
+  //------------------------------------------------------------------------------------------
 
-  //////////////////////////////////////
-  //Constructores
-  //////////////////////////////////////
+
+  //------------------------------------------------------------------------------------------
+
+  // Constructores
+  //------------------------------------------------------------------------------------------
+
   constructor(nombreBD) {
     this.laConexionBD = new ConexionBD(nombreBD, function(err) {
       console.log("Me conecto a la BD desde la logica");
@@ -34,10 +40,11 @@ module.exports = class Logica {
   cerrar() {
     this.laConexionBD.cerrar();
   }
-  //////////////////////////////////////
-  /*
-      void  --> getUltimaMedida()  --> callback
-  */
+  //------------------------------------------------------------------------------------------
+
+  void-- > getUltimaMedida() -- > callback
+  //------------------------------------------------------------------------------------------
+
 
   //----------------------------------------------------------------------------
   //métodos medidas
@@ -119,10 +126,10 @@ module.exports = class Logica {
     })
   } // getAllOzono()
 
-  //////////////////////////////////////
-  /*
-      JSON  --> guardarMedida() --> callback
-  */
+  //------------------------------------------------------------------------------------------
+  // JSON-- > guardarMedida() -- > callback
+  //------------------------------------------------------------------------------------------
+
   guardarMedida(json, callback) {
 
     if (!this.elJsonTieneTodosLosCamposRequeridos(json)) {
@@ -171,10 +178,10 @@ module.exports = class Logica {
   } //camposRequeridos
 
 
-  ////////////////////////////////////
-  /*
-      void -> borrarUltimaMedida() --> callback
-  */
+  //------------------------------------------------------------------------------------------
+  // void - > borrarUltimaMedida() -- > callback
+  //------------------------------------------------------------------------------------------
+
 
   borrarUltimaMedida(callback) {
     const maxIdMedida = 'SELECT idMedida FROM Medidas WHERE idMedida=(SELECT MAX(idMedida) FROM Medidas);'
@@ -200,6 +207,9 @@ module.exports = class Logica {
       });
     });
   }
+  //------------------------------------------------------------------------------------------
+  // borrarTodasLasMedidas() ->
+  //------------------------------------------------------------------------------------------
 
   borrarTodasLasMedidas(callback) {
     const sql = 'DELETE FROM Medidas;';
@@ -571,7 +581,7 @@ module.exports = class Logica {
   async dameListaSensoresInactivos(tiempoLimite, lista) {
 
     //obtenemos el tiempo actual
-    var tiempoActual = 1575486900000 //new Date()getTime();
+    var tiempoActual = new Date().getTime();
 
     //creamos la lista donde albergaremos el resultado
     var sensoresInactivos = [];
@@ -634,7 +644,7 @@ module.exports = class Logica {
 
     var tiempoActual = new Date().getTime();
 
-    if (tiempo + tiempoLimite < tiempoActual) {
+    if (tiempo + tiempoLimite > tiempoActual) {
       return true;
     }
     return false;
@@ -648,13 +658,13 @@ module.exports = class Logica {
   // ->
   // lista[{idSensor: N, valorMedido: Z, latitud: R, longitud: R, tiempo: R}]
   // ---------------------------------------------------
-  async dameTodasMedidasDeUnSensor(idSensor){
+  async dameTodasMedidasDeUnSensor(idSensor) {
 
     let datos = {
       $idSensor: idSensor
     }
 
-    let sql= "SELECT idSensor, valorMedido, latitud, longitud, tiempo FROM Medidas WHERE idSensor=$idSensor;"
+    let sql = "SELECT idSensor, valorMedido, latitud, longitud, tiempo FROM Medidas WHERE idSensor=$idSensor;"
 
     return new Promise((resolver, rechazar) => {
       this.laConexionBD.consultarConPrepared(sql, datos,
@@ -663,7 +673,7 @@ module.exports = class Logica {
         })
     })
 
-  }//dameTodasMedidasDeUnSensor
+  } //dameTodasMedidasDeUnSensor
   // ---------------------------------------------------
   // Método implementado por Brian Calabuig 8-12-19
   // ->
@@ -671,9 +681,9 @@ module.exports = class Logica {
   // ->
   // lista[{idSensor: N, valorMedido: Z, latitud: R, longitud: R, tiempo: R}]
   // ---------------------------------------------------
-  async dameTodasMedidasDeTodosSensores(){
+  async dameTodasMedidasDeTodosSensores() {
 
-    let sql= "SELECT idSensor, valorMedido, latitud, longitud, tiempo FROM Medidas;"
+    let sql = "SELECT idSensor, valorMedido, latitud, longitud, tiempo FROM Medidas;"
 
     return new Promise((resolver, rechazar) => {
       this.laConexionBD.consultar(sql,
@@ -682,7 +692,7 @@ module.exports = class Logica {
         })
     })
 
-  }//dameTodasMedidasDeTodosSensores
+  } //dameTodasMedidasDeTodosSensores
   // ---------------------------------------------------
   // Método implementado por Brian Calabuig 8-12-19
   //  lista1[{idSensor: N, valorMedido: Z, latitud: R, longitud: R, tiempo: R}]
@@ -704,26 +714,26 @@ module.exports = class Logica {
 
         var distancia = this.calcularDistanciaEntre2Puntos(lista1.latitud, lista1.longitud, lista2.latitud, lista2.longitud)
 
-        if ((lista1.idSensor != lista2.idSensor) && (lista1.tiempo <= lista2.tiempo + 1800000 || lista1.tiempo >= lista2.tiempo - 1800000)
-        && (distancia < 50) && (lista1.valorMedido > lista2.valorMedido + 10 || lista1.valorMedido < lista2.valorMedido - 10)) {
+        if ((lista1.idSensor != lista2.idSensor) && (lista1.tiempo <= lista2.tiempo + 1800000 || lista1.tiempo >= lista2.tiempo - 1800000) &&
+          (distancia < 50) && (lista1.valorMedido > lista2.valorMedido + 10 || lista1.valorMedido < lista2.valorMedido - 10)) {
 
-          contador ++;
+          contador++;
 
-        }//if
+        } //if
 
-        if (contador > 3){
+        if (contador > 3) {
 
           bool = true;
 
-        }//if
+        } //if
 
-      }//for2
+      } //for2
 
-    }//for1
+    } //for1
 
     return bool;
 
-  }//estaDandoMedidasErroneasUnSensor()
+  } //estaDandoMedidasErroneasUnSensor()
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
@@ -937,24 +947,18 @@ module.exports = class Logica {
   // --------------------------------------------------
   //  Carlos Tortosa Micó
   // --------------------------------------------------
-  //  -> {ubicaciones[]:Ubicacion, horaInicio:Int, horaFinal:Int}  (Dentro de un json)
-  //  calidadDelAireMediaRespirada()
-  //  -> resultado : string / error (via callback)
+  //  -> {ubicaciones[]:Ubicacion
+  //  getValoracionCalidadAire()
+  //  -> resultado : R / error (via callback)
   // --------------------------------------------------
-  calidadDelAireMediaRespirada(json, callback) {
+  getValoracionCalidadAire(json, callback) {
     let that = this;
     let puntosValidos = [];
 
     let puntosRuta = json.puntosRuta;
-    let horaInicio = json.horaInicio;
-    let horaFinal = json.horaFinal;
 
     if (!puntosRuta) {
       callback('No se ha proporcionado waypoints', null);
-      return;
-    }
-    if (!horaInicio || !horaFinal) {
-      callback('Asegurate que proporcionas la hora de inicio y final', null);
       return;
     }
 
@@ -976,37 +980,9 @@ module.exports = class Logica {
 
       } //for
 
-      let media = that.calcularMediaCalidadAire(puntosValidos, variograma) * 2 //Para compararlo más facil con los estándares de la OMS en ug/m3
+      let media = that.calcularMediaCalidadAire(puntosValidos, variograma) * 2; //Para compararlo más facil con los estándares de la OMS en ug/m3
 
-      let intervalo = (horaFinal - horaInicio) / (3600 * 1000); //Tiempo que estuvo en ruta en horas (millis -> horas)
-
-      let mediaJornada = (media / intervalo); // unidades --> ug/m3/h (microgramos / metro cúbico / hora)
-
-      /*
-
-          Vamos a emplear la siguiente tabla para definir que resultado damos, segun indicaciones de la OMS:
-
-          media <= 90 ug/m3/h --> Exposicion reducida
-          90 < media <= 110  --> Exposicion media
-          110 < media  --> Exposicion alta
-
-      */
-
-      switch (true) {
-        case (mediaJornada <= 90):
-          callback(null, 'Baja exposicion: ' + mediaJornada + " ug/m3 por hora");
-          break;
-
-        case (mediaJornada > 90 && mediaJornada <= 110):
-          callback(null, 'Exposicion media: ' + mediaJornada + ' ug/m3 por hora');
-          break;
-        case (mediaJornada > 110):
-          callback(null, 'Alta exposición: ' + mediaJornada + ' ug/m3 por hora');
-
-        default:
-          callback(null, 'Media indefinida: ' + mediaJornada);
-          break;
-      } //switch
+      callback(null, media);
 
     }); //interpolarPorKriging
 
@@ -1077,18 +1053,154 @@ module.exports = class Logica {
   //  calcularMediaCalidadAire()
   //  -> resultado : R
   // --------------------------------------------------
-  calcularMediaCalidadAire(ubicaciones, variograma) {
+  calcularMediaCalidadAire() {
     let acumulador = 0;
-    for (const ubi of ubicaciones) {
-      acumulador += kriging.predict(ubi.longitud, ubi.latitud, variograma);
+    if (arguments.length == 2) {
+      let ubicaciones = arguments[0];
+      let variograma = arguments[1];
+      for (const ubi of ubicaciones) {
+        acumulador += kriging.predict(ubi.longitud, ubi.latitud, variograma);
+      }
+
+      return (acumulador / ubicaciones.length);
     }
 
-    return (acumulador / ubicaciones.length);
+    //Si llega hasta aqui el método ha sido llamado por la función para camioneros
+    //El usuario no proporciona datos de ubicacion porque ya las tengo en la BD
+
+    let dataCamiones = arguments[0];
+
+    for (const data of dataCamiones) {
+      acumulador += data.valorMedido;
+    }
+
+    return acumulador / dataCamiones.length;
+
 
   } //calcularMediaCalidadAire
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
 
+
+  // --------------------------------------------------
+  //  Carlos Tortosa Micó
+  // --------------------------------------------------
+  //  -> {horaInicio:int, horaFinal:int, idUsuario:string}
+  //  getValoracionCalidadAireRespiradoJornada()
+  //  -> resultado : R
+  // --------------------------------------------------
+  getValoracionCalidadAireJornada(json, callback) {
+    let that = this; //Establezco contexto para acceder a métodos propios después
+
+    //Comprobaciones genéricas de que tengo lo que me hace falta
+    if (!json.horaInicio || !json.horaFinal) {
+      callback('Asegurate que proporciones un intervalo de tiempo', null);
+      return;
+    }
+
+    if (!json.idUsuario) {
+      callback('Asegurate que proporcionas la id del usuario', null);
+      return;
+    }
+
+    //Preparo la consulta a la BD
+    // Necesito los valores que midió el usuario dentro del intervalo de tiempo que me dan
+    let sql = "SELECT valorMedido FROM Medidas WHERE idTipoMedida = 1 AND idUsuario = '" + json.idUsuario +
+      "' AND tiempo BETWEEN " + json.horaInicio + " AND " + json.horaFinal + ";";
+
+    this.laConexionBD.consultar(sql, function(err, valoresBD) {
+      if (err) {
+        callback(err, null);
+        return;
+      } else {
+
+        if (valoresBD.length == 0) {
+
+          // Se ha decidido que si no hay niguna medida en la BD que cumpla los requisitos
+          // simplemente devuelvo vacio, que lo gestione el de movil
+          callback(null, []);
+          return;
+        }
+
+        let media = Math.floor(that.calcularMediaCalidadAire(valoresBD) * 2); //Lo paso a ug/m3
+
+        /*
+          Vuelvo a tener en cuenta las recomendaciones de la OMS para disernir la gravedad de la medicion
+          en cuanto a peligrosidad para la salud
+
+          media <= 90 ug/m3/h --> Exposicion reducida
+            90 < media <= 110  --> Exposicion media
+            110 < media  --> Exposicion alta
+        */
+
+        switch (true) {
+          case (media <= 90):
+            callback(null, 1);
+            break;
+
+          case (media > 90 && media <= 110):
+            callback(null, 2);
+            break;
+          case (media > 110):
+            callback(null, 3);
+            break;
+
+          default:
+            callback(null, 0);
+            break;
+        } //switch
+
+      }
+    })
+
+  }
+
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
+
+  // --------------------------------------------------
+  //  Carlos Tortosa Micó
+  // --------------------------------------------------
+  //      fecha: N-- >
+  //    getMedidasDeDiaConcreto()
+  //    <--[medidas]
+  //---------------------------------------------------
+
+  getMedidasDeIntervaloConcreto(json, callback) {
+    let that = this;
+
+    if (!json.fecha || !json.ventanaDeHoras) {
+      callback('Recuerda adjuntar la fecha y ventana de horas', null);
+      return;
+    }
+
+    if (json.fecha < 0 || json.ventanaDeHoras < 0) {
+      callback('Ambas propiedades deben ser mayor que 0', null);
+    }
+
+    let intervalo = {
+      extremoAnterior: json.fecha - ((json.ventanaDeHoras / 2) * 3600 * 1000),
+      extremoPosterior: json.fecha + ((json.ventanaDeHoras / 2) * 3600 * 1000)
+    }
+
+    let sql = "SELECT valorMedido, latitud, longitud from Medidas WHERE tiempo BETWEEN " + intervalo.extremoAnterior +
+      " AND " + intervalo.extremoPosterior + ";";
+
+
+    this.laConexionBD.consultar(sql, function(err, res) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, res);
+      }
+    });
+
+
+  }
+
+
+  //------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------
+
+
 } //() clase Logica

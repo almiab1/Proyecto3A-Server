@@ -1,4 +1,10 @@
 //------------------------------------------------------------------------------------------
+// basurero.router.js
+// Equipo 4
+// Brian, Carlos Tortosa, Carlos Canut, Oscar, Alejandro
+// copyright
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 // requires
 //------------------------------------------------------------------------------------------
 const express = require('express')
@@ -8,14 +14,14 @@ const app = express();
 //------------------------------------------------------------------------------------------
 const router = express.Router()
 
-/* *********** CORS *********************************
- * Óscar Blánquez
- * description: middleware que habilita el
- * uso de CORS del servidor para poder realizar
- * peticiones HTTP desde el script de un cliente.
- * @params: req: Object, res: Object, next
- * @return: void
- ***************************************************/
+//------------------------------------------------------------------------------------------
+// Óscar Blánquez
+// description: middleware que habilita el
+// uso de CORS del servidor para poder realizar
+// peticiones HTTP desde el script de un cliente.
+// @params: req: Object, res: Object, next
+// @return: void
+//------------------------------------------------------------------------------------------
 
 
 //------------------------------------------------------------------------------------------
@@ -50,11 +56,11 @@ router.put('/cambiarContrasenya', async function(req, res) {
 
 //------------------------------------------------------------------------------------------
 // Carlos Tortosa Micó
-// /calidadDelAireMediaRespirada
+// /getValoracionCalidadAire
 //------------------------------------------------------------------------------------------
-router.get('/calidadDelAireMediaRespirada', async function(req, res) {
+router.get('/getValoracionCalidadAire', async function(req, res) {
   if (req.body) {
-    await LogicaDeNegocio.calidadDelAireMediaRespirada(req.body, function(err, media) {
+    await LogicaDeNegocio.getValoracionCalidadAire(req.body, function(err, media) {
       if (err) {
         res.json({
           error: err
@@ -67,6 +73,30 @@ router.get('/calidadDelAireMediaRespirada', async function(req, res) {
     })
   } else {
     res.sendStatus(403);
+  }
+}) // cambiarContrasenya
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------------------
+// Carlos Tortosa Micó
+// /getValoracionCalidadAireJornada
+//------------------------------------------------------------------------------------------
+router.get('/getValoracionCalidadAireJornada', async function(req, res) {
+  if (req.body) {
+    await LogicaDeNegocio.getValoracionCalidadAireJornada(req.body, function(err, media) {
+      if (err) {
+        res.json({
+          error: err
+        }).status(500);
+      } else {
+        res.json({
+          CalidadDelAire: media
+        }).status(200);
+      }
+    })
+  } else {
+    res.send('No se ha detectado body en la peticion').status(403);
   }
 }) // cambiarContrasenya
 //------------------------------------------------------------------------------------------

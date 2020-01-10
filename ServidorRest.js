@@ -1,4 +1,10 @@
 //------------------------------------------------------------------------------------------
+// ServidorRest.js
+// Equipo 4
+// Brian, Carlos Tortosa, Carlos Canut, Oscar, Alejandro
+// copyright
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 // requires
 //------------------------------------------------------------------------------------------
 const express = require('express');
@@ -13,18 +19,18 @@ const routerCiudadano = require('./reglasREST/ciudadano.router')
 const routerAdministrador = require('./reglasREST/usuarios/administrador.router')
 const routerBasurero = require('./reglasREST/usuarios/basurero.router')
 
-/* *********** CORS *********************************
- * Óscar Blánquez
- * description: middleware que habilita el
- * uso de CORS del servidor para poder realizar
- * peticiones HTTP desde el script de un cliente.
- * @params: req: Object, res: Object, next
- * @return: void
- ***************************************************/
+ //------------------------------------------------------------------------------------------
+ // Óscar Blánquez
+ // description: middleware que habilita el
+ // uso de CORS del servidor para poder realizar
+ // peticiones HTTP desde el script de un cliente.
+ // @params: req: Object, res: Object, next
+ // @return: void
+ //------------------------------------------------------------------------------------------
 
-/*
-    Carlos Tortosa
-*/
+//------------------------------------------------------------------------------------------
+// Carlos Tortosa
+//------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------------
 // constructor objeto LogicaDeNegocio

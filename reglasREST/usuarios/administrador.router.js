@@ -1,4 +1,10 @@
 //------------------------------------------------------------------------------------------
+// administrador.router.js
+// Equipo 4
+// Brian, Carlos Tortosa, Carlos Canut, Oscar, Alejandro
+// copyright
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 // requires
 //------------------------------------------------------------------------------------------
 const express = require('express')
@@ -7,14 +13,14 @@ const app = express();
 // Creación del enrutador
 //------------------------------------------------------------------------------------------
 const router = express.Router()
-/* *********** CORS *********************************
- * Óscar Blánquez
- * description: middleware que habilita el
- * uso de CORS del servidor para poder realizar
- * peticiones HTTP desde el script de un cliente.
- * @params: req: Object, res: Object, next
- * @return: void
- ***************************************************/
+//------------------------------------------------------------------------------------------
+// Óscar Blánquez
+// description: middleware que habilita el
+// uso de CORS del servidor para poder realizar
+// peticiones HTTP desde el script de un cliente.
+// @params: req: Object, res: Object, next
+// @return: void
+//------------------------------------------------------------------------------------------
 
 
 //------------------------------------------------------------------------------------------
@@ -167,6 +173,9 @@ router.get('/estadoUnSensor/:idSensor', async function(req, res) {
   console.log(idSensor);
   let tiempoLimite = 3600000 * 24;
   let tiempo = await LogicaDeNegocio.dameUltimaMedidaDeUnSensor(idSensor);
+  if( tiempo[0].tiempo == null){
+    tiempo[0].tiempo = 0
+  }
   console.log(tiempo);
   let bool = await LogicaDeNegocio.estaInactivoUnSensor(tiempoLimite, tiempo[0].tiempo)
   console.log(bool);
@@ -206,9 +215,9 @@ router.get('/precisionTodosSensores', async function(req, res) {
       }
 
       listaJson[indiceListaJson] = jsonSensoresAveriados;
-      indiceListaJson ++;
-    }//if
-  }//for
+      indiceListaJson++;
+    } //if
+  } //for
 
   res.send(JSON.stringify(listaJson)).status(200);
 
@@ -270,6 +279,31 @@ router.get('/borrarTodasLasMedidas', async (req, res) => {
   });
 });
 
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------------------
+// GET /getMedidasDeIntervaloConcreto
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
+//  GET /getMedidasDeIntervaloConcreto
+//------------------------------------------------------------------------------------------
+router.get('/getMedidasDeIntervaloConcreto', (req, res) => {
+
+  LogicaDeNegocio.getMedidasDeIntervaloConcreto(req.body, function(err, medidas) {
+    if (err) {
+      res.send({
+        Error: err
+      }).status(500);
+    } else {
+      res.send(medidas).status(200);
+    }
+  })
+
+}) // /getMedidasOficiales
+
+//------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 module.exports = router
