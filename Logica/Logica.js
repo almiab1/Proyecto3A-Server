@@ -792,6 +792,50 @@ module.exports = class Logica {
     this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
   }
 
+  // ---------------------------------------------------
+  // idUsuario: texto
+  // ->
+  // getRutasPredefinidas()
+  // ->
+  // lista [json{ idUsuario: texto, nombreRuta: texto, tipoRuta: Z, ruta: {lista[lat: R, lng: R]} }]
+  // ---------------------------------------------------
+  async getRutasRealizadas(idUsuario) {
+
+    let datos = {
+      $idUsuario: idUsuario
+    }
+
+    let sql = "SELECT * FROM Rutas WHERE idUsuario=$idUsuario;"
+
+    return new Promise((resolver, rechazar) => {
+      this.laConexionBD.consultarConPrepared(sql, datos,
+        (err, res) => {
+          (err ? rechazar(err) : resolver(res))
+        })
+    })
+
+  } //getRutasRealizadas
+
+  // ---------------------------------------------------
+  //
+  // ->
+  // getRutasPredefinidas()
+  // ->
+  // lista [json{ idUsuario: texto, nombreRuta: texto, tipoRuta: Z, ruta: {lista[lat: R, lng: R]} }]
+  // ---------------------------------------------------
+  async getRutasPredefinidas() {
+
+    let sql = "SELECT * FROM Rutas WHERE tipoRuta=0;"
+
+    return new Promise((resolver, rechazar) => {
+      this.laConexionBD.consultar(sql,
+        (err, res) => {
+          (err ? rechazar(err) : resolver(res))
+        })
+    })
+
+  } //getRutasPredefinidas
+
   //----------------------------------------------------------------------------
   //métodos log in
   //----------------------------------------------------------------------------

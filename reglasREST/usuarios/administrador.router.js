@@ -265,6 +265,36 @@ router.post('/postRuta', async function(req, res) {
 }) // /postRuta
 
 //------------------------------------------------------------------------------------------
+// GET /getRutasPredefinidas
+//------------------------------------------------------------------------------------------
+router.get('/getRutasPredefinidas', async function(req, res) {
+
+  await LogicaDeNegocio.getRutasPredefinidas(function(err, resultado) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.send(JSON.stringify(resultado)).status(200);
+    }
+  });
+}) // getRutasPredefinidas
+
+//------------------------------------------------------------------------------------------
+// GET /getRutasRealizadas
+//------------------------------------------------------------------------------------------
+router.get('/getRutasRealizadas/:usuario', async function(req, res) {
+
+  var idUsuario = req.params.usuario
+
+  await LogicaDeNegocio.getRutasRealizadas(idUsuario, function(err, resultado) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.send(JSON.stringify(resultado)).status(200);
+    }
+  });
+}) // getRutasRealizadas
+
+//------------------------------------------------------------------------------------------
 // GET /borrarUltimaMedida
 //------------------------------------------------------------------------------------------
 router.get('/borrarUltimaMedida', async (req, res) => {
