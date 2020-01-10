@@ -1212,8 +1212,36 @@ module.exports = class Logica {
 
 
   }
+  //------------------------------------------------------------------------------------------
+  // métodos rutas
+  //------------------------------------------------------------------------------------------
 
+  //------------------------------------------------------------------------------------------
+  // json{ idUsuario: texto, nombreRuta: texto, tipoRuta: Z, ruta: {lista[lat: R, lng: R]} }
+  // ->
+  // postRuta()
+  // ->
+  //
+  //------------------------------------------------------------------------------------------
+  postRuta(json){
 
+    let tipoRuta = parseInt(json.tipoRuta, 10);
+
+    let datos = {
+      $idUsuario: json.idUsuario,
+      $nombreRuta: json.nombreRuta,
+      $tipoRuta: tipoRuta,
+      $ruta: json.ruta
+    }
+
+    let textoSQL = "INSERT INTO Rutas (idUsuario, nombreRuta, tipoRuta, ruta) VALUES ($idUsuario, $nombreRuta, $tipoRuta, $ruta);"
+
+    return new Promise((resolver, rechazar) => {
+      this.laConexion.run(textoSQL, datos, function(err) {
+        (err ? rechazar(err) : resolver())
+      })
+    })
+  }
   //------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------
 
