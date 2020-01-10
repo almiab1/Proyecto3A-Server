@@ -305,7 +305,7 @@ router.get('/getMedidasDeIntervaloConcreto', (req, res) => {
 //------------------------------------------------------------------------------------------
 //  POST /postRuta
 //------------------------------------------------------------------------------------------
-router.post('/postRuta', (req, res) => {
+router.post('/postRuta', async function(req, res) {
 
   await LogicaDeNegocio.postRuta(req.body, function(err, algo) {
     if (err) {
