@@ -148,7 +148,10 @@ router.get('/getRutasRealizadas/:usuario', async function(req, res) {
 
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
-router.post('/prueba', (req, res) => {
+router.post('/postPrueba', (req, res) => {
+  res.status(200).send("Probando router basurero");
+})
+router.get('/getPrueba', (req, res) => {
   res.status(200).send("Probando router basurero");
 })
 //------------------------------------------------------------------------------------------
