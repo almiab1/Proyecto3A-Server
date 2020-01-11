@@ -712,10 +712,10 @@ module.exports = class Logica {
 
       for (var j = 0; j < lista2.length; j++) {
 
-        var distancia = this.calcularDistanciaEntre2Puntos(lista1.latitud, lista1.longitud, lista2.latitud, lista2.longitud)
+        var distancia = this.calcularDistanciaEntre2Puntos(lista1[i].latitud, lista1[i].longitud, lista2[j].latitud, lista2[j].longitud)
 
-        if ((lista1.idSensor != lista2.idSensor) && (lista1.tiempo <= lista2.tiempo + 1800000 || lista1.tiempo >= lista2.tiempo - 1800000) &&
-          (distancia < 50) && (lista1.valorMedido > lista2.valorMedido + 10 || lista1.valorMedido < lista2.valorMedido - 10)) {
+        if ((lista1[i].idSensor != lista2[j].idSensor) && (lista1[i].tiempo <= lista2[j].tiempo + 1800000 || lista1[i].tiempo >= lista2[j].tiempo - 1800000) &&
+          (distancia < 10) && (lista1[i].valorMedido > lista2[j].valorMedido + 10 || lista1[i].valorMedido < lista2[j].valorMedido - 10)) {
 
           contador++;
 
@@ -764,6 +764,43 @@ module.exports = class Logica {
     return distanciaTotal
 
   } //calcularDistanciaEntre2Puntos()
+
+  //------------------------------------------------------------------------------------------
+  // listaSensoresErroneos: [{idSensor: Z}], listaMedidasOficiales: [{hora: texto, valorO3: Z}]
+  // -->
+  // calibracionPorProximidadEstacionOficial()
+  // -->
+  //
+  //------------------------------------------------------------------------------------------
+  calibracionPorProximidadEstacionOficial(lista, listaMedidasOficiales) {
+
+    for (var i = 0; i < lista.length; i++) {
+
+      listaMedidasUnSensor = this.dameTodasMedidasDeUnSensor(lista[i]);
+
+      for (var j = 0; j < listaMedidasUnSensor.length; j++) {
+
+        for (var k = 0; k < listaMedidasOficiales.length; k++) {
+
+          var distancia = this.calcularDistanciaEntre2Puntos(listaMedidasUnSensor[j].latitud, listaMedidasUnSensor[j].longitud, 38.968473, -0.190018)
+
+          if ((listaMedidasOficiales[k].hora === JSON.stringify((listaMedidasUnSensor[j].tiempo).getHours())+":00") && (distancia < 10) &&
+              (listaMedidasOficiales[k].o3 + 10 < listaMedidasUnSensor[j].valorMedido || listaMedidasOficiales[k].o3 - 10 > listaMedidasUnSensor[j].valorMedido)) {
+
+            let datos = {
+              $valorMedido: listaMedidasOficiales[k].o3
+            }
+
+            let sql = "UPDATE Medidas SET valorMedido=$valorMedido;"
+
+            this.laConexionBD.modificarConPrepared(textoSQL, datos, callback);
+
+          }//if
+        }//for 3
+      }//for2
+    }//for1
+
+  } //calibracionPorProximidadEstacionOficial()
 
   //------------------------------------------------------------------------------------------
   // métodos rutas
