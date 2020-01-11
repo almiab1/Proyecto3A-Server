@@ -62,6 +62,7 @@ router.put('/cambiarContrasenya', async function(req, res) {
 router.post('/getValoracionCalidadAire', async function(req, res) {
   if (req.body) {
     res.status(200).send(req.body);
+    /*
     await LogicaDeNegocio.getValoracionCalidadAire(req.body, function(err, media) {
       if (err) {
         res.json({
@@ -70,7 +71,7 @@ router.post('/getValoracionCalidadAire', async function(req, res) {
       } else {
         res.status(200).send(media);
       }
-    })
+    })*/
   } else {
     res.sendStatus(403);
   }
