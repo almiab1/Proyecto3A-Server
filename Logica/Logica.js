@@ -1075,7 +1075,7 @@ module.exports = class Logica {
     let puntosRuta = json.puntosRuta;
 
     if (!puntosRuta) {
-      callback('No se ha proporcionado waypoints', null);
+      callback('No se ha proporcionado waypoints'+ json, null);
       return;
     }
 
@@ -1091,7 +1091,7 @@ module.exports = class Logica {
       // Relleno el array de puntosRuta con los puntos que son validos
       for (const punto of puntosRuta) {
 
-        if (punto.latitud && punto.longitud) {
+        if (punto.lat && punto.lng) {
           puntosValidos.push(punto);
         } //if
 
