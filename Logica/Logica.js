@@ -836,7 +836,7 @@ module.exports = class Logica {
   // ->
   // lista [json{ idUsuario: texto, nombreRuta: texto, tipoRuta: Z, ruta: {lista[lat: R, lng: R]} }]
   // ---------------------------------------------------
-  async getRutasRealizadas(idUsuario) {
+  async getRutasRealizadas(idUsuario, callback) {
 
     let datos = {
       $idUsuario: idUsuario
@@ -844,12 +844,7 @@ module.exports = class Logica {
 
     let sql = "SELECT * FROM Rutas WHERE idUsuario=$idUsuario;"
 
-    return new Promise((resolver, rechazar) => {
-      this.laConexionBD.consultarConPrepared(sql, datos,
-        (err, res) => {
-          (err ? rechazar(err) : resolver(res))
-        })
-    })
+    this.laConexionBD.consultarConPrepared(sql, datos, callback);
 
   } //getRutasRealizadas
 
@@ -860,16 +855,11 @@ module.exports = class Logica {
   // ->
   // lista [json{ idUsuario: texto, nombreRuta: texto, tipoRuta: Z, ruta: {lista[lat: R, lng: R]} }]
   // ---------------------------------------------------
-  async getRutasPredefinidas() {
+  getRutasPredefinidas(callback) {
 
     let sql = "SELECT * FROM Rutas WHERE tipoRuta=0;"
 
-    return new Promise((resolver, rechazar) => {
-      this.laConexionBD.consultar(sql,
-        (err, res) => {
-          (err ? rechazar(err) : resolver(res))
-        })
-    })
+    this.laConexionBD.consultar(sql, callback)
 
   } //getRutasPredefinidas
 
