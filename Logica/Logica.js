@@ -1072,12 +1072,12 @@ module.exports = class Logica {
     let that = this;
     let puntosValidos = [];
 
-    let puntosRuta = json.puntosRuta;
+    let puntosRuta = json;
 
     if (!puntosRuta) {
-      callback('No se ha proporcionado waypoints'+ JSON.stringify(json), null);
+      callback('No se ha proporcionado waypoints'+ puntosRuta, null);
       return;
-    }
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 
 
     //Obtengo un modelo matemático ('variograma') para predecir que cantidad de O3 habrá en un sitio
