@@ -269,7 +269,7 @@ router.post('/postRuta', async function(req, res) {
 //------------------------------------------------------------------------------------------
 router.get('/getRutasPredefinidas', async function(req, res) {
 
-  await LogicaDeNegocio.getRutasPredefinidas(function(err, resultado) {
+   LogicaDeNegocio.getRutasPredefinidas(function(err, resultado) {
     if (err) {
       res.sendStatus(500);
     } else {
@@ -285,7 +285,7 @@ router.get('/getRutasRealizadas/:usuario', async function(req, res) {
 
   var idUsuario = req.params.usuario
 
-  await LogicaDeNegocio.getRutasRealizadas(idUsuario, function(err, resultado) {
+   LogicaDeNegocio.getRutasRealizadas(idUsuario, function(err, resultado) {
     if (err) {
       res.sendStatus(500);
     } else {
