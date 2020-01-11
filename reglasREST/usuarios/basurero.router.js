@@ -67,9 +67,7 @@ router.post('/getValoracionCalidadAire', async function(req, res) {
           error: err
         }).status(500);
       } else {
-        res.json({
-          CalidadDelAire: media
-        }).status(200);
+        res.status(200).send(media);
       }
     })
   } else {
