@@ -1075,7 +1075,7 @@ module.exports = class Logica {
     let puntosRuta = json.puntosRuta;
 
     if (!puntosRuta) {
-      callback('No se ha proporcionado waypoints'+ json, null);
+      callback('No se ha proporcionado waypoints'+ JSON.stringify(json), null);
       return;
     }
 
