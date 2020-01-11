@@ -60,18 +60,18 @@ router.put('/cambiarContrasenya', async function(req, res) {
 // A pesar de ser un get, uso post porque la libreria de Ionic no permite adjuntar body con los get
 //------------------------------------------------------------------------------------------
 router.post('/getValoracionCalidadAire', async function(req, res) {
-  if (req.body) {
-    res.status(200).send(req.body);
-    /*
+  if (req.body) {    
     await LogicaDeNegocio.getValoracionCalidadAire(req.body, function(err, media) {
       if (err) {
         res.json({
           error: err
         }).status(500);
       } else {
-        res.status(200).send(media);
+        res.json({
+          calidadDelAire: media
+        }).status(200);
       }
-    })*/
+    })
   } else {
     res.sendStatus(403);
   }
