@@ -863,6 +863,25 @@ module.exports = class Logica {
 
   } //getRutasPredefinidas
 
+  // ---------------------------------------------------
+  // nombreRuta: texto
+  // ->
+  // borrarRuta()
+  // ->
+  //
+  // ---------------------------------------------------
+  borrarRuta(nombreRuta, callback) {
+
+    let datos = {
+      $nombreRuta: nombreRuta
+    }
+    let texto = 'DELETE FROM Rutas WHERE nombreRuta=$nombreRuta;'
+    
+    this.laConexionBD.modificarConPrepared(texto, datos, callback);
+
+  } //getRutasRealizadas
+
+
   //----------------------------------------------------------------------------
   //métodos log in
   //----------------------------------------------------------------------------

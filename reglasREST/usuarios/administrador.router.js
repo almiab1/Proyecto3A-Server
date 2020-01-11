@@ -295,6 +295,19 @@ router.get('/getRutasRealizadas/:usuario', async function(req, res) {
 }) // getRutasRealizadas
 
 //------------------------------------------------------------------------------------------
+// /deleteRuta
+//------------------------------------------------------------------------------------------
+router.delete('/deleteRuta/:nombreRuta', async function(req, res) {
+  await LogicaDeNegocio.borrarRuta(req.params, function(err, algo) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  });
+}); // darBajaSensor
+
+//------------------------------------------------------------------------------------------
 // GET /borrarUltimaMedida
 //------------------------------------------------------------------------------------------
 router.get('/borrarUltimaMedida', async (req, res) => {
