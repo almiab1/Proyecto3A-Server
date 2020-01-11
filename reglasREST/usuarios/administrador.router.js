@@ -298,7 +298,10 @@ router.get('/getRutasRealizadas/:usuario', async function(req, res) {
 // /deleteRuta
 //------------------------------------------------------------------------------------------
 router.delete('/deleteRuta/:nombreRuta', async function(req, res) {
-  await LogicaDeNegocio.borrarRuta(req.params, function(err, algo) {
+
+  var nombre = req.params.nombreRuta
+
+  await LogicaDeNegocio.borrarRuta(nombre, function(err, algo) {
     if (err) {
       res.sendStatus(500);
     } else {
