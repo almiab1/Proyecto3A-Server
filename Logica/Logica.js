@@ -524,7 +524,7 @@ module.exports = class Logica {
   // ---------------------------------------------------
   getSensores(callback) {
 
-    let sql = 'SELECT * FROM Sensores;'
+    let sql = 'SELECT Sensores.idSensor, TipoSensor.descripcion, SensoresUsuarios.idUsuario FROM Sensores, TipoSensor, Usuarios WHERE  Sensores.idSensor=SensoresUsuarios.idSensor AND Sensores.idTipoSensor=TipoSensor.idTipoSensor;'
 
     this.laConexionBD.consultar(sql, callback)
 
@@ -876,7 +876,7 @@ module.exports = class Logica {
       $nombreRuta: nombreRuta
     }
     let texto = 'DELETE FROM Rutas WHERE nombreRuta=$nombreRuta;'
-    
+
     this.laConexionBD.modificarConPrepared(texto, datos, callback);
 
   } //getRutasRealizadas
@@ -1077,7 +1077,7 @@ module.exports = class Logica {
     if (!puntosRuta) {
       callback('No se ha proporcionado waypoints'+ puntosRuta, null);
       return;
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+    }
 
 
     //Obtengo un modelo matemático ('variograma') para predecir que cantidad de O3 habrá en un sitio
