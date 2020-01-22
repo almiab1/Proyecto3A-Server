@@ -787,8 +787,10 @@ module.exports = class Logica {
           if ((listaMedidasOficiales[k].hora === JSON.stringify((listaMedidasUnSensor[j].tiempo).getHours())+":00") && (distancia < 10) &&
               (listaMedidasOficiales[k].o3 + 10 < listaMedidasUnSensor[j].valorMedido || listaMedidasOficiales[k].o3 - 10 > listaMedidasUnSensor[j].valorMedido)) {
 
+                let factorCalibracion = 44 / 55;
+
             let datos = {
-              $valorMedido: listaMedidasOficiales[k].o3
+              $valorMedido: listaMedidasUnSensor[j].o3 * factorCalibracion;
             }
 
             let sql = "UPDATE Medidas SET valorMedido=$valorMedido;"
